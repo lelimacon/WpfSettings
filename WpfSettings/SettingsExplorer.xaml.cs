@@ -3,15 +3,34 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using WpfSettingsControl;
 
-namespace WpfSettingsControl
+namespace WpfSettings
 {
     /// <summary>
     /// Interaction logic for SettingsExplorer.xaml
     /// </summary>
     public partial class SettingsExplorer : UserControl
     {
-        //public ObservableCollection<ConfigSection> Items { get; set; }
+
+        public static readonly DependencyProperty MyTextProperty =
+            DependencyProperty.Register(nameof(MyText),
+                typeof(string),
+                typeof(SettingsExplorer), new PropertyMetadata(null));
+
+
+        public string MyText
+        {
+            get { return (string)GetValue(MyTextProperty); }
+            set { SetValueDp(ItemsProperty, value); }
+        }
+
+
+
+
+
+
+        //public ObservableCollection<ConfigSection> Itemss { get; set; }
 
         public ObservableCollection<ConfigSection> Itemss
         {
@@ -31,7 +50,7 @@ namespace WpfSettingsControl
         public static readonly DependencyProperty ItemsProperty =
             DependencyProperty.Register(nameof(Itemss),
                 typeof(ObservableCollection<ConfigSection>),
-                typeof(SettingsExplorer), null);
+                typeof(SettingsExplorer), new PropertyMetadata(null));
 
         public event PropertyChangedEventHandler PropertyChanged;
         void SetValueDp(DependencyProperty property, object value,
@@ -43,18 +62,18 @@ namespace WpfSettingsControl
 
         public SettingsExplorer()
         {
-            //Items = new ObservableCollection<ConfigSection>();
+            //Itemss = new ObservableCollection<ConfigSection>();
             InitializeComponent();
-            (Content as FrameworkElement).DataContext = this;
+            ((FrameworkElement)Content).DataContext = this;
 
             /*
             var section = new ConfigSection("general", "General");
             //section.Image = "icon-search.png";
-            Items.Add(section);
+            Itemss.Add(section);
             section = new ConfigSection("env", "Environment");
             section.SubSections.Add(new ConfigSection("test1", "General"));
             section.SubSections.Add(new ConfigSection("test2", "Documents"));
-            Items.Add(section);
+            Itemss.Add(section);
             */
         }
     }

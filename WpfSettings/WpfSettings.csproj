@@ -76,6 +76,8 @@
     <Compile Include="LeftMarginMultiplierConverter.cs" />
     <Compile Include="MyConfig.cs" />
     <Compile Include="PlaceHolderTextBox.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="RelayCommand.cs" />
     <Compile Include="SettingsExplorer.xaml.cs">
       <DependentUpon>SettingsExplorer.xaml</DependentUpon>
     </Compile>
@@ -83,6 +85,7 @@
     <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SettingsWindowViewModel.cs" />
     <Compile Include="ShyTextBlock.cs" />
     <Compile Include="TreeViewItemExtensions.cs" />
     <Page Include="SettingsExplorer.xaml">
