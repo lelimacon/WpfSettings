@@ -3,12 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfSettingsControl" 
-        xmlns:wpfSettings="clr-namespace:WpfSettings"
+        xmlns:controls="clr-namespace:WpfSettings.Controls"
+        DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="600" Width="800"
-        DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
+        x:Name="MyWindow"
         Background="#F0F0F0" ResizeMode="CanResizeWithGrip">
 
     <Grid Margin="8,8,12,12">
@@ -22,16 +22,16 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <local:PlaceHolderTextBox x:Name="SearchBox" Grid.Row="0" Grid.Column="0"
-                                    Background="White"
-                                    VerticalContentAlignment="Center" FontSize="12"
-                                    PlaceHolderText="Search" />
+        <controls:PlaceHolderTextBox x:Name="SearchBox" Grid.Row="0" Grid.Column="0"
+                                     Background="White"
+                                     VerticalContentAlignment="Center" FontSize="12"
+                                     PlaceHolderText="Search" />
 
         <Button Grid.Row="0" Grid.Column="0"
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                 HorizontalAlignment="Right" VerticalAlignment="Stretch"
                 Focusable="False">
-            <Image Source="icon-search.png" Width="16"></Image>
+            <Image Source="Resources/icon-search.png" Width="16" />
         </Button>
 
         <Border Grid.Row="0" Grid.Column="1" BorderBrush="{x:Null}">
@@ -39,20 +39,14 @@
                        VerticalAlignment="Center" Margin="16,0,0,0" FontSize="12" />
         </Border>
 
-        <wpfSettings:SettingsExplorer x:Name="MyExporer" Grid.Row="1" Grid.Column="0"
-                                MyText="{Binding MyNewText}"
-                                Margin="0,6,0,0" Itemss="{Binding InternalConfig}" />
-
-        <!--
-        <local:SettingsExplorer Grid.Row="1" Grid.Column="0"
-                                Margin="0,6,0,0" Items="{Binding Itemss}" />
-        -->
+        <controls:SettingsExplorer Grid.Row="1" Grid.Column="0"
+                                   Margin="0,6,0,0" Items="{Binding InternalConfig}" />
 
         <ScrollViewer Grid.Row="1" Grid.Column="1"
                       Margin="12,8,0,0" VerticalScrollBarVisibility="Auto">
-            <!--<local:SettingsPage />-->
+            <controls:SettingsPage ConfigElements="{Binding CurrentPageConfig}" />
         </ScrollViewer>
-        
+
         <Rectangle Grid.Row="1" Grid.Column="1" Margin="12,0,0,0" Height="1"
                    VerticalAlignment="Bottom" Fill="Gray" />
 

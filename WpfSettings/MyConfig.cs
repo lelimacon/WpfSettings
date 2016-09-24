@@ -1,4 +1,4 @@
-﻿namespace WpfSettingsControl
+﻿namespace WpfSettings
 {
     public class MyConfig
     {
@@ -17,7 +17,7 @@
             public bool Checkbox { get; set; }
 
             [SettingsLabel("Your name")]
-            public string login { get; set; }
+            public string Login { get; set; }
 
             [SettingsLabel("Choose one")]
             public MyEnum MyChoice { get; set; }

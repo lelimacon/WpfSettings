@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace WpfSettingsControl
+namespace WpfSettings
 {
     public abstract class ConfigElement
     {
@@ -18,36 +18,53 @@ namespace WpfSettingsControl
 
     public class ConfigSection : ConfigElement
     {
-        public ObservableCollection<ConfigSection> SubSections { get; private set; }
-        public ObservableCollection<ConfigSimpleElement> Elements { get; private set; }
+        public ObservableCollection<ConfigSection> SubSections { get; }
+        public ObservableCollection<ConfigPageElement> Elements { get; }
+
         public ConfigSection(string id, string label)
             : base(id, label)
         {
             SubSections = new ObservableCollection<ConfigSection>();
-            Elements = new ObservableCollection<ConfigSimpleElement>();
+            Elements = new ObservableCollection<ConfigPageElement>();
         }
-    }
 
-    public class ConfigSimpleElement : ConfigElement
-    {
-        public ConfigSimpleElement(string id, string label)
-            : base(id, label)
+        public void Add(ConfigSection element)
         {
+            SubSections.Add(element);
+        }
+
+        public void Add(ConfigPageElement element)
+        {
+            Elements.Add(element);
         }
     }
 
-    public class ConfigGroup : ConfigSimpleElement
+    public class ConfigGroup : ConfigPageElement
     {
-        public ObservableCollection<ConfigSimpleElement> Elements { get; private set; }
+        public ObservableCollection<ConfigPageElement> Elements { get; }
+
         public ConfigGroup(string id, string label)
             : base(id, label)
         {
-            Elements = new ObservableCollection<ConfigSimpleElement>();
+            Elements = new ObservableCollection<ConfigPageElement>();
+        }
+
+        public void Add(ConfigPageElement element)
+        {
+            Elements.Add(element);
+        }
+    }
+
+    public class ConfigPageElement : ConfigElement
+    {
+        public ConfigPageElement(string id, string label)
+            : base(id, label)
+        {
         }
     }
 
     /*
-    public class TitleConfig : ConfigSimpleElement
+    internal class TitleConfig : ConfigSimpleElement
     {
         public TitleConfig(string id, string label)
             : base(id, label)
@@ -56,7 +73,7 @@ namespace WpfSettingsControl
     }
     */
 
-    public class StringConfig : ConfigSimpleElement
+    public class StringConfig : ConfigPageElement
     {
         public string Value { get; set; }
 
@@ -66,7 +83,7 @@ namespace WpfSettingsControl
         }
     }
 
-    public class TextConfig : ConfigSimpleElement
+    public class TextConfig : ConfigPageElement
     {
         public string Value { get; set; }
         public int Height { get; set; }
@@ -83,17 +100,18 @@ namespace WpfSettingsControl
         }
     }
 
-    public class BoolConfig : ConfigSimpleElement
+    public class BoolConfig : ConfigPageElement
     {
         public bool Value { get; set; }
 
         public BoolConfig(string id, string label)
             : base(id, label)
         {
+            Value = true;
         }
     }
 
-    public class ChoiceConfig : ConfigSimpleElement
+    public class ChoiceConfig : ConfigPageElement
     {
         public ObservableCollection<string> Choices { get; private set; }
         public int SelectedIndex { get; set; }

@@ -70,25 +70,25 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ConfigElement.cs" />
-    <Compile Include="ConfigManager.cs" />
-    <Compile Include="ContentToVisibilityConverter.cs" />
-    <Compile Include="LeftMarginMultiplierConverter.cs" />
+    <Compile Include="Config\ConfigElement.cs" />
+    <Compile Include="Config\ConfigManager.cs" />
+    <Compile Include="Utils\LeftMarginMultiplierConverter.cs" />
     <Compile Include="MyConfig.cs" />
-    <Compile Include="PlaceHolderTextBox.cs" />
+    <Compile Include="Controls\PlaceHolderTextBox.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="RelayCommand.cs" />
-    <Compile Include="SettingsExplorer.xaml.cs">
+    <Compile Include="Utils\RelayCommand.cs" />
+    <Compile Include="Controls\SettingsExplorer.xaml.cs">
       <DependentUpon>SettingsExplorer.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsLabelAttribute.cs" />
-    <Compile Include="SettingsPage.xaml.cs">
+    <Compile Include="Controls\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsWindowViewModel.cs" />
-    <Compile Include="ShyTextBlock.cs" />
-    <Compile Include="TreeViewItemExtensions.cs" />
-    <Page Include="SettingsExplorer.xaml">
+    <Compile Include="ViewModels\SettingsWindowViewModel.cs" />
+    <Compile Include="Controls\ShyTextBlock.cs" />
+    <Compile Include="Utils\TreeViewItemExtensions.cs" />
+    <Compile Include="Utils\MvvmUtils.cs" />
+    <Page Include="Controls\SettingsExplorer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -104,7 +104,7 @@
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SettingsPage.xaml">
+    <Page Include="Controls\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -137,7 +137,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icon-search.png" />
+    <Resource Include="Resources\icon-search.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -151,6 +151,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

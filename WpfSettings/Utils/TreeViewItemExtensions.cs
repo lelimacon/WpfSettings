@@ -1,9 +1,9 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace WpfSettingsControl
+namespace WpfSettings.Utils
 {
-    public static class TreeViewItemExtensions
+    internal static class TreeViewItemExtensions
     {
         public static int GetDepth(this TreeViewItem item)
         {

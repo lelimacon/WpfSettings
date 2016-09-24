@@ -3,9 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace WpfSettingsControl
+namespace WpfSettings.Controls
 {
-    public class PlaceHolderTextBox : TextBox
+    internal class PlaceHolderTextBox : TextBox
     {
         private bool _isPlaceHolder = true;
         private string _placeHolderText;

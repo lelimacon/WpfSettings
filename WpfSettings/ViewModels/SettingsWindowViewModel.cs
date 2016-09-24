@@ -3,28 +3,27 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using WpfSettings.Annotations;
-using WpfSettingsControl;
+using WpfSettings.Config;
+using WpfSettings.Utils;
 
-namespace WpfSettings
+namespace WpfSettings.ViewModels
 {
     public class SettingsWindowViewModel : INotifyPropertyChanged
     {
-
         public object ExternalConfig { get; set; }
         public ObservableCollection<ConfigSection> InternalConfig { get; set; }
-        public string MyNewText { get; set; }
+        public ObservableCollection<ConfigPageElement> CurrentPageConfig { get; set; }
 
-        public ICommand ApplyCommand => new RelayCommand(o => Apply());
-        public ICommand OkCommand => new RelayCommand(o => Ok());
-        public ICommand CancelCommand => new RelayCommand(o => Cancel());
+        public ICommand ApplyCommand => new RelayCommand(Apply);
+        public ICommand OkCommand => new RelayCommand(Ok);
+        public ICommand CancelCommand => new RelayCommand(Cancel);
 
         public SettingsWindowViewModel()
         {
-            var config = new ConfigManager(ExternalConfig);
-            InternalConfig = config.ConvertConfig();
-            MyNewText = "test";
+            var configManager = new ConfigManager(ExternalConfig);
+            InternalConfig = configManager.ConvertConfig();
+            CurrentPageConfig = InternalConfig[0].Elements;
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

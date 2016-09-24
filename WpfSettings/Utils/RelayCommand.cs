@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace WpfSettings
+namespace WpfSettings.Utils
 {
     public class RelayCommand : ICommand
     {
@@ -12,6 +12,11 @@ namespace WpfSettings
 
         public RelayCommand(Action<object> execute)
             : this(execute, DefaultCanExecute)
+        {
+        }
+
+        public RelayCommand(Action execute)
+            : this(o => execute(), DefaultCanExecute)
         {
         }
 

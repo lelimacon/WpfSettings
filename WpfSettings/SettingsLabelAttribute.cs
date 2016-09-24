@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WpfSettingsControl
+namespace WpfSettings
 {
     public class SettingsLabelAttribute : Attribute
     {

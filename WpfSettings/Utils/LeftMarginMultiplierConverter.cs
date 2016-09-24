@@ -4,9 +4,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace WpfSettingsControl
+namespace WpfSettings.Utils
 {
-    public class LeftMarginMultiplierConverter : IValueConverter
+    internal class LeftMarginMultiplierConverter : IValueConverter
     {
         public double Length { get; set; }
 
@@ -21,7 +21,7 @@ namespace WpfSettingsControl
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,11 +1,14 @@
-﻿<UserControl x:Class="WpfSettings.SettingsExplorer"
+﻿<UserControl x:Class="WpfSettings.Controls.SettingsExplorer"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:WpfSettingsControl"
+             xmlns:wpfSettings="clr-namespace:WpfSettings"
+             xmlns:utils="clr-namespace:WpfSettings.Utils"
              mc:Ignorable="d"
-             d:DesignHeight="100" d:DesignWidth="300">
+             x:Name="Root"
+             d:DesignHeight="100" d:DesignWidth="300"
+             x:ClassModifier="internal">
 
     <UserControl.Resources>
 
@@ -55,9 +58,7 @@
             </Setter>
         </Style>
 
-
-        <Style x:Key="{x:Type TreeViewItem}"
-               TargetType="{x:Type TreeViewItem}">
+        <Style TargetType="{x:Type TreeViewItem}">
             <Setter Property="Background"
                     Value="Transparent" />
             <Setter Property="HorizontalContentAlignment"
@@ -76,7 +77,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TreeViewItem}">
                         <ControlTemplate.Resources>
-                            <local:LeftMarginMultiplierConverter Length="19" x:Key="LengthConverter" />
+                            <utils:LeftMarginMultiplierConverter Length="19" x:Key="LengthConverter" />
                         </ControlTemplate.Resources>
                         <StackPanel>
                             <Border Name="Bd"
@@ -180,25 +181,23 @@
         -->
     </UserControl.Resources>
 
-    <StackPanel Orientation="Vertical">
-        <TextBlock Text="{Binding Path=MyText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-        <TreeView ItemsSource="{Binding Itemss, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                  Background="#F5F5F5">
-            <TreeView.Resources>
+    <TreeView DataContext="{Binding ElementName=Root}"
+              ItemsSource="{Binding Items}"
+              Background="#F5F5F5">
+        <TreeView.Resources>
 
-                <HierarchicalDataTemplate DataType="{x:Type local:ConfigSection}"
+            <HierarchicalDataTemplate DataType="{x:Type wpfSettings:ConfigSection}"
                                       ItemsSource="{Binding SubSections}">
-                    <Border BorderBrush="{x:Null}" Height="22">
-                        <StackPanel x:Name="TreeViewFolderItem" Orientation="Horizontal"
+                <Border BorderBrush="{x:Null}" Height="22">
+                    <StackPanel x:Name="TreeViewFolderItem" Orientation="Horizontal"
                                 VerticalAlignment="Center">
-                            <Image Source="{Binding Image}" Margin="0,0,5,0" MaxWidth="16" MaxHeight="16" />
-                            <TextBlock Text="{Binding Label}" />
-                        </StackPanel>
-                    </Border>
-                </HierarchicalDataTemplate>
+                        <Image Source="{Binding Image}" Margin="0,0,5,0" MaxWidth="16" MaxHeight="16" />
+                        <TextBlock Text="{Binding Label}" />
+                    </StackPanel>
+                </Border>
+            </HierarchicalDataTemplate>
 
-            </TreeView.Resources>
+        </TreeView.Resources>
 
-        </TreeView>
-    </StackPanel>
+    </TreeView>
 </UserControl>

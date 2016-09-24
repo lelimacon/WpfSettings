@@ -1,9 +1,9 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfSettingsControl
+namespace WpfSettings.Controls
 {
-    public class ShyTextBlock : TextBlock
+    internal class ShyTextBlock : TextBlock
     {
         public ShyTextBlock()
         {
