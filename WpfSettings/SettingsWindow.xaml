@@ -39,12 +39,13 @@
                        VerticalAlignment="Center" Margin="16,0,0,0" FontSize="12" />
         </Border>
 
-        <controls:SettingsExplorer Grid.Row="1" Grid.Column="0"
-                                   Margin="0,6,0,0" Items="{Binding InternalConfig}" />
+        <controls:SettingsExplorer Grid.Row="1" Grid.Column="0" Margin="0,6,0,0"
+                                   Items="{Binding InternalConfig}"
+                                   ChangeAction="{Binding ChangeSectionAction}" />
 
         <ScrollViewer Grid.Row="1" Grid.Column="1"
                       Margin="12,8,0,0" VerticalScrollBarVisibility="Auto">
-            <controls:SettingsPage ConfigElements="{Binding CurrentPageConfig}" />
+            <controls:SettingsPage ConfigElements="{Binding CurrentPageConfig, Mode=TwoWay}" />
         </ScrollViewer>
 
         <Rectangle Grid.Row="1" Grid.Column="1" Margin="12,0,0,0" Height="1"

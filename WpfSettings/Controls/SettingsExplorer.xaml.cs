@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -15,14 +16,25 @@ namespace WpfSettings.Controls
         public ObservableCollection<ConfigSection> Items
         {
             get { return (ObservableCollection<ConfigSection>) GetValue(ItemsProperty); }
-            set
-            {
-                //if (Items == null)
-                    SetValueDp(ItemsProperty, value);
-                //Items?.Clear();
-                //foreach (var val in value)
-                //    Items?.Add(val);
-            }
+            set { SetValueDp(ItemsProperty, value); }
+        }
+
+        public static readonly DependencyProperty SelectedProperty =
+            MvvmUtils.RegisterDp<SettingsExplorer>();
+
+        public string Selected
+        {
+            get { return (string) GetValue(SelectedProperty); }
+            set { SetValueDp(SelectedProperty, value); }
+        }
+
+        public static readonly DependencyProperty ChangeActionProperty =
+            MvvmUtils.RegisterDp<SettingsExplorer>();
+
+        public Action<ConfigSection> ChangeAction
+        {
+            get { return (Action<ConfigSection>)GetValue(ChangeActionProperty); }
+            set { SetValueDp(ChangeActionProperty, value); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -37,6 +49,12 @@ namespace WpfSettings.Controls
         public SettingsExplorer()
         {
             InitializeComponent();
+        }
+
+        private void OnSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            ConfigSection section = (ConfigSection) e.NewValue;
+            ChangeAction?.Invoke(section);
         }
     }
 }

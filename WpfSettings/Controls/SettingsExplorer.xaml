@@ -183,6 +183,8 @@
 
     <TreeView DataContext="{Binding ElementName=Root}"
               ItemsSource="{Binding Items}"
+              SelectedValuePath="{Binding Selected}"
+              SelectedItemChanged="OnSelectionChanged"
               Background="#F5F5F5">
         <TreeView.Resources>
 

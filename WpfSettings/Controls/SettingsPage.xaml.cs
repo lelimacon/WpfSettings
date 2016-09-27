@@ -7,9 +7,6 @@ using WpfSettings.Utils;
 
 namespace WpfSettings.Controls
 {
-    /// <summary>
-    ///     Interaction logic for WpfSettingsControl.xaml
-    /// </summary>
     internal partial class SettingsPage : UserControl
     {
         public static readonly DependencyProperty ConfigElementsProperty =

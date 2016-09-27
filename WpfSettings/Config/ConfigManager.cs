@@ -44,8 +44,13 @@ namespace WpfSettings.Config
             //section.Image = "icon-search.png";
             items.Add(section);
             section = new ConfigSection("env", "Environment");
-            section.SubSections.Add(new ConfigSection("test1", "General"));
-            section.SubSections.Add(new ConfigSection("test2", "Documents"));
+            section.Add(new TextConfig("test1", "My multiple line answer"));
+            ConfigSection subSection = new ConfigSection("test1", "General");
+            subSection.Add(new BoolConfig("test", "My checkbox"));
+            section.SubSections.Add(subSection);
+            subSection = new ConfigSection("test2", "Documents");
+            subSection.Add(new StringConfig("test1", "My string"));
+            section.SubSections.Add(subSection);
             items.Add(section);
 
             InternalConfig = items;
