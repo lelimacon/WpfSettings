@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wpfSettings="clr-namespace:WpfSettings" 
-             xmlns:controls="clr-namespace:WpfSettings.Controls"
+             xmlns:controls="clr-namespace:WpfSettings.Controls" 
+             xmlns:config="clr-namespace:WpfSettings.Config"
              mc:Ignorable="d"
              x:Name="Root"
              d:DesignHeight="100" d:DesignWidth="300"
@@ -16,14 +17,14 @@
                 <ContentControl.Resources>
 
                     <!-- Group -->
-                    <DataTemplate DataType="{x:Type wpfSettings:ConfigGroup}">
+                    <DataTemplate DataType="{x:Type config:ConfigGroup}">
                         <StackPanel Orientation="Vertical" Margin="6,2,0,2">
                             <GroupBox Header="{Binding Label}" Content="{Binding Elements}" />
                         </StackPanel>
                     </DataTemplate>
 
                     <!-- String -->
-                    <DataTemplate DataType="{x:Type wpfSettings:StringConfig}">
+                    <DataTemplate DataType="{x:Type config:StringConfig}">
                         <Grid Margin="6,2,0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="160" />
@@ -43,7 +44,7 @@
                     </DataTemplate>
 
                     <!-- Text -->
-                    <DataTemplate DataType="{x:Type wpfSettings:TextConfig}">
+                    <DataTemplate DataType="{x:Type config:TextConfig}">
                         <Grid Margin="6,2,0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="160" />
@@ -64,7 +65,7 @@
                     </DataTemplate>
 
                     <!-- Bool -->
-                    <DataTemplate DataType="{x:Type wpfSettings:BoolConfig}">
+                    <DataTemplate DataType="{x:Type config:BoolConfig}">
                         <StackPanel Orientation="Vertical" Margin="6,2,0,2">
                             <CheckBox Content="{Binding Label}"
                                       IsChecked="{Binding Value}" />
@@ -85,7 +86,7 @@
                     -->
 
                     <!-- Choice -->
-                    <DataTemplate DataType="{x:Type wpfSettings:ChoiceConfig}">
+                    <DataTemplate DataType="{x:Type config:ChoiceConfig}">
                         <Grid Margin="6,2,0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="160" />

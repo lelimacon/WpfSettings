@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wpfSettings="clr-namespace:WpfSettings"
-             xmlns:utils="clr-namespace:WpfSettings.Utils"
+             xmlns:utils="clr-namespace:WpfSettings.Utils" 
+             xmlns:config="clr-namespace:WpfSettings.Config"
              mc:Ignorable="d"
              x:Name="Root"
              d:DesignHeight="100" d:DesignWidth="300"
@@ -188,7 +189,7 @@
               Background="#F5F5F5">
         <TreeView.Resources>
 
-            <HierarchicalDataTemplate DataType="{x:Type wpfSettings:ConfigSection}"
+            <HierarchicalDataTemplate DataType="{x:Type config:ConfigSection}"
                                       ItemsSource="{Binding SubSections}">
                 <Border BorderBrush="{x:Null}" Height="22">
                     <StackPanel x:Name="TreeViewFolderItem" Orientation="Horizontal"

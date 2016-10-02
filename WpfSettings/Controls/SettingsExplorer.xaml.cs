@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using WpfSettings.Config;
 using WpfSettings.Utils;
 
 namespace WpfSettings.Controls

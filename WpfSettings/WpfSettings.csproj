@@ -80,7 +80,7 @@
     <Compile Include="Controls\SettingsExplorer.xaml.cs">
       <DependentUpon>SettingsExplorer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SettingsLabelAttribute.cs" />
+    <Compile Include="Attributes.cs" />
     <Compile Include="Controls\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>

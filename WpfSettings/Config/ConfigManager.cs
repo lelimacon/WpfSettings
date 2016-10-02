@@ -1,10 +1,13 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Reflection;
 
 namespace WpfSettings.Config
 {
     internal class ConfigManager
     {
-        public object ExternalConfig { get; private set; }
+        public object ExternalConfig { get; }
         // TODO: simple array?
         public ObservableCollection<ConfigSection> InternalConfig { get; private set; }
 
@@ -15,47 +18,82 @@ namespace WpfSettings.Config
 
         public ObservableCollection<ConfigSection> ConvertConfig()
         {
-            //PropertyInfo[] properties = ExternalConfig.GetType()
-            //    .GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo[] properties = ExternalConfig.GetType().GetProperties();
+            var infos = properties.Where(IsSection);
+            var sections = infos
+                .Select(p => GetSettingSection(ExternalConfig, p));
+            InternalConfig = new ObservableCollection<ConfigSection>(sections);
+            return InternalConfig;
+        }
 
-            var items = new ObservableCollection<ConfigSection>();
-            var section = new ConfigSection("general", "General");
+        private static bool IsSection(PropertyInfo p)
+        {
+            var attribute = p.PropertyType.GetCustomAttribute<SettingSectionAttribute>(true);
+            return attribute != null;
+        }
 
-            //ConfigElements.Add(new TitleConfig("test0", "My title"));
-            section.Add(new StringConfig("test1", "My string"));
-            section.Add(new TextConfig("test1", "My multiple line answer"));
-            section.Add(new BoolConfig("test2", "My checkbox"));
-            section.Add(new BoolConfig("test2", "My second checkbox"));
-            //config = new TitleConfig("test0", "A title with details");
-            //config.Details = "This part deals with other kinds of issues";
-            //ConfigElements.Add(config);
-            section.Add(new BoolConfig("test2", "A checkbox on\ntwo lines"));
-            section.Add(new BoolConfig("test2", "Checkbox with details")
-                {
-                    Details =
-                        "You can either activate or deactivate this checkbox." +
-                        "It's made for it! By default it's deactivated so" +
-                        "don't worry and be happy. We will take care of everything."
-                }
-            );
-            section.Add(new ChoiceConfig("test2", "Select the value",
-                new ObservableCollection<string> {"First Value", "Second Value"}));
+        private static bool IsField(PropertyInfo p)
+        {
+            object[] attributes = p.GetCustomAttributes(true);
+            return attributes.Any(a => a is SettingFieldAttribute);
+        }
 
-            //section.Image = "icon-search.png";
-            items.Add(section);
-            section = new ConfigSection("env", "Environment");
-            section.Add(new TextConfig("test1", "My multiple line answer"));
-            ConfigSection subSection = new ConfigSection("test1", "General");
-            subSection.Add(new BoolConfig("test", "My checkbox"));
-            section.SubSections.Add(subSection);
-            subSection = new ConfigSection("test2", "Documents");
-            subSection.Add(new StringConfig("test1", "My string"));
-            section.SubSections.Add(subSection);
-            items.Add(section);
+        private ConfigSection GetSettingSection(object parent, PropertyInfo prop)
+        {
+            var attribute = prop.PropertyType.GetCustomAttribute<SettingSectionAttribute>(true);
+            PropertyInfo[] properties = prop.PropertyType.GetProperties();
+            var sections = properties
+                .Where(IsSection)
+                .Select(p => GetSettingSection(ExternalConfig, p));
+            var items = properties
+                .Where(IsField)
+                .Select(p => GetSettingElement(ExternalConfig, p));
+            ConfigSection section = new ConfigSection(parent, prop)
+            {
+                SubSections = new ObservableCollection<ConfigSection>(sections),
+                Elements = new ObservableCollection<ConfigPageElement>(items)
+            };
+            if (!string.IsNullOrEmpty(attribute.Label))
+                section.Label = attribute.Label;
+            return section;
+        }
 
-            InternalConfig = items;
+        private ConfigPageElement GetSettingElement(object parent, PropertyInfo prop)
+        {
+            var attribute = prop.GetCustomAttribute<SettingFieldAttribute>(false);
+            Type type = prop.PropertyType;
+            ConfigPageElement element;
+            if (type == typeof(string))
+                element = new StringConfig(parent, prop);
+            else if (type == typeof(bool))
+                element = new BoolConfig(parent, prop);
+            else if (type.IsEnum)
+            {
+                element = GetChoiceConfig(parent, prop);
+            }
+            else
+                throw new ArgumentException($"Type of \"{prop.Name}\" is not recognized");
+            if (!string.IsNullOrEmpty(attribute.Label))
+                element.Label = attribute.Label;
+            return element;
+        }
 
-            return items;
+        private static ChoiceConfig GetChoiceConfig(object parent, PropertyInfo prop)
+        {
+            Type type = prop.PropertyType;
+            var choices = new ObservableCollection<string>();
+            Array names = Enum.GetNames(type);
+            foreach (string name in names)
+            {
+                var memberInfos = type.GetMember(name);
+                var attr = memberInfos[0].GetCustomAttribute<SettingFieldAttribute>(false);
+                if (attr != null)
+                    choices.Add(attr.Label);
+            }
+            return new ChoiceConfig(parent, prop)
+            {
+                Choices = choices,
+            };
         }
 
         public void SaveConfig()

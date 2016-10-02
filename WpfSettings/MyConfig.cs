@@ -2,27 +2,28 @@
 {
     public class MyConfig
     {
-        public class GeneralSettings
+        public GeneralSettings General { get; set; }
+    }
+
+    [SettingSection("General Settings")]
+    public class GeneralSettings
+    {
+        public enum MyEnum
         {
-            public enum MyEnum
-            {
-                [SettingsLabel("Choix 1")]
-                FirstChoice,
+            [SettingField("Choix 1")]
+            FirstChoice,
 
-                [SettingsLabel("Choix 2")]
-                FirstChoice2,
-            }
-
-            [SettingsLabel("Click me")]
-            public bool Checkbox { get; set; }
-
-            [SettingsLabel("Your name")]
-            public string Login { get; set; }
-
-            [SettingsLabel("Choose one")]
-            public MyEnum MyChoice { get; set; }
+            [SettingField("Choix 2")]
+            FirstChoice2,
         }
 
-        public GeneralSettings General { get; set; }
+        [SettingField("Click me")]
+        public bool Checkbox { get; set; }
+
+        [SettingField("Your name", DefaultValue = "Alibaba")]
+        public string Login { get; set; }
+
+        [SettingField("Choose one")]
+        public MyEnum MyChoice { get; set; }
     }
 }

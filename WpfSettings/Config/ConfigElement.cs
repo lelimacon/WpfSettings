@@ -1,41 +1,40 @@
 ﻿using System.Collections.ObjectModel;
+using System.Reflection;
 
-namespace WpfSettings
+namespace WpfSettings.Config
 {
     public abstract class ConfigElement
     {
-        public string Id { get; private set; }
+        public object Parent { get; }
+        public PropertyInfo Property { get; }
         public string Label { get; set; }
         public string Image { get; set; }
         public string Details { get; set; }
 
-        protected ConfigElement(string id, string label)
+        protected ConfigElement(object parent, PropertyInfo property)
         {
-            Id = id;
-            Label = label;
+            Parent = parent;
+            Property = property;
+            Label = property?.Name;
         }
     }
 
     public class ConfigSection : ConfigElement
     {
-        public ObservableCollection<ConfigSection> SubSections { get; }
-        public ObservableCollection<ConfigPageElement> Elements { get; }
+        public ObservableCollection<ConfigSection> SubSections { get; set; }
+        public ObservableCollection<ConfigPageElement> Elements { get; set; }
 
-        public ConfigSection(string id, string label)
-            : base(id, label)
+        public ConfigSection(object parent, PropertyInfo property)
+            : base(parent, property)
         {
-            SubSections = new ObservableCollection<ConfigSection>();
-            Elements = new ObservableCollection<ConfigPageElement>();
         }
+    }
 
-        public void Add(ConfigSection element)
+    public abstract class ConfigPageElement : ConfigElement
+    {
+        protected ConfigPageElement(object parent, PropertyInfo property)
+            : base(parent, property)
         {
-            SubSections.Add(element);
-        }
-
-        public void Add(ConfigPageElement element)
-        {
-            Elements.Add(element);
         }
     }
 
@@ -43,8 +42,8 @@ namespace WpfSettings
     {
         public ObservableCollection<ConfigPageElement> Elements { get; }
 
-        public ConfigGroup(string id, string label)
-            : base(id, label)
+        public ConfigGroup(object parent, PropertyInfo property)
+            : base(parent, property)
         {
             Elements = new ObservableCollection<ConfigPageElement>();
         }
@@ -55,30 +54,12 @@ namespace WpfSettings
         }
     }
 
-    public class ConfigPageElement : ConfigElement
-    {
-        public ConfigPageElement(string id, string label)
-            : base(id, label)
-        {
-        }
-    }
-
-    /*
-    internal class TitleConfig : ConfigSimpleElement
-    {
-        public TitleConfig(string id, string label)
-            : base(id, label)
-        {
-        }
-    }
-    */
-
     public class StringConfig : ConfigPageElement
     {
         public string Value { get; set; }
 
-        public StringConfig(string id, string label)
-            : base(id, label)
+        public StringConfig(object parent, PropertyInfo property)
+            : base(parent, property)
         {
         }
     }
@@ -88,15 +69,9 @@ namespace WpfSettings
         public string Value { get; set; }
         public int Height { get; set; }
 
-        public TextConfig(string id, string label)
-            : this(id, label, 60)
+        public TextConfig(object parent, PropertyInfo property)
+            : base(parent, property)
         {
-        }
-
-        public TextConfig(string id, string label, int height)
-            : base(id, label)
-        {
-            Height = height;
         }
     }
 
@@ -104,28 +79,20 @@ namespace WpfSettings
     {
         public bool Value { get; set; }
 
-        public BoolConfig(string id, string label)
-            : base(id, label)
+        public BoolConfig(object parent, PropertyInfo property)
+            : base(parent, property)
         {
-            Value = true;
         }
     }
 
     public class ChoiceConfig : ConfigPageElement
     {
-        public ObservableCollection<string> Choices { get; private set; }
+        public ObservableCollection<string> Choices { get; set; }
         public int SelectedIndex { get; set; }
 
-        public ChoiceConfig(string id, string label)
-            : this(id, label, new ObservableCollection<string>())
+        public ChoiceConfig(object parent, PropertyInfo property)
+            : base(parent, property)
         {
-        }
-
-        public ChoiceConfig(string id, string label, ObservableCollection<string> choices)
-            : base(id, label)
-        {
-            Choices = choices;
-            SelectedIndex = 0;
         }
     }
 }
