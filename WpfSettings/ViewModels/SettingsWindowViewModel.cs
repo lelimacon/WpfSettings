@@ -50,9 +50,9 @@ namespace WpfSettings.ViewModels
         }
 
 
-        public SettingsWindowViewModel()
+        public SettingsWindowViewModel(object config)
         {
-            ExternalConfig = new MyConfig();
+            ExternalConfig = config;
             var configManager = new ConfigManager(ExternalConfig);
             InternalConfig = configManager.ConvertConfig();
             CurrentPageConfig = InternalConfig[0].Elements;

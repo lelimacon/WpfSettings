@@ -7,9 +7,9 @@ namespace WpfSettings
     {
         public SettingsWindowViewModel ViewModel { get; set; }
 
-        public SettingsWindow()
+        public SettingsWindow(object config)
         {
-            ViewModel = new SettingsWindowViewModel();
+            ViewModel = new SettingsWindowViewModel(config);
             InitializeComponent();
         }
     }
