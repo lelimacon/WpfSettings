@@ -64,7 +64,7 @@ namespace WpfSettings.Config
             Type type = prop.PropertyType;
             ConfigPageElement element;
             if (type == typeof(string))
-                element = new StringConfig(parent, prop);
+                element = new TextConfig(parent, prop);
             else if (type == typeof(bool))
                 element = new BoolConfig(parent, prop);
             else if (type.IsEnum)
@@ -90,15 +90,17 @@ namespace WpfSettings.Config
                 if (attr != null)
                     choices.Add(attr.Label);
             }
-            return new ChoiceConfig(parent, prop)
+            ChoiceConfig config = new ChoiceConfig(parent, prop)
             {
-                Choices = choices,
+                Choices = choices
             };
+            return config;
         }
 
         public void SaveConfig()
         {
-            // TODO: Save properties
+            foreach (ConfigSection section in InternalConfig)
+                section.Save();
         }
     }
 }

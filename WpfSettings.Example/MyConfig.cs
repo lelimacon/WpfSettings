@@ -1,4 +1,4 @@
-﻿namespace WpfSettings
+﻿namespace WpfSettings.Example
 {
     public class MyConfig
     {

@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:wpfSettings="clr-namespace:WpfSettings" 
-             xmlns:controls="clr-namespace:WpfSettings.Controls" 
+             xmlns:controls="clr-namespace:WpfSettings.Controls"
              xmlns:config="clr-namespace:WpfSettings.Config"
              mc:Ignorable="d"
              x:Name="Root"
@@ -23,26 +22,6 @@
                         </StackPanel>
                     </DataTemplate>
 
-                    <!-- String -->
-                    <DataTemplate DataType="{x:Type config:StringConfig}">
-                        <Grid Margin="6,2,0,2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="160" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Label}" />
-                            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Value}"
-                                     VerticalContentAlignment="Center" />
-                            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                                Text="{Binding Details}"
-                                                TextWrapping="Wrap" FontStyle="Italic" />
-                        </Grid>
-                    </DataTemplate>
-
                     <!-- Text -->
                     <DataTemplate DataType="{x:Type config:TextConfig}">
                         <Grid Margin="6,2,0,2">
@@ -54,13 +33,16 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Label}" />
+                            <Border Grid.Row="0" Grid.Column="0" Height="{Binding Height}">
+                                <TextBlock Text="{Binding Label}"
+                                           VerticalAlignment="{Binding ContentAlignment}" />
+                            </Border>
                             <TextBox Grid.Row="0" Grid.Column="1" TextWrapping="Wrap"
                                      Height="{Binding Height}" Text="{Binding Value}"
-                                     VerticalContentAlignment="Top" />
+                                     VerticalContentAlignment="{Binding ContentAlignment}" />
                             <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                                Text="{Binding Details}"
-                                                TextWrapping="Wrap" FontStyle="Italic" />
+                                                   Text="{Binding Details}"
+                                                   TextWrapping="Wrap" FontStyle="Italic" />
                         </Grid>
                     </DataTemplate>
 
@@ -70,20 +52,9 @@
                             <CheckBox Content="{Binding Label}"
                                       IsChecked="{Binding Value}" />
                             <controls:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
-                                                TextWrapping="Wrap" Margin="18,2,0,4" />
+                                                   TextWrapping="Wrap" Margin="18,2,0,4" />
                         </StackPanel>
                     </DataTemplate>
-
-                    <!-- Title -->
-                    <!--
-                    <DataTemplate DataType="{x:Type local:TitleConfig}">
-                        <StackPanel Orientation="Vertical" Margin="0,6,0,6">
-                            <Label Content="{Binding Label}" FontWeight="Bold" />
-                            <local:ShyTextBlock Text="{Binding Details}" Margin="4,-4,0,4"
-                                                TextWrapping="Wrap" FontStyle="Italic" />
-                        </StackPanel>
-                    </DataTemplate>
-                    -->
 
                     <!-- Choice -->
                     <DataTemplate DataType="{x:Type config:ChoiceConfig}">
@@ -100,8 +71,8 @@
                             <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Choices}"
                                       SelectedIndex="{Binding SelectedIndex}" />
                             <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                                Text="{Binding Details}" FontStyle="Italic"
-                                                TextWrapping="Wrap" Margin="8,-2,0,0" />
+                                                   Text="{Binding Details}" FontStyle="Italic"
+                                                   TextWrapping="Wrap" Margin="8,-2,0,0" />
                         </Grid>
                     </DataTemplate>
 
@@ -113,16 +84,5 @@
     <ItemsControl DataContext="{Binding ElementName=Root}"
                   ItemTemplate="{StaticResource ConfigElementTemplate}"
                   ItemsSource="{Binding ConfigElements}" />
-
-    <!--
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0" Text="test" />
-        <TextBox Grid.Column="1" />
-    </Grid>
-    -->
 
 </UserControl>

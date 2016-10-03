@@ -1,5 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection;
+using System.Windows;
 
 namespace WpfSettings.Config
 {
@@ -8,7 +11,6 @@ namespace WpfSettings.Config
         public object Parent { get; }
         public PropertyInfo Property { get; }
         public string Label { get; set; }
-        public string Image { get; set; }
         public string Details { get; set; }
 
         protected ConfigElement(object parent, PropertyInfo property)
@@ -17,16 +19,29 @@ namespace WpfSettings.Config
             Property = property;
             Label = property?.Name;
         }
+
+        public virtual void Save()
+        {
+        }
     }
 
     public class ConfigSection : ConfigElement
     {
+        public string Image { get; set; }
         public ObservableCollection<ConfigSection> SubSections { get; set; }
         public ObservableCollection<ConfigPageElement> Elements { get; set; }
 
         public ConfigSection(object parent, PropertyInfo property)
             : base(parent, property)
         {
+        }
+
+        public override void Save()
+        {
+            foreach (ConfigSection section in SubSections)
+                section.Save();
+            foreach (ConfigPageElement element in Elements)
+                element.Save();
         }
     }
 
@@ -52,26 +67,31 @@ namespace WpfSettings.Config
         {
             Elements.Add(element);
         }
-    }
 
-    public class StringConfig : ConfigPageElement
-    {
-        public string Value { get; set; }
-
-        public StringConfig(object parent, PropertyInfo property)
-            : base(parent, property)
+        public override void Save()
         {
+            foreach (ConfigPageElement element in Elements)
+                element.Save();
         }
     }
-
+    
     public class TextConfig : ConfigPageElement
     {
         public string Value { get; set; }
         public int Height { get; set; }
+        public bool TextWrapping { get; set; }
+        public VerticalAlignment ContentAlignment { get; set; }
 
         public TextConfig(object parent, PropertyInfo property)
             : base(parent, property)
         {
+            Height = 24;
+            ContentAlignment = VerticalAlignment.Center;
+        }
+
+        public override void Save()
+        {
+            Property.SetValue(Parent, Value);
         }
     }
 
@@ -83,6 +103,11 @@ namespace WpfSettings.Config
             : base(parent, property)
         {
         }
+
+        public override void Save()
+        {
+            Property.SetValue(Parent, Value);
+        }
     }
 
     public class ChoiceConfig : ConfigPageElement
@@ -93,6 +118,22 @@ namespace WpfSettings.Config
         public ChoiceConfig(object parent, PropertyInfo property)
             : base(parent, property)
         {
+        }
+
+        public override void Save()
+        {
+            string value = Choices[SelectedIndex];
+            Type type = Property.PropertyType;
+            string name = Enum.GetNames(type).First(n => FieldLabel(type, n) == value);
+            var entry = Enum.Parse(type, name);
+            Property.SetValue(Parent, entry);
+        }
+
+        private static string FieldLabel(Type type, string n)
+        {
+            MemberInfo info = type.GetMember(n)[0];
+            var attribute = info.GetCustomAttribute<SettingFieldAttribute>(false);
+            return attribute?.Label;
         }
     }
 }
