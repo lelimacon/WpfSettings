@@ -5,11 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="260" Width="400">
+        Title="My Note"
+        Height="260" Width="400">
     <Grid>
         <Border Margin="10,10,84,0" VerticalAlignment="Top" Height="24"
                 BorderBrush="Gray" BorderThickness="1">
-            <TextBlock Text="Title" VerticalAlignment="Center" Margin="4" FontWeight="Bold" />
+            <TextBlock Text="{Binding Settings.Interface.Content.Title}" VerticalAlignment="Center"
+                       Margin="4" FontWeight="Bold" />
         </Border>
         <Button Content="Settings" Margin="0,10,10,0"
                 Height="24" Width="69"

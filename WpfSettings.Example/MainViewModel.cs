@@ -8,18 +8,18 @@ namespace WpfSettings.Example
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private MyConfig _myConfig;
+        private Settings _settings;
 
         #region Properties
 
         public ICommand ShowSettingsCommand => new RelayCommand(ShowSettings);
 
-        public MyConfig MyConfig
+        public Settings Settings
         {
-            get { return _myConfig; }
+            get { return _settings; }
             set
             {
-                _myConfig = value;
+                _settings = value;
                 OnPropertyChanged();
             }
         }
@@ -36,12 +36,12 @@ namespace WpfSettings.Example
 
         public MainViewModel()
         {
-            MyConfig = new MyConfig();
+            Settings = new Settings();
         }
 
         private void ShowSettings()
         {
-            SettingsWindow window = new SettingsWindow(MyConfig);
+            SettingsWindow window = new SettingsWindow(Settings);
             window.ShowDialog();
         }
     }
