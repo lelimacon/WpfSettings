@@ -30,8 +30,6 @@ namespace WpfSettings
 
     public class SettingFieldAttribute : SettingAttribute
     {
-        public object DefaultValue { get; set; }
-
         public SettingFieldAttribute()
         {
         }
