@@ -5,13 +5,12 @@ using System.Reflection;
 
 namespace WpfSettings.Config
 {
-    internal class ConfigManager
+    internal class ConfigConverter
     {
         public object ExternalConfig { get; }
-        // TODO: simple array?
         public ObservableCollection<ConfigSection> InternalConfig { get; private set; }
 
-        public ConfigManager(object config)
+        public ConfigConverter(object config)
         {
             ExternalConfig = config;
         }
@@ -42,12 +41,13 @@ namespace WpfSettings.Config
         {
             var attribute = prop.PropertyType.GetCustomAttribute<SettingSectionAttribute>(true);
             PropertyInfo[] properties = prop.PropertyType.GetProperties();
+            object value = prop.GetValue(parent);
             var sections = properties
                 .Where(IsSection)
-                .Select(p => GetSettingSection(ExternalConfig, p));
+                .Select(p => GetSettingSection(value, p));
             var items = properties
                 .Where(IsField)
-                .Select(p => GetSettingElement(ExternalConfig, p));
+                .Select(p => GetSettingElement(value, p));
             ConfigSection section = new ConfigSection(parent, prop)
             {
                 SubSections = new ObservableCollection<ConfigSection>(sections),

@@ -3,6 +3,19 @@ using System.Windows.Input;
 
 namespace WpfSettings.Utils
 {
+    public class RelayCommand<T> : RelayCommand
+    {
+        public RelayCommand(Action<T> execute)
+            : base(o => execute((T) o))
+        {
+        }
+
+        public RelayCommand(Action<T> execute, Predicate<T> canExecute)
+            : base(o => execute((T)o), o => canExecute((T) o))
+        {
+        }
+    }
+
     public class RelayCommand : ICommand
     {
         private Action<object> _execute;

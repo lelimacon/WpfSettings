@@ -3,6 +3,11 @@
     public class MyConfig
     {
         public GeneralSettings General { get; set; }
+
+        public MyConfig()
+        {
+            General = new GeneralSettings();
+        }
     }
 
     [SettingSection("General Settings")]

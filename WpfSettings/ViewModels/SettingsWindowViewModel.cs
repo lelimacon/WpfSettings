@@ -13,6 +13,8 @@ namespace WpfSettings.ViewModels
     {
         private ObservableCollection<ConfigPageElement> _currentPageConfig;
         private ObservableCollection<ConfigSection> _internalConfig;
+        private string _categoryTitle;
+        internal ConfigConverter ConfigConverter { get; set; }
         public object ExternalConfig { get; set; }
 
         public ObservableCollection<ConfigSection> InternalConfig
@@ -35,11 +37,21 @@ namespace WpfSettings.ViewModels
             }
         }
 
+        public string CategoryTitle
+        {
+            get { return _categoryTitle; }
+            set
+            {
+                _categoryTitle = value;
+                OnPropertyChanged();
+            }
+        }
+
         public Action<ConfigSection> ChangeSectionAction { get; set; }
 
-        public ICommand ApplyCommand => new RelayCommand(Apply);
-        public ICommand OkCommand => new RelayCommand(Ok);
-        public ICommand CancelCommand => new RelayCommand(Cancel);
+        public ICommand ApplyCommand => new RelayCommand<SettingsWindow>(Apply);
+        public ICommand OkCommand => new RelayCommand<SettingsWindow>(Ok);
+        public ICommand CancelCommand => new RelayCommand<SettingsWindow>(Cancel);
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -53,27 +65,32 @@ namespace WpfSettings.ViewModels
         public SettingsWindowViewModel(object config)
         {
             ExternalConfig = config;
-            var configManager = new ConfigManager(ExternalConfig);
-            InternalConfig = configManager.ConvertConfig();
-            CurrentPageConfig = InternalConfig[0].Elements;
+            ConfigConverter = new ConfigConverter(config);
+            InternalConfig = ConfigConverter.ConvertConfig();
             ChangeSectionAction = ChangeSection;
+            ChangeSection(InternalConfig[0]);
         }
 
         private void ChangeSection(ConfigSection section)
         {
+            CategoryTitle = section.Label;
             CurrentPageConfig = section.Elements;
         }
 
-        private void Apply()
+        private void Apply(SettingsWindow window)
         {
+            ConfigConverter.SaveConfig();
         }
 
-        private void Ok()
+        private void Ok(SettingsWindow window)
         {
+            ConfigConverter.SaveConfig();
+            window.Close();
         }
 
-        private void Cancel()
+        private void Cancel(SettingsWindow window)
         {
+            window.Close();
         }
     }
 }
