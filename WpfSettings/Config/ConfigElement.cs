@@ -74,19 +74,31 @@ namespace WpfSettings.Config
                 element.Save();
         }
     }
-    
+
+    public class StringConfig : ConfigPageElement
+    {
+        public string Value { get; set; }
+
+        public StringConfig(object parent, PropertyInfo property)
+            : base(parent, property)
+        {
+        }
+
+        public override void Save()
+        {
+            Property.SetValue(Parent, Value);
+        }
+    }
+
     public class TextConfig : ConfigPageElement
     {
         public string Value { get; set; }
         public int Height { get; set; }
-        public bool TextWrapping { get; set; }
-        public VerticalAlignment ContentAlignment { get; set; }
 
         public TextConfig(object parent, PropertyInfo property)
             : base(parent, property)
         {
-            Height = 24;
-            ContentAlignment = VerticalAlignment.Center;
+            Height = 40;
         }
 
         public override void Save()

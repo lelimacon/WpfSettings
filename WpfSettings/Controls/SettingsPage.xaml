@@ -22,6 +22,30 @@
                         </StackPanel>
                     </DataTemplate>
 
+                    <!-- String -->
+                    <DataTemplate DataType="{x:Type config:StringConfig}">
+                        <Grid Margin="6,2,0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" Grid.Column="0" Height="24">
+                                <TextBlock Text="{Binding Label}"
+                                           VerticalAlignment="Center" />
+                            </Border>
+                            <TextBox Grid.Row="0" Grid.Column="1" TextWrapping="Wrap"
+                                     Height="24" Text="{Binding Value}"
+                                     VerticalContentAlignment="Center" />
+                            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
+                                                   Text="{Binding Details}"
+                                                   TextWrapping="Wrap" FontStyle="Italic" />
+                        </Grid>
+                    </DataTemplate>
+
                     <!-- Text -->
                     <DataTemplate DataType="{x:Type config:TextConfig}">
                         <Grid Margin="6,2,0,2">
@@ -34,12 +58,10 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <Border Grid.Row="0" Grid.Column="0" Height="{Binding Height}">
-                                <TextBlock Text="{Binding Label}"
-                                           VerticalAlignment="{Binding ContentAlignment}" />
+                                <TextBlock Text="{Binding Label}" />
                             </Border>
                             <TextBox Grid.Row="0" Grid.Column="1" TextWrapping="Wrap"
-                                     Height="{Binding Height}" Text="{Binding Value}"
-                                     VerticalContentAlignment="{Binding ContentAlignment}" />
+                                     Height="{Binding Height}" Text="{Binding Value}" />
                             <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
                                                    Text="{Binding Details}"
                                                    TextWrapping="Wrap" FontStyle="Italic" />

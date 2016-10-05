@@ -34,7 +34,7 @@ namespace WpfSettings.Example
     {
         private bool _startReboot;
 
-        [SettingField("Launch this program with Windows start-up")]
+        [SettingBool("Launch this program with Windows start-up")]
         public bool StartReboot
         {
             get { return _startReboot; }
@@ -60,7 +60,7 @@ namespace WpfSettings.Example
             [SettingField("Other")] Other
         }
 
-        [SettingField("Gender")]
+        [SettingComboBox("Gender")]
         public EGender Gender
         {
             get { return _gender; }
@@ -71,7 +71,7 @@ namespace WpfSettings.Example
             }
         }
 
-        [SettingField("Name")]
+        [SettingString("Name")]
         public string Name
         {
             get { return _name; }
@@ -83,7 +83,7 @@ namespace WpfSettings.Example
         }
 
         // TODO: int selection
-        [SettingField("Age")]
+        [SettingString("Age")]
         public string Age
         {
             get { return _age; }
@@ -123,7 +123,7 @@ namespace WpfSettings.Example
         }
 
         // TODO: color picker
-        [SettingField("Background color")]
+        [SettingString("Background color")]
         public string BgColor
         {
             get { return _bgColor; }
@@ -134,7 +134,7 @@ namespace WpfSettings.Example
             }
         }
 
-        [SettingField("Text color")]
+        [SettingString("Text color")]
         public string TextColor
         {
             get { return _textColor; }
@@ -145,7 +145,7 @@ namespace WpfSettings.Example
             }
         }
 
-        [SettingField("Title text style")]
+        [SettingComboBox("Title text style")]
         public TextStyle TitleStyle
         {
             get { return _titleStyle; }
@@ -156,7 +156,7 @@ namespace WpfSettings.Example
             }
         }
 
-        [SettingField("Content text style")]
+        [SettingComboBox("Content text style")]
         public TextStyle ContentStyle
         {
             get { return _contentStyle; }
@@ -174,7 +174,7 @@ namespace WpfSettings.Example
         private string _title;
         private string _pageContent;
 
-        [SettingField("Title")]
+        [SettingString("Title")]
         public string Title
         {
             get { return _title; }
@@ -185,7 +185,7 @@ namespace WpfSettings.Example
             }
         }
 
-        [SettingField("Page content")]
+        [SettingText("Page content")]
         public string PageContent
         {
             get { return _pageContent; }

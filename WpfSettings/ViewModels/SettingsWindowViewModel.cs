@@ -79,18 +79,24 @@ namespace WpfSettings.ViewModels
 
         private void Apply(SettingsWindow window)
         {
-            ConfigConverter.SaveConfig();
+            Save();
         }
 
         private void Ok(SettingsWindow window)
         {
-            ConfigConverter.SaveConfig();
+            Save();
             window.Close();
         }
 
         private void Cancel(SettingsWindow window)
         {
             window.Close();
+        }
+
+        private void Save()
+        {
+            foreach (ConfigSection section in InternalConfig)
+                section.Save();
         }
     }
 }

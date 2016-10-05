@@ -30,13 +30,7 @@ namespace WpfSettings.Config
             var attribute = p.PropertyType.GetCustomAttribute<SettingSectionAttribute>(true);
             return attribute != null;
         }
-
-        private static bool IsField(PropertyInfo p)
-        {
-            object[] attributes = p.GetCustomAttributes(true);
-            return attributes.Any(a => a is SettingFieldAttribute);
-        }
-
+        
         private ConfigSection GetSettingSection(object parent, PropertyInfo prop)
         {
             var attribute = prop.PropertyType.GetCustomAttribute<SettingSectionAttribute>(true);
@@ -45,13 +39,13 @@ namespace WpfSettings.Config
             var sections = properties
                 .Where(IsSection)
                 .Select(p => GetSettingSection(value, p));
-            var items = properties
-                .Where(IsField)
-                .Select(p => GetSettingElement(value, p));
+            var elements = properties
+                .Select(p => GetSettingElement(value, p))
+                .Where(e => e != null);
             ConfigSection section = new ConfigSection(parent, prop)
             {
                 SubSections = new ObservableCollection<ConfigSection>(sections),
-                Elements = new ObservableCollection<ConfigPageElement>(items)
+                Elements = new ObservableCollection<ConfigPageElement>(elements)
             };
             if (!string.IsNullOrEmpty(attribute.Label))
                 section.Label = attribute.Label;
@@ -60,27 +54,61 @@ namespace WpfSettings.Config
 
         private ConfigPageElement GetSettingElement(object parent, PropertyInfo prop)
         {
-            var attribute = prop.GetCustomAttribute<SettingFieldAttribute>(false);
+            // TODO: Retrieve all attributes
             Type type = prop.PropertyType;
-            ConfigPageElement element;
-            if (type == typeof(string))
-                element = new TextConfig(parent, prop);
-            else if (type == typeof(bool))
-                element = new BoolConfig(parent, prop);
-            else if (type.IsEnum)
+            var attributes = prop.GetCustomAttributes(false);
+            foreach (object attribute in attributes)
             {
-                element = GetChoiceConfig(parent, prop);
+                ConfigPageElement element = GetElement(parent, prop, (dynamic) attribute);
+                if (element != null)
+                    return element;
             }
-            else
-                throw new ArgumentException($"Type of \"{prop.Name}\" is not recognized");
+            return null;
+        }
+
+        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, object att)
+        {
+            return null;
+        }
+
+        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, SettingStringAttribute attribute)
+        {
+            Type type = prop.PropertyType;
+            if (type != typeof(string))
+                throw new ArgumentException("SettingStringAttribute must target a string");
+            StringConfig element = new StringConfig(parent, prop);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             return element;
         }
 
-        private static ChoiceConfig GetChoiceConfig(object parent, PropertyInfo prop)
+        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, SettingTextAttribute attribute)
         {
             Type type = prop.PropertyType;
+            if (type != typeof(string))
+                throw new ArgumentException("SettingTextAttribute must target a string");
+            TextConfig element = new TextConfig(parent, prop);
+            if (!string.IsNullOrEmpty(attribute.Label))
+                element.Label = attribute.Label;
+            return element;
+        }
+
+        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, SettingBoolAttribute attribute)
+        {
+            Type type = prop.PropertyType;
+            if (type != typeof(bool))
+                throw new ArgumentException("SettingTextAttribute must target a boolean");
+            BoolConfig element = new BoolConfig(parent, prop);
+            if (!string.IsNullOrEmpty(attribute.Label))
+                element.Label = attribute.Label;
+            return element;
+        }
+
+        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, SettingComboBoxAttribute attribute)
+        {
+            Type type = prop.PropertyType;
+            if (!type.IsEnum)
+                throw new ArgumentException("SettingComboBoxAttribute must target an enum");
             var choices = new ObservableCollection<string>();
             Array names = Enum.GetNames(type);
             foreach (string name in names)
@@ -90,17 +118,13 @@ namespace WpfSettings.Config
                 if (attr != null)
                     choices.Add(attr.Label);
             }
-            ChoiceConfig config = new ChoiceConfig(parent, prop)
+            ChoiceConfig element = new ChoiceConfig(parent, prop)
             {
                 Choices = choices
             };
-            return config;
-        }
-
-        public void SaveConfig()
-        {
-            foreach (ConfigSection section in InternalConfig)
-                section.Save();
+            if (!string.IsNullOrEmpty(attribute.Label))
+                element.Label = attribute.Label;
+            return element;
         }
     }
 }
