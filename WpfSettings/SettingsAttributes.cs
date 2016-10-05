@@ -68,14 +68,22 @@ namespace WpfSettings
         }
     }
 
-    [AttributeUsage(AttributeTargets.Property)]
-    public class SettingComboBoxAttribute : SettingAttribute
+    public enum ChoiceType
     {
-        public SettingComboBoxAttribute()
+        DropDown,
+        RadioButtons
+    }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public class SettingChoiceAttribute : SettingAttribute
+    {
+        public ChoiceType Type { get; set; } = ChoiceType.DropDown;
+
+        public SettingChoiceAttribute()
         {
         }
 
-        public SettingComboBoxAttribute(string label)
+        public SettingChoiceAttribute(string label)
             : base(label)
         {
         }

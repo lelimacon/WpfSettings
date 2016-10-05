@@ -30,7 +30,7 @@ namespace WpfSettings.Config
             var attribute = p.PropertyType.GetCustomAttribute<SettingSectionAttribute>(true);
             return attribute != null;
         }
-        
+
         private ConfigSection GetSettingSection(object parent, PropertyInfo prop)
         {
             var attribute = prop.PropertyType.GetCustomAttribute<SettingSectionAttribute>(true);
@@ -104,11 +104,11 @@ namespace WpfSettings.Config
             return element;
         }
 
-        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, SettingComboBoxAttribute attribute)
+        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, SettingChoiceAttribute attribute)
         {
             Type type = prop.PropertyType;
             if (!type.IsEnum)
-                throw new ArgumentException("SettingComboBoxAttribute must target an enum");
+                throw new ArgumentException("SettingChoiceAttribute must target an enum");
             var choices = new ObservableCollection<string>();
             Array names = Enum.GetNames(type);
             foreach (string name in names)
@@ -118,10 +118,12 @@ namespace WpfSettings.Config
                 if (attr != null)
                     choices.Add(attr.Label);
             }
-            ChoiceConfig element = new ChoiceConfig(parent, prop)
-            {
-                Choices = choices
-            };
+            ChoiceConfig element;
+            if (attribute.Type == ChoiceType.DropDown)
+                element = new DropDownConfig(parent, prop);
+            else
+                element = new RadioButtonsConfig(parent, prop);
+            element.Choices = choices;
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             return element;

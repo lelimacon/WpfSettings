@@ -4,13 +4,13 @@ using WpfSettings.Annotations;
 
 namespace WpfSettings.Example
 {
-    public class Settings
+    public class GlobalSettings
     {
         public GeneralSettings General { get; set; }
         public UserSettings User { get; set; }
         public InterfaceSettings Interface { get; set; }
 
-        public Settings()
+        public GlobalSettings()
         {
             General = new GeneralSettings();
             User = new UserSettings();
@@ -49,8 +49,8 @@ namespace WpfSettings.Example
     [SettingSection("Profile")]
     public class UserSettings : Notify
     {
-        private EGender _gender;
-        private string _name;
+        private EGender _gender = EGender.Other;
+        private string _name = "Bob";
         private string _age;
 
         public enum EGender
@@ -60,7 +60,7 @@ namespace WpfSettings.Example
             [SettingField("Other")] Other
         }
 
-        [SettingComboBox("Gender")]
+        [SettingChoice("Gender")]
         public EGender Gender
         {
             get { return _gender; }
@@ -118,8 +118,9 @@ namespace WpfSettings.Example
 
         public enum TextStyle
         {
-            [SettingField("Bold")] Bold,
-            [SettingField("Italic")] Italic
+            [SettingField("Passive")] Normal,
+            [SettingField("Agressive")] Bold,
+            [SettingField("Discrete")] Italic
         }
 
         // TODO: color picker
@@ -145,7 +146,7 @@ namespace WpfSettings.Example
             }
         }
 
-        [SettingComboBox("Title text style")]
+        [SettingChoice("Title text style", Type = ChoiceType.RadioButtons)]
         public TextStyle TitleStyle
         {
             get { return _titleStyle; }
@@ -156,7 +157,7 @@ namespace WpfSettings.Example
             }
         }
 
-        [SettingComboBox("Content text style")]
+        [SettingChoice("Content text style", Type = ChoiceType.RadioButtons)]
         public TextStyle ContentStyle
         {
             get { return _contentStyle; }
@@ -171,8 +172,8 @@ namespace WpfSettings.Example
     [SettingSection("Content")]
     public class ContentSettings : Notify
     {
-        private string _title;
-        private string _pageContent;
+        private string _title = "My Super Note!";
+        private string _pageContent = "My Super Content!";
 
         [SettingString("Title")]
         public string Title

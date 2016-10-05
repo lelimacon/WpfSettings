@@ -8,13 +8,13 @@ namespace WpfSettings.Example
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private Settings _settings;
+        private GlobalSettings _settings;
 
         #region Properties
 
         public ICommand ShowSettingsCommand => new RelayCommand(ShowSettings);
 
-        public Settings Settings
+        public GlobalSettings Settings
         {
             get { return _settings; }
             set
@@ -36,7 +36,7 @@ namespace WpfSettings.Example
 
         public MainViewModel()
         {
-            Settings = new Settings();
+            Settings = new GlobalSettings();
         }
 
         private void ShowSettings()

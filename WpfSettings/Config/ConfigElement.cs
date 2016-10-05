@@ -2,7 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Windows;
+using System.Windows.Input;
+using WpfSettings.Utils;
 
 namespace WpfSettings.Config
 {
@@ -146,6 +147,31 @@ namespace WpfSettings.Config
             MemberInfo info = type.GetMember(n)[0];
             var attribute = info.GetCustomAttribute<SettingFieldAttribute>(false);
             return attribute?.Label;
+        }
+    }
+
+    public class DropDownConfig : ChoiceConfig
+    {
+        public DropDownConfig(object parent, PropertyInfo property)
+            : base(parent, property)
+        {
+        }
+    }
+
+    public class RadioButtonsConfig : ChoiceConfig
+    {
+        public string Id { get; }
+        public ICommand OnSelectionCommand => new RelayCommand<string>(ChangeSelection);
+
+        public RadioButtonsConfig(object parent, PropertyInfo property)
+            : base(parent, property)
+        {
+            Id = property.Name;
+        }
+
+        public void ChangeSelection(string selection)
+        {
+            SelectedIndex = Choices.IndexOf(selection);
         }
     }
 }

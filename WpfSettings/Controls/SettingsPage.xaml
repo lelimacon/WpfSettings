@@ -78,8 +78,8 @@
                         </StackPanel>
                     </DataTemplate>
 
-                    <!-- Choice -->
-                    <DataTemplate DataType="{x:Type config:ChoiceConfig}">
+                    <!-- Choice: DropDown -->
+                    <DataTemplate DataType="{x:Type config:DropDownConfig}">
                         <Grid Margin="6,2,0,2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="160" />
@@ -92,6 +92,40 @@
                             <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Label}" Margin="0,2,0,0" />
                             <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Choices}"
                                       SelectedIndex="{Binding SelectedIndex}" />
+                            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
+                                                   Text="{Binding Details}" FontStyle="Italic"
+                                                   TextWrapping="Wrap" Margin="8,-2,0,0" />
+                        </Grid>
+                    </DataTemplate>
+
+                    <!-- Choice: RadioButtons -->
+                    <DataTemplate DataType="{x:Type config:RadioButtonsConfig}">
+                        <Grid Margin="6,2,0,2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Label}" Margin="0,2,0,0" />
+                            <ItemsControl Grid.Row="0" Grid.Column="1"
+                                          ItemsSource="{Binding Choices}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <RadioButton Content="{Binding .}"
+                                                     GroupName="{Binding DataContext.Property.Name, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                     Command="{Binding DataContext.OnSelectionCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                     CommandParameter="{Binding .}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                             <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
                                                    Text="{Binding Details}" FontStyle="Italic"
                                                    TextWrapping="Wrap" Margin="8,-2,0,0" />
