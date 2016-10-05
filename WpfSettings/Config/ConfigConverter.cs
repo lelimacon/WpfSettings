@@ -79,6 +79,7 @@ namespace WpfSettings.Config
             StringConfig element = new StringConfig(parent, prop);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
+            element.Value = (string)prop.GetValue(parent);
             return element;
         }
 
@@ -90,6 +91,7 @@ namespace WpfSettings.Config
             TextConfig element = new TextConfig(parent, prop);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
+            element.Value = (string)prop.GetValue(parent);
             return element;
         }
 
@@ -101,6 +103,7 @@ namespace WpfSettings.Config
             BoolConfig element = new BoolConfig(parent, prop);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
+            element.Value = (bool)prop.GetValue(parent);
             return element;
         }
 
@@ -126,6 +129,8 @@ namespace WpfSettings.Config
             element.Choices = choices;
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
+            string enumValue = prop.GetValue(parent).ToString();
+            element.SelectedIndex = choices.IndexOf(enumValue);
             return element;
         }
     }
