@@ -91,7 +91,7 @@
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Label}" Margin="0,2,0,0" />
                             <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Choices}"
-                                      SelectedIndex="{Binding SelectedIndex}" />
+                                      SelectedItem="{Binding SelectedValue}" />
                             <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
                                                    Text="{Binding Details}" FontStyle="Italic"
                                                    TextWrapping="Wrap" Margin="8,-2,0,0" />
@@ -119,10 +119,23 @@
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
+                                        <DataTemplate.Resources>
+                                            <config:IndexToCheckedConverter x:Key="IndexToChecked" />
+                                        </DataTemplate.Resources>
                                         <RadioButton Content="{Binding .}"
-                                                     GroupName="{Binding DataContext.Property.Name, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                                     Command="{Binding DataContext.OnSelectionCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                                     CommandParameter="{Binding .}" />
+                                                     GroupName="{Binding DataContext.Property.Name,
+                                                                         RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                     Command="{Binding DataContext.OnSelectionCommand,
+                                                                       RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                     CommandParameter="{Binding .}">
+                                            <RadioButton.IsChecked>
+                                                <MultiBinding Converter="{StaticResource IndexToChecked}" Mode="OneWay">
+                                                    <Binding Path="DataContext.SelectedValue"
+                                                             RelativeSource="{RelativeSource AncestorType={x:Type ItemsControl}}" />
+                                                    <Binding Path="." />
+                                                </MultiBinding>
+                                            </RadioButton.IsChecked>
+                                        </RadioButton>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

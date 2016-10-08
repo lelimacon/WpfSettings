@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Config\ConfigElement.cs" />
     <Compile Include="Config\ConfigConverter.cs" />
+    <Compile Include="Config\IndexToCheckedConverter.cs" />
     <Compile Include="Utils\LeftMarginMultiplierConverter.cs" />
     <Compile Include="Controls\PlaceHolderTextBox.cs" />
     <Compile Include="Properties\Annotations.cs" />

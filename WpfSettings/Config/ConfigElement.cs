@@ -126,7 +126,7 @@ namespace WpfSettings.Config
     public class ChoiceConfig : ConfigPageElement
     {
         public ObservableCollection<string> Choices { get; set; }
-        public int SelectedIndex { get; set; }
+        public string SelectedValue { get; set; }
 
         public ChoiceConfig(object parent, PropertyInfo property)
             : base(parent, property)
@@ -135,7 +135,7 @@ namespace WpfSettings.Config
 
         public override void Save()
         {
-            string value = Choices[SelectedIndex];
+            string value = SelectedValue;
             Type type = Property.PropertyType;
             string name = Enum.GetNames(type).First(n => FieldLabel(type, n) == value);
             var entry = Enum.Parse(type, name);
@@ -171,7 +171,7 @@ namespace WpfSettings.Config
 
         public void ChangeSelection(string selection)
         {
-            SelectedIndex = Choices.IndexOf(selection);
+            SelectedValue = selection;
         }
     }
 }

@@ -113,8 +113,8 @@ namespace WpfSettings.Example
     {
         private string _bgColor;
         private string _textColor;
-        private TextStyle _titleStyle;
-        private TextStyle _contentStyle;
+        private TextStyle _titleStyle = TextStyle.Bold;
+        private TextStyle _contentStyle = TextStyle.Italic;
 
         public enum TextStyle
         {

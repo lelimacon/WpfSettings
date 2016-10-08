@@ -116,10 +116,9 @@ namespace WpfSettings.Config
             Array names = Enum.GetNames(type);
             foreach (string name in names)
             {
-                var memberInfos = type.GetMember(name);
-                var attr = memberInfos[0].GetCustomAttribute<SettingFieldAttribute>(false);
-                if (attr != null)
-                    choices.Add(attr.Label);
+                string label = GetFieldLabel(type, name);
+                if (!string.IsNullOrEmpty(label))
+                    choices.Add(label);
             }
             ChoiceConfig element;
             if (attribute.Type == ChoiceType.DropDown)
@@ -129,9 +128,16 @@ namespace WpfSettings.Config
             element.Choices = choices;
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
-            string enumValue = prop.GetValue(parent).ToString();
-            element.SelectedIndex = choices.IndexOf(enumValue);
+            string enumValue = GetFieldLabel(type, prop.GetValue(parent).ToString());
+            element.SelectedValue = enumValue;
             return element;
+        }
+
+        private static string GetFieldLabel(Type enumType, string fieldName)
+        {
+            var memberInfos = enumType.GetMember(fieldName);
+            var attr = memberInfos[0].GetCustomAttribute<SettingFieldAttribute>(false);
+            return attr?.Label;
         }
     }
 }
