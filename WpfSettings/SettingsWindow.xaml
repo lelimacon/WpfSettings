@@ -11,23 +11,23 @@
         x:Name="MyWindow"
         Background="#F0F0F0" ResizeMode="CanResizeWithGrip">
 
-    <Grid Margin="8,8,12,12">
+    <Grid Margin="6">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="260" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="26" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <controls:PlaceHolderTextBox x:Name="SearchBox" Grid.Row="0" Grid.Column="0"
-                                     Background="White"
+                                     Margin="3" Height="26" Background="White"
                                      VerticalContentAlignment="Center" FontSize="12"
                                      PlaceHolderText="Search" />
 
-        <Button Grid.Row="0" Grid.Column="0"
+        <Button Grid.Row="0" Grid.Column="0" Margin="3"
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                 HorizontalAlignment="Right" VerticalAlignment="Stretch"
                 Focusable="False">
@@ -36,23 +36,23 @@
 
         <Border Grid.Row="0" Grid.Column="1" BorderBrush="{x:Null}">
             <TextBlock Text="{Binding CategoryTitle}" FontWeight="Bold"
-                       VerticalAlignment="Center" Margin="16,0,0,0" FontSize="12" />
+                       VerticalAlignment="Center" Margin="3" FontSize="12" />
         </Border>
 
-        <controls:SettingsExplorer Grid.Row="1" Grid.Column="0" Margin="0,6,0,0"
+        <controls:SettingsExplorer Grid.Row="1" Grid.Column="0" Margin="3"
                                    Items="{Binding InternalConfig}"
                                    ChangeAction="{Binding ChangeSectionAction}" />
 
         <ScrollViewer Grid.Row="1" Grid.Column="1"
-                      Margin="12,8,0,0" VerticalScrollBarVisibility="Auto">
+                      Margin="3" VerticalScrollBarVisibility="Auto">
             <controls:SettingsPage ConfigElements="{Binding CurrentPageConfig, Mode=TwoWay}" />
         </ScrollViewer>
 
-        <Rectangle Grid.Row="1" Grid.Column="1" Margin="12,0,0,0" Height="1"
+        <Rectangle Grid.Row="1" Grid.Column="1" Margin="3" Height="1"
                    VerticalAlignment="Bottom" Fill="Gray" />
 
         <StackPanel Grid.Row="2" Grid.Column="1"
-                    Orientation="Horizontal" Margin="0,12,0,0"
+                    Orientation="Horizontal" Margin="3"
                     HorizontalAlignment="Right">
             <Button Content="Apply" HorizontalAlignment="Right"
                     Width="75" Height="24" Margin="0,0,6,0"

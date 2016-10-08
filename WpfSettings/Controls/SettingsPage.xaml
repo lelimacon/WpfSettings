@@ -37,7 +37,7 @@
                                 <TextBlock Text="{Binding Label}"
                                            VerticalAlignment="Center" />
                             </Border>
-                            <TextBox Grid.Row="0" Grid.Column="1" TextWrapping="Wrap"
+                            <TextBox Grid.Row="0" Grid.Column="1"
                                      Height="24" Text="{Binding Value}"
                                      VerticalContentAlignment="Center" />
                             <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
@@ -60,7 +60,8 @@
                             <Border Grid.Row="0" Grid.Column="0" Height="{Binding Height}">
                                 <TextBlock Text="{Binding Label}" />
                             </Border>
-                            <TextBox Grid.Row="0" Grid.Column="1" TextWrapping="Wrap"
+                            <TextBox Grid.Row="0" Grid.Column="1"
+                                     TextWrapping="Wrap" AcceptsReturn="True"
                                      Height="{Binding Height}" Text="{Binding Value}" />
                             <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
                                                    Text="{Binding Details}"

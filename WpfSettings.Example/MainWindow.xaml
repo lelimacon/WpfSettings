@@ -7,7 +7,7 @@
         DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
         Title="My Note"
-        Height="260" Width="400">
+        Height="260" Width="400" ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>
         <local:GenderToColorConverter x:Key="GenderToColor" />
@@ -15,23 +15,29 @@
         <local:StyleToFontStyleConverter x:Key="StyleToFontStyle" />
     </Window.Resources>
 
-    <Grid Background="{Binding Settings.User.Gender, Converter={StaticResource GenderToColor}}">
-        <Border Margin="10,10,84,0" VerticalAlignment="Top" Height="24"
-                BorderBrush="Gray" BorderThickness="1">
-            <TextBlock Text="{Binding Settings.Interface.Content.Title}"
-                       FontWeight="{Binding Settings.Interface.Style.TitleStyle, Converter={StaticResource StyleToWeight}}"
-                       FontStyle="{Binding Settings.Interface.Style.TitleStyle, Converter={StaticResource StyleToFontStyle}}"
-                       VerticalAlignment="Center" Margin="4" />
-        </Border>
-        <Button Content="Settings" Margin="0,10,10,0"
-                Height="24" Width="69"
-                VerticalAlignment="Top" HorizontalAlignment="Right"
-                Command="{Binding ShowSettingsCommand}" />
-        <Border Margin="10,39,10,10" BorderBrush="Gray" BorderThickness="1">
-            <TextBlock Text="{Binding Settings.Interface.Content.PageContent}"
-                       FontWeight="{Binding Settings.Interface.Style.ContentStyle, Converter={StaticResource StyleToWeight}}"
-                       FontStyle="{Binding Settings.Interface.Style.ContentStyle, Converter={StaticResource StyleToFontStyle}}"
-                       Margin="4" TextWrapping="Wrap" />
-        </Border>
-    </Grid>
+    <Border Background="{Binding Settings.User.Gender, Converter={StaticResource GenderToColor}}">
+        <Grid Margin="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBox Grid.Row="0" Grid.Column="0" Margin="3"
+                     Text="{Binding Settings.Interface.Content.Title}"
+                     VerticalContentAlignment="Center"
+                     FontWeight="{Binding Settings.Interface.Style.TitleStyle, Converter={StaticResource StyleToWeight}}"
+                     FontStyle="{Binding Settings.Interface.Style.TitleStyle, Converter={StaticResource StyleToFontStyle}}" />
+            <Button Grid.Row="0" Grid.Column="1" Margin="3" Height="26"
+                    Content="Settings"
+                    Command="{Binding ShowSettingsCommand}" />
+            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="3"
+                     Text="{Binding Settings.Interface.Content.PageContent}"
+                     FontWeight="{Binding Settings.Interface.Style.ContentStyle, Converter={StaticResource StyleToWeight}}"
+                     FontStyle="{Binding Settings.Interface.Style.ContentStyle, Converter={StaticResource StyleToFontStyle}}"
+                     TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" />
+        </Grid>
+    </Border>
 </Window>

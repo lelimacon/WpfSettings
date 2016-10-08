@@ -99,7 +99,7 @@ namespace WpfSettings.Config
         public TextConfig(object parent, PropertyInfo property)
             : base(parent, property)
         {
-            Height = 40;
+            Height = 60;
         }
 
         public override void Save()
