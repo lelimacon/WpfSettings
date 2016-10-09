@@ -2,6 +2,7 @@
 
 namespace WpfSettings
 {
+    [AttributeUsage(AttributeTargets.Property)]
     public abstract class SettingAttribute : Attribute
     {
         public int Position { get; set; }
@@ -25,7 +26,6 @@ namespace WpfSettings
         }
     }
 
-    [AttributeUsage(AttributeTargets.Class)]
     public class SettingSectionAttribute : SettingAttribute
     {
         public SettingSectionAttribute()
@@ -43,7 +43,6 @@ namespace WpfSettings
         }
     }
 
-    [AttributeUsage(AttributeTargets.Property)]
     public class SettingTextAttribute : SettingAttribute
     {
         public SettingTextAttribute()
@@ -61,7 +60,6 @@ namespace WpfSettings
         }
     }
 
-    [AttributeUsage(AttributeTargets.Property)]
     public class SettingStringAttribute : SettingAttribute
     {
         public SettingStringAttribute()
@@ -79,7 +77,6 @@ namespace WpfSettings
         }
     }
 
-    [AttributeUsage(AttributeTargets.Property)]
     public class SettingBoolAttribute : SettingAttribute
     {
         public SettingBoolAttribute()
@@ -103,7 +100,6 @@ namespace WpfSettings
         RadioButtons
     }
 
-    [AttributeUsage(AttributeTargets.Property)]
     public class SettingChoiceAttribute : SettingAttribute
     {
         public ChoiceType Type { get; set; } = ChoiceType.DropDown;

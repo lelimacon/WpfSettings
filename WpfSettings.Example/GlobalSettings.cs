@@ -6,8 +6,13 @@ namespace WpfSettings.Example
 {
     public class GlobalSettings
     {
+        [SettingSection("General")]
         public GeneralSettings General { get; set; }
+
+        [SettingSection("Profile")]
         public UserSettings User { get; set; }
+
+        [SettingSection("Interface")]
         public InterfaceSettings Interface { get; set; }
 
         public GlobalSettings()
@@ -29,7 +34,6 @@ namespace WpfSettings.Example
         }
     }
 
-    [SettingSection("General")]
     public class GeneralSettings : Notify
     {
         private bool _startReboot;
@@ -46,7 +50,6 @@ namespace WpfSettings.Example
         }
     }
 
-    [SettingSection("Profile")]
     public class UserSettings : Notify
     {
         private EGender _gender = EGender.Other;
@@ -95,10 +98,12 @@ namespace WpfSettings.Example
         }
     }
 
-    [SettingSection("Interface")]
     public class InterfaceSettings : Notify
     {
+        [SettingSection("Style")]
         public StyleSettings Style { get; set; }
+
+        [SettingSection("Content")]
         public ContentSettings Content { get; set; }
 
         public InterfaceSettings()
@@ -108,7 +113,6 @@ namespace WpfSettings.Example
         }
     }
 
-    [SettingSection("Style")]
     public class StyleSettings : Notify
     {
         private string _bgColor;
@@ -169,7 +173,6 @@ namespace WpfSettings.Example
         }
     }
 
-    [SettingSection("Content")]
     public class ContentSettings : Notify
     {
         private string _title = "My Super Note!";

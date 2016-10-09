@@ -18,8 +18,8 @@ namespace WpfSettings.Config
         public ObservableCollection<ConfigSection> ConvertConfig()
         {
             PropertyInfo[] properties = ExternalConfig.GetType().GetProperties();
-            var infos = properties.Where(IsSection);
-            var sections = infos
+            var sections = properties
+                .Where(IsSection)
                 .Select(p => GetSettingSection(ExternalConfig, p))
                 .OrderBy(s => s.Position)
                 .ThenBy(s => s.Property.MetadataToken);
@@ -29,13 +29,13 @@ namespace WpfSettings.Config
 
         private static bool IsSection(PropertyInfo p)
         {
-            var attribute = p.PropertyType.GetCustomAttribute<SettingSectionAttribute>(true);
+            var attribute = p.GetCustomAttribute<SettingSectionAttribute>(false);
             return attribute != null;
         }
 
         private ConfigSection GetSettingSection(object parent, PropertyInfo prop)
         {
-            var attribute = prop.PropertyType.GetCustomAttribute<SettingSectionAttribute>(true);
+            var attribute = prop.GetCustomAttribute<SettingSectionAttribute>(false);
             PropertyInfo[] properties = prop.PropertyType.GetProperties();
             object value = prop.GetValue(parent);
             var sections = properties
@@ -108,7 +108,7 @@ namespace WpfSettings.Config
         {
             Type type = prop.PropertyType;
             if (type != typeof(bool))
-                throw new ArgumentException("SettingTextAttribute must target a boolean");
+                throw new ArgumentException("SettingBoolAttribute must target a boolean");
             BoolConfig element = new BoolConfig(parent, prop);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
