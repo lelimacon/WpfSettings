@@ -20,7 +20,9 @@ namespace WpfSettings.Config
             PropertyInfo[] properties = ExternalConfig.GetType().GetProperties();
             var infos = properties.Where(IsSection);
             var sections = infos
-                .Select(p => GetSettingSection(ExternalConfig, p));
+                .Select(p => GetSettingSection(ExternalConfig, p))
+                .OrderBy(s => s.Position)
+                .ThenBy(s => s.Property.MetadataToken);
             InternalConfig = new ObservableCollection<ConfigSection>(sections);
             return InternalConfig;
         }
@@ -38,10 +40,14 @@ namespace WpfSettings.Config
             object value = prop.GetValue(parent);
             var sections = properties
                 .Where(IsSection)
-                .Select(p => GetSettingSection(value, p));
+                .Select(p => GetSettingSection(value, p))
+                .OrderBy(s => s.Position)
+                .ThenBy(s => s.Property.MetadataToken);
             var elements = properties
                 .Select(p => GetSettingElement(value, p))
-                .Where(e => e != null);
+                .Where(e => e != null)
+                .OrderBy(e => e.Position)
+                .ThenBy(e => e.Property.MetadataToken);
             ConfigSection section = new ConfigSection(parent, prop)
             {
                 SubSections = new ObservableCollection<ConfigSection>(sections),
@@ -49,6 +55,7 @@ namespace WpfSettings.Config
             };
             if (!string.IsNullOrEmpty(attribute.Label))
                 section.Label = attribute.Label;
+            section.Position = attribute.Position;
             return section;
         }
 
@@ -79,6 +86,7 @@ namespace WpfSettings.Config
             StringConfig element = new StringConfig(parent, prop);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
+            element.Position = attribute.Position;
             element.Value = (string)prop.GetValue(parent);
             return element;
         }
@@ -91,6 +99,7 @@ namespace WpfSettings.Config
             TextConfig element = new TextConfig(parent, prop);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
+            element.Position = attribute.Position;
             element.Value = (string)prop.GetValue(parent);
             return element;
         }
@@ -103,6 +112,7 @@ namespace WpfSettings.Config
             BoolConfig element = new BoolConfig(parent, prop);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
+            element.Position = attribute.Position;
             element.Value = (bool)prop.GetValue(parent);
             return element;
         }
@@ -128,6 +138,7 @@ namespace WpfSettings.Config
             element.Choices = choices;
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
+            element.Position = attribute.Position;
             string enumValue = GetFieldLabel(type, prop.GetValue(parent).ToString());
             element.SelectedValue = enumValue;
             return element;

@@ -124,8 +124,8 @@ namespace WpfSettings.Example
         }
 
         // TODO: color picker
-        [SettingString("Background color")]
-        public string BgColor
+        [SettingString(0, "Title text color")]
+        public string TitleColor
         {
             get { return _bgColor; }
             set
@@ -135,8 +135,8 @@ namespace WpfSettings.Example
             }
         }
 
-        [SettingString("Text color")]
-        public string TextColor
+        [SettingString(2, "Content text color")]
+        public string ContentColor
         {
             get { return _textColor; }
             set
@@ -146,7 +146,7 @@ namespace WpfSettings.Example
             }
         }
 
-        [SettingChoice("Title text style", Type = ChoiceType.RadioButtons)]
+        [SettingChoice(1, "Title text style", Type = ChoiceType.RadioButtons)]
         public TextStyle TitleStyle
         {
             get { return _titleStyle; }
@@ -157,7 +157,7 @@ namespace WpfSettings.Example
             }
         }
 
-        [SettingChoice("Content text style", Type = ChoiceType.RadioButtons)]
+        [SettingChoice(3, "Content text style", Type = ChoiceType.RadioButtons)]
         public TextStyle ContentStyle
         {
             get { return _contentStyle; }

@@ -4,14 +4,23 @@ namespace WpfSettings
 {
     public abstract class SettingAttribute : Attribute
     {
+        public int Position { get; set; }
         public string Label { get; set; }
 
         protected SettingAttribute()
         {
+            Position = 0;
         }
 
         protected SettingAttribute(string label)
         {
+            Position = 0;
+            Label = label;
+        }
+
+        protected SettingAttribute(int position, string label)
+        {
+            Position = position;
             Label = label;
         }
     }
@@ -27,6 +36,11 @@ namespace WpfSettings
             : base(label)
         {
         }
+
+        public SettingSectionAttribute(int position, string label)
+            : base(position, label)
+        {
+        }
     }
 
     [AttributeUsage(AttributeTargets.Property)]
@@ -38,6 +52,11 @@ namespace WpfSettings
 
         public SettingTextAttribute(string label)
             : base(label)
+        {
+        }
+
+        public SettingTextAttribute(int position, string label)
+            : base(position, label)
         {
         }
     }
@@ -53,6 +72,11 @@ namespace WpfSettings
             : base(label)
         {
         }
+
+        public SettingStringAttribute(int position, string label)
+            : base(position, label)
+        {
+        }
     }
 
     [AttributeUsage(AttributeTargets.Property)]
@@ -64,6 +88,11 @@ namespace WpfSettings
 
         public SettingBoolAttribute(string label)
             : base(label)
+        {
+        }
+
+        public SettingBoolAttribute(int position, string label)
+            : base(position, label)
         {
         }
     }
@@ -87,6 +116,11 @@ namespace WpfSettings
             : base(label)
         {
         }
+
+        public SettingChoiceAttribute(int position, string label)
+            : base(position, label)
+        {
+        }
     }
 
     [AttributeUsage(AttributeTargets.Field)]
@@ -98,6 +132,11 @@ namespace WpfSettings
 
         public SettingFieldAttribute(string label)
             : base(label)
+        {
+        }
+
+        public SettingFieldAttribute(int position, string label)
+            : base(position, label)
         {
         }
     }

@@ -11,6 +11,7 @@ namespace WpfSettings.Config
     {
         public object Parent { get; }
         public PropertyInfo Property { get; }
+        public int Position { get; set; }
         public string Label { get; set; }
         public string Details { get; set; }
 
