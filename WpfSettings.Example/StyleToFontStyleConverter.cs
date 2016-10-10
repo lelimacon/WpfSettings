@@ -9,8 +9,8 @@ namespace WpfSettings.Example
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var gender = (StyleSettings.TextStyle) value;
-            if (gender == StyleSettings.TextStyle.Italic)
+            var gender = (BoxStyle.TextStyle) value;
+            if (gender == BoxStyle.TextStyle.Italic)
                 return FontStyles.Italic;
             return FontStyles.Normal;
         }
@@ -19,8 +19,8 @@ namespace WpfSettings.Example
         {
             var brush = (FontStyle) value;
             if (brush.Equals(FontStyles.Italic))
-                return StyleSettings.TextStyle.Italic;
-            return StyleSettings.TextStyle.Normal;
+                return BoxStyle.TextStyle.Italic;
+            return BoxStyle.TextStyle.Normal;
         }
     }
 }

@@ -33,21 +33,13 @@ namespace WpfSettings.Config
             return attribute != null;
         }
 
-        private ConfigSection GetSettingSection(object parent, PropertyInfo prop)
+        private static ConfigSection GetSettingSection(object parent, PropertyInfo prop)
         {
             var attribute = prop.GetCustomAttribute<SettingSectionAttribute>(false);
             PropertyInfo[] properties = prop.PropertyType.GetProperties();
             object value = prop.GetValue(parent);
-            var sections = properties
-                .Where(IsSection)
-                .Select(p => GetSettingSection(value, p))
-                .OrderBy(s => s.Position)
-                .ThenBy(s => s.Property.MetadataToken);
-            var elements = properties
-                .Select(p => GetSettingElement(value, p))
-                .Where(e => e != null)
-                .OrderBy(e => e.Position)
-                .ThenBy(e => e.Property.MetadataToken);
+            var sections = GetSections(properties, value);
+            var elements = GetElements(properties, value);
             ConfigSection section = new ConfigSection(parent, prop)
             {
                 SubSections = new ObservableCollection<ConfigSection>(sections),
@@ -59,10 +51,8 @@ namespace WpfSettings.Config
             return section;
         }
 
-        private ConfigPageElement GetSettingElement(object parent, PropertyInfo prop)
+        private static ConfigPageElement GetSettingElement(object parent, PropertyInfo prop)
         {
-            // TODO: Retrieve all attributes
-            Type type = prop.PropertyType;
             var attributes = prop.GetCustomAttributes(false);
             foreach (object attribute in attributes)
             {
@@ -73,9 +63,47 @@ namespace WpfSettings.Config
             return null;
         }
 
+        private static IOrderedEnumerable<ConfigSection> GetSections(PropertyInfo[] properties, object value)
+        {
+            var sections = properties
+                .Where(IsSection)
+                .Select(p => GetSettingSection(value, p))
+                .OrderBy(s => s.Position)
+                .ThenBy(s => s.Property.MetadataToken);
+            return sections;
+        }
+
+        private static IOrderedEnumerable<ConfigPageElement> GetElements(PropertyInfo[] properties, object value)
+        {
+            var elements = properties
+                .Select(p => GetSettingElement(value, p))
+                .Where(e => e != null)
+                .OrderBy(e => e.Position)
+                .ThenBy(e => e.Property.MetadataToken);
+            return elements;
+        }
+
         private static ConfigPageElement GetElement(object parent, PropertyInfo prop, object att)
         {
             return null;
+        }
+
+        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, SettingGroupAttribute attribute)
+        {
+            PropertyInfo[] properties = prop.PropertyType.GetProperties();
+            object value = prop.GetValue(parent);
+            var elements = GetElements(properties, value);
+            Type type = prop.PropertyType;
+            if (!type.IsClass)
+                throw new ArgumentException("SettingGroupAttribute must target a class (not a value type or interface)");
+            ConfigGroup element = new ConfigGroup(parent, prop)
+            {
+                Elements = new ObservableCollection<ConfigPageElement>(elements)
+            };
+            if (!string.IsNullOrEmpty(attribute.Label))
+                element.Label = attribute.Label;
+            element.Position = attribute.Position;
+            return element;
         }
 
         private static ConfigPageElement GetElement(object parent, PropertyInfo prop, SettingStringAttribute attribute)
@@ -87,7 +115,7 @@ namespace WpfSettings.Config
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             element.Position = attribute.Position;
-            element.Value = (string)prop.GetValue(parent);
+            element.Value = (string) prop.GetValue(parent);
             return element;
         }
 
@@ -100,7 +128,7 @@ namespace WpfSettings.Config
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             element.Position = attribute.Position;
-            element.Value = (string)prop.GetValue(parent);
+            element.Value = (string) prop.GetValue(parent);
             return element;
         }
 
@@ -113,7 +141,7 @@ namespace WpfSettings.Config
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             element.Position = attribute.Position;
-            element.Value = (bool)prop.GetValue(parent);
+            element.Value = (bool) prop.GetValue(parent);
             return element;
         }
 

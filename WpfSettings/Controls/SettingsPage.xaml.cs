@@ -8,7 +8,7 @@ using WpfSettings.Utils;
 
 namespace WpfSettings.Controls
 {
-    internal partial class SettingsPage : UserControl
+    public partial class SettingsPage : UserControl
     {
         public static readonly DependencyProperty ConfigElementsProperty =
             MvvmUtils.RegisterDp<SettingsPage>();

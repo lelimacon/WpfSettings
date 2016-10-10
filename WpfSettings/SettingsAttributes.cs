@@ -43,6 +43,23 @@ namespace WpfSettings
         }
     }
 
+    public class SettingGroupAttribute : SettingAttribute
+    {
+        public SettingGroupAttribute()
+        {
+        }
+
+        public SettingGroupAttribute(string label)
+            : base(label)
+        {
+        }
+
+        public SettingGroupAttribute(int position, string label)
+            : base(position, label)
+        {
+        }
+    }
+
     public class SettingTextAttribute : SettingAttribute
     {
         public SettingTextAttribute()
@@ -102,6 +119,7 @@ namespace WpfSettings
 
     public class SettingChoiceAttribute : SettingAttribute
     {
+        public string GroupName { get; set; }
         public ChoiceType Type { get; set; } = ChoiceType.DropDown;
 
         public SettingChoiceAttribute()

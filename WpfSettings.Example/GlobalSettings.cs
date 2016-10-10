@@ -5,13 +5,13 @@ namespace WpfSettings.Example
     public class GlobalSettings
     {
         [SettingSection("General")]
-        public GeneralSettings General { get; set; }
+        public GeneralSettings General { get; }
 
         [SettingSection("Profile")]
-        public UserSettings User { get; set; }
+        public UserSettings User { get; }
 
         [SettingSection("Interface")]
-        public InterfaceSettings Interface { get; set; }
+        public InterfaceSettings Interface { get; }
 
         public GlobalSettings()
         {
@@ -65,8 +65,7 @@ namespace WpfSettings.Example
         }
     }
 
-    [ImplementPropertyChanged]
-    public class StyleSettings
+    public class BoxStyle
     {
         public enum TextStyle
         {
@@ -76,17 +75,27 @@ namespace WpfSettings.Example
         }
 
         // TODO: color picker
-        [SettingString(0, "Title text color")]
-        public string TitleColor { get; set; }
+        [SettingString(0, "Color")]
+        public string Color { get; set; }
 
-        [SettingString(2, "Content text color")]
-        public string ContentColor { get; set; }
+        [SettingChoice(1, "Style", Type = ChoiceType.RadioButtons)]
+        public TextStyle Style { get; set; } = TextStyle.Bold;
+    }
 
-        [SettingChoice(1, "Title text style", Type = ChoiceType.RadioButtons)]
-        public TextStyle TitleStyle { get; set; } = TextStyle.Bold;
+    [ImplementPropertyChanged]
+    public class StyleSettings
+    {
+        [SettingGroup(1, "Title Style")]
+        public BoxStyle TitleStyle { get; }
 
-        [SettingChoice(3, "Content text style", Type = ChoiceType.RadioButtons)]
-        public TextStyle ContentStyle { get; set; } = TextStyle.Italic;
+        [SettingGroup(2, "Content Style")]
+        public BoxStyle ContentStyle { get; }
+
+        public StyleSettings()
+        {
+            TitleStyle = new BoxStyle {Style = BoxStyle.TextStyle.Bold};
+            ContentStyle = new BoxStyle {Style = BoxStyle.TextStyle.Normal};
+        }
     }
 
     [ImplementPropertyChanged]

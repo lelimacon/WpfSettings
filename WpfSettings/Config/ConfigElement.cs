@@ -57,7 +57,7 @@ namespace WpfSettings.Config
 
     public class ConfigGroup : ConfigPageElement
     {
-        public ObservableCollection<ConfigPageElement> Elements { get; }
+        public ObservableCollection<ConfigPageElement> Elements { get; set; }
 
         public ConfigGroup(object parent, PropertyInfo property)
             : base(parent, property)
@@ -161,13 +161,14 @@ namespace WpfSettings.Config
 
     public class RadioButtonsConfig : ChoiceConfig
     {
-        public string Id { get; }
+        private static int _id = 0;
+        public string GroupName { get; }
         public ICommand OnSelectionCommand => new RelayCommand<string>(ChangeSelection);
 
         public RadioButtonsConfig(object parent, PropertyInfo property)
             : base(parent, property)
         {
-            Id = property.Name;
+            GroupName = property.Name + _id++;
         }
 
         public void ChangeSelection(string selection)

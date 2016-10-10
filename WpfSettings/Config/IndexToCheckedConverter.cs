@@ -4,21 +4,6 @@ using System.Windows.Data;
 
 namespace WpfSettings.Config
 {
-    /*
-    public class IndexToCheckedConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return false;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return 1;
-        }
-    }
-    */
-
     public class IndexToCheckedConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
