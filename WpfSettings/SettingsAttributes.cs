@@ -62,6 +62,8 @@ namespace WpfSettings
 
     public class SettingTextAttribute : SettingAttribute
     {
+        public string Details { get; set; }
+
         public SettingTextAttribute()
         {
         }
@@ -79,6 +81,8 @@ namespace WpfSettings
 
     public class SettingStringAttribute : SettingAttribute
     {
+        public string Details { get; set; }
+
         public SettingStringAttribute()
         {
         }
@@ -96,6 +100,8 @@ namespace WpfSettings
 
     public class SettingBoolAttribute : SettingAttribute
     {
+        public string Details { get; set; }
+
         public SettingBoolAttribute()
         {
         }
@@ -119,6 +125,8 @@ namespace WpfSettings
 
     public class SettingChoiceAttribute : SettingAttribute
     {
+        public string Details { get; set; }
+
         public string GroupName { get; set; }
         public ChoiceType Type { get; set; } = ChoiceType.DropDown;
 

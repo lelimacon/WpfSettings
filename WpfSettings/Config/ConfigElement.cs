@@ -13,7 +13,6 @@ namespace WpfSettings.Config
         public PropertyInfo Property { get; }
         public int Position { get; set; }
         public string Label { get; set; }
-        public string Details { get; set; }
 
         protected ConfigElement(object parent, PropertyInfo property)
         {
@@ -80,6 +79,7 @@ namespace WpfSettings.Config
     public class StringConfig : ConfigPageElement
     {
         public string Value { get; set; }
+        public string Details { get; set; }
 
         public StringConfig(object parent, PropertyInfo property)
             : base(parent, property)
@@ -95,6 +95,7 @@ namespace WpfSettings.Config
     public class TextConfig : ConfigPageElement
     {
         public string Value { get; set; }
+        public string Details { get; set; }
         public int Height { get; set; }
 
         public TextConfig(object parent, PropertyInfo property)
@@ -112,6 +113,7 @@ namespace WpfSettings.Config
     public class BoolConfig : ConfigPageElement
     {
         public bool Value { get; set; }
+        public string Details { get; set; }
 
         public BoolConfig(object parent, PropertyInfo property)
             : base(parent, property)
@@ -128,6 +130,7 @@ namespace WpfSettings.Config
     {
         public ObservableCollection<string> Choices { get; set; }
         public string SelectedValue { get; set; }
+        public string Details { get; set; }
 
         public ChoiceConfig(object parent, PropertyInfo property)
             : base(parent, property)

@@ -24,7 +24,8 @@ namespace WpfSettings.Example
     [ImplementPropertyChanged]
     public class GeneralSettings
     {
-        [SettingBool("Launch this program with Windows start-up")]
+        [SettingBool("Launch this program with Windows start-up",
+             Details = "This options doesn't actually have any effect, don't worry.")]
         public bool StartReboot { get; set; }
     }
 
@@ -38,7 +39,8 @@ namespace WpfSettings.Example
             [SettingField("Other")] Other
         }
 
-        [SettingChoice("Gender")]
+        [SettingChoice("Gender",
+             Details = "This will change the background to match your color preferences! No questions.")]
         public EGender Gender { get; set; } = EGender.Other;
 
         [SettingString("Name")]

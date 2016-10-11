@@ -114,6 +114,8 @@ namespace WpfSettings.Config
             StringConfig element = new StringConfig(parent, prop);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
+            if (!string.IsNullOrEmpty(attribute.Details))
+                element.Details = attribute.Details;
             element.Position = attribute.Position;
             element.Value = (string) prop.GetValue(parent);
             return element;
@@ -127,6 +129,8 @@ namespace WpfSettings.Config
             TextConfig element = new TextConfig(parent, prop);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
+            if (!string.IsNullOrEmpty(attribute.Details))
+                element.Details = attribute.Details;
             element.Position = attribute.Position;
             element.Value = (string) prop.GetValue(parent);
             return element;
@@ -140,6 +144,8 @@ namespace WpfSettings.Config
             BoolConfig element = new BoolConfig(parent, prop);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
+            if (!string.IsNullOrEmpty(attribute.Details))
+                element.Details = attribute.Details;
             element.Position = attribute.Position;
             element.Value = (bool) prop.GetValue(parent);
             return element;
@@ -158,14 +164,14 @@ namespace WpfSettings.Config
                 if (!string.IsNullOrEmpty(label))
                     choices.Add(label);
             }
-            ChoiceConfig element;
-            if (attribute.Type == ChoiceType.DropDown)
-                element = new DropDownConfig(parent, prop);
-            else
-                element = new RadioButtonsConfig(parent, prop);
+            var element = attribute.Type == ChoiceType.DropDown
+                ? (ChoiceConfig) new DropDownConfig(parent, prop)
+                : new RadioButtonsConfig(parent, prop);
             element.Choices = choices;
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
+            if (!string.IsNullOrEmpty(attribute.Details))
+                element.Details = attribute.Details;
             element.Position = attribute.Position;
             string enumValue = GetFieldLabel(type, prop.GetValue(parent).ToString());
             element.SelectedValue = enumValue;
