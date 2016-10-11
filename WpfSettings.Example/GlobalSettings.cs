@@ -65,6 +65,7 @@ namespace WpfSettings.Example
         }
     }
 
+    [ImplementPropertyChanged]
     public class BoxStyle
     {
         public enum TextStyle
