@@ -28,6 +28,8 @@ namespace WpfSettings
 
     public class SettingSectionAttribute : SettingAttribute
     {
+        public string Image { get; set; }
+
         public SettingSectionAttribute()
         {
         }

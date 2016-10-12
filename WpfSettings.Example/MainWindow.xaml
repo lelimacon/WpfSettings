@@ -7,6 +7,7 @@
         DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
         Title="My Note"
+        Icon="Resources/icon-note.ico"
         Height="260" Width="400" ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>

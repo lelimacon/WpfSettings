@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using WpfSettings.Utils;
 
 namespace WpfSettings.Config
@@ -28,7 +29,7 @@ namespace WpfSettings.Config
 
     public class ConfigSection : ConfigElement
     {
-        public string Image { get; set; }
+        public BitmapSource Image { get; set; }
         public ObservableCollection<ConfigSection> SubSections { get; set; }
         public ObservableCollection<ConfigPageElement> Elements { get; set; }
 

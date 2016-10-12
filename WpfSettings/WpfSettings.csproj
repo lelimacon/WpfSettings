@@ -55,6 +55,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -72,6 +73,7 @@
     <Compile Include="Config\ConfigElement.cs" />
     <Compile Include="Config\ConfigConverter.cs" />
     <Compile Include="Config\IndexToCheckedConverter.cs" />
+    <Compile Include="Utils\BitmapUtils.cs" />
     <Compile Include="Utils\LeftMarginMultiplierConverter.cs" />
     <Compile Include="Controls\PlaceHolderTextBox.cs" />
     <Compile Include="Properties\Annotations.cs" />
@@ -83,6 +85,7 @@
     <Compile Include="Controls\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\ResourceUtils.cs" />
     <Compile Include="ViewModels\SettingsWindowViewModel.cs" />
     <Compile Include="Controls\ShyTextBlock.cs" />
     <Compile Include="Utils\TreeViewItemExtensions.cs" />

@@ -4,13 +4,16 @@ namespace WpfSettings.Example
 {
     public class GlobalSettings
     {
-        [SettingSection("General")]
+        [SettingSection("General",
+            Image = "Resources.icon-bulb.png")]
         public GeneralSettings General { get; }
 
-        [SettingSection("Profile")]
+        [SettingSection("Profile",
+            Image = "Resources.icon-skull.png")]
         public UserSettings User { get; }
 
-        [SettingSection("Interface")]
+        [SettingSection("Interface",
+            Image = "Resources.icon-window-system.png")]
         public InterfaceSettings Interface { get; }
 
         public GlobalSettings()
@@ -54,10 +57,12 @@ namespace WpfSettings.Example
     [ImplementPropertyChanged]
     public class InterfaceSettings
     {
-        [SettingSection("Style")]
+        [SettingSection("Style",
+            Image = "Resources.icon-flask.png")]
         public StyleSettings Style { get; set; }
 
-        [SettingSection("Content")]
+        [SettingSection("Content",
+            Image = "Resources.icon-gift.png")]
         public ContentSettings Content { get; set; }
 
         public InterfaceSettings()

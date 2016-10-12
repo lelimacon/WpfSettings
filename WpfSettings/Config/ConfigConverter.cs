@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using WpfSettings.Utils;
 
 namespace WpfSettings.Config
 {
@@ -47,6 +49,12 @@ namespace WpfSettings.Config
             };
             if (!string.IsNullOrEmpty(attribute.Label))
                 section.Label = attribute.Label;
+            if (!string.IsNullOrEmpty(attribute.Image))
+            {
+                var stream = ResourceUtils.FromParentAssembly(attribute.Image);
+                var image = new Bitmap(stream);
+                section.Image = image.ToBitmapSource();
+            }
             section.Position = attribute.Position;
             return section;
         }

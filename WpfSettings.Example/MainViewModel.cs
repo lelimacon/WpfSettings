@@ -23,6 +23,7 @@ namespace WpfSettings.Example
         private void ShowSettings()
         {
             SettingsWindow window = new SettingsWindow(Settings);
+            window.IconSource = "Resources.icon-cog.png";
             window.ShowDialog();
         }
     }

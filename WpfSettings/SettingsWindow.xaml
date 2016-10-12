@@ -6,9 +6,8 @@
         xmlns:controls="clr-namespace:WpfSettings.Controls"
         DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
-        Title="MainWindow"
+        Title="Settings"
         Height="600" Width="800"
-        x:Name="MyWindow"
         Background="#F0F0F0" ResizeMode="CanResizeWithGrip">
 
     <Grid Margin="6">
@@ -31,7 +30,7 @@
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                 HorizontalAlignment="Right" VerticalAlignment="Stretch"
                 Focusable="False">
-            <Image Source="Resources/icon-search.png" Width="16" />
+            <Image Source="Resources/icon-search.png" Width="16" Height="16" />
         </Button>
 
         <Border Grid.Row="0" Grid.Column="1" BorderBrush="{x:Null}">
