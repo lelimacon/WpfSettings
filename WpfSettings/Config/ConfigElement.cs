@@ -11,15 +11,15 @@ namespace WpfSettings.Config
     public abstract class ConfigElement
     {
         public object Parent { get; }
-        public PropertyInfo Property { get; }
+        public MemberInfo Member { get; }
         public int Position { get; set; }
         public string Label { get; set; }
 
-        protected ConfigElement(object parent, PropertyInfo property)
+        protected ConfigElement(object parent, MemberInfo member)
         {
             Parent = parent;
-            Property = property;
-            Label = property?.Name;
+            Member = member;
+            Label = member?.Name;
         }
 
         public virtual void Save()
@@ -33,8 +33,8 @@ namespace WpfSettings.Config
         public ObservableCollection<ConfigSection> SubSections { get; set; }
         public ObservableCollection<ConfigPageElement> Elements { get; set; }
 
-        public ConfigSection(object parent, PropertyInfo property)
-            : base(parent, property)
+        public ConfigSection(object parent, MemberInfo member)
+            : base(parent, member)
         {
         }
 
@@ -49,8 +49,8 @@ namespace WpfSettings.Config
 
     public abstract class ConfigPageElement : ConfigElement
     {
-        protected ConfigPageElement(object parent, PropertyInfo property)
-            : base(parent, property)
+        protected ConfigPageElement(object parent, MemberInfo member)
+            : base(parent, member)
         {
         }
     }
@@ -59,8 +59,8 @@ namespace WpfSettings.Config
     {
         public ObservableCollection<ConfigPageElement> Elements { get; set; }
 
-        public ConfigGroup(object parent, PropertyInfo property)
-            : base(parent, property)
+        public ConfigGroup(object parent, MemberInfo member)
+            : base(parent, member)
         {
             Elements = new ObservableCollection<ConfigPageElement>();
         }
@@ -82,14 +82,14 @@ namespace WpfSettings.Config
         public string Value { get; set; }
         public string Details { get; set; }
 
-        public StringConfig(object parent, PropertyInfo property)
-            : base(parent, property)
+        public StringConfig(object parent, MemberInfo member)
+            : base(parent, member)
         {
         }
 
         public override void Save()
         {
-            Property.SetValue(Parent, Value);
+            Member.SetValue(Parent, Value);
         }
     }
 
@@ -99,15 +99,15 @@ namespace WpfSettings.Config
         public string Details { get; set; }
         public int Height { get; set; }
 
-        public TextConfig(object parent, PropertyInfo property)
-            : base(parent, property)
+        public TextConfig(object parent, MemberInfo member)
+            : base(parent, member)
         {
             Height = 60;
         }
 
         public override void Save()
         {
-            Property.SetValue(Parent, Value);
+            Member.SetValue(Parent, Value);
         }
     }
 
@@ -116,14 +116,14 @@ namespace WpfSettings.Config
         public bool Value { get; set; }
         public string Details { get; set; }
 
-        public BoolConfig(object parent, PropertyInfo property)
-            : base(parent, property)
+        public BoolConfig(object parent, MemberInfo member)
+            : base(parent, member)
         {
         }
 
         public override void Save()
         {
-            Property.SetValue(Parent, Value);
+            Member.SetValue(Parent, Value);
         }
     }
 
@@ -133,18 +133,18 @@ namespace WpfSettings.Config
         public string SelectedValue { get; set; }
         public string Details { get; set; }
 
-        public ChoiceConfig(object parent, PropertyInfo property)
-            : base(parent, property)
+        public ChoiceConfig(object parent, MemberInfo member)
+            : base(parent, member)
         {
         }
 
         public override void Save()
         {
             string value = SelectedValue;
-            Type type = Property.PropertyType;
+            Type type = Member.GetValueType();
             string name = Enum.GetNames(type).First(n => FieldLabel(type, n) == value);
             var entry = Enum.Parse(type, name);
-            Property.SetValue(Parent, entry);
+            Member.SetValue(Parent, entry);
         }
 
         private static string FieldLabel(Type type, string n)
@@ -157,8 +157,8 @@ namespace WpfSettings.Config
 
     public class DropDownConfig : ChoiceConfig
     {
-        public DropDownConfig(object parent, PropertyInfo property)
-            : base(parent, property)
+        public DropDownConfig(object parent, MemberInfo member)
+            : base(parent, member)
         {
         }
     }
@@ -169,10 +169,10 @@ namespace WpfSettings.Config
         public string GroupName { get; }
         public ICommand OnSelectionCommand => new RelayCommand<string>(ChangeSelection);
 
-        public RadioButtonsConfig(object parent, PropertyInfo property)
-            : base(parent, property)
+        public RadioButtonsConfig(object parent, MemberInfo member)
+            : base(parent, member)
         {
-            GroupName = property.Name + _id++;
+            GroupName = Member.Name + _id++;
         }
 
         public void ChangeSelection(string selection)

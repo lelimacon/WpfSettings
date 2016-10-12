@@ -77,6 +77,7 @@
     <Compile Include="Utils\LeftMarginMultiplierConverter.cs" />
     <Compile Include="Controls\PlaceHolderTextBox.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Utils\MemberInfoUtils.cs" />
     <Compile Include="Utils\RelayCommand.cs" />
     <Compile Include="Controls\SettingsExplorer.xaml.cs">
       <DependentUpon>SettingsExplorer.xaml</DependentUpon>

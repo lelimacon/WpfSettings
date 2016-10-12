@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
@@ -19,30 +20,27 @@ namespace WpfSettings.Config
 
         public ObservableCollection<ConfigSection> ConvertConfig()
         {
-            PropertyInfo[] properties = ExternalConfig.GetType().GetProperties();
-            var sections = properties
-                .Where(IsSection)
-                .Select(p => GetSettingSection(ExternalConfig, p))
-                .OrderBy(s => s.Position)
-                .ThenBy(s => s.Property.MetadataToken);
+            MemberInfo[] members = ExternalConfig.GetType().GetMembers();
+            var sections = GetSections(members, ExternalConfig);
             InternalConfig = new ObservableCollection<ConfigSection>(sections);
             return InternalConfig;
         }
 
-        private static bool IsSection(PropertyInfo p)
+        private static bool IsSection(MemberInfo member)
         {
-            var attribute = p.GetCustomAttribute<SettingSectionAttribute>(false);
+            var attribute = member.GetCustomAttribute<SettingSectionAttribute>(false);
             return attribute != null;
         }
 
-        private static ConfigSection GetSettingSection(object parent, PropertyInfo prop)
+        private static ConfigSection GetSettingSection(object parent, MemberInfo member)
         {
-            var attribute = prop.GetCustomAttribute<SettingSectionAttribute>(false);
-            PropertyInfo[] properties = prop.PropertyType.GetProperties();
-            object value = prop.GetValue(parent);
-            var sections = GetSections(properties, value);
-            var elements = GetElements(properties, value);
-            ConfigSection section = new ConfigSection(parent, prop)
+            var attribute = member.GetCustomAttribute<SettingSectionAttribute>(false);
+            Type type = member.GetValueType();
+            MemberInfo[] members = type.GetMembers();
+            object value = member.GetValue(parent);
+            var sections = GetSections(members, value);
+            var elements = GetElements(members, value);
+            ConfigSection section = new ConfigSection(parent, member)
             {
                 SubSections = new ObservableCollection<ConfigSection>(sections),
                 Elements = new ObservableCollection<ConfigPageElement>(elements)
@@ -59,52 +57,53 @@ namespace WpfSettings.Config
             return section;
         }
 
-        private static ConfigPageElement GetSettingElement(object parent, PropertyInfo prop)
+        private static ConfigPageElement GetSettingElement(object parent, MemberInfo member)
         {
-            var attributes = prop.GetCustomAttributes(false);
+            var attributes = member.GetCustomAttributes(false);
+            // Return the first valid attribute
             foreach (object attribute in attributes)
             {
-                ConfigPageElement element = GetElement(parent, prop, (dynamic) attribute);
+                ConfigPageElement element = GetElement(parent, member, (dynamic) attribute);
                 if (element != null)
                     return element;
             }
             return null;
         }
 
-        private static IOrderedEnumerable<ConfigSection> GetSections(PropertyInfo[] properties, object value)
+        private static IOrderedEnumerable<ConfigSection> GetSections(IEnumerable<MemberInfo> members, object parent)
         {
-            var sections = properties
+            var sections = members
                 .Where(IsSection)
-                .Select(p => GetSettingSection(value, p))
+                .Select(p => GetSettingSection(parent, p))
                 .OrderBy(s => s.Position)
-                .ThenBy(s => s.Property.MetadataToken);
+                .ThenBy(s => s.Member.MetadataToken);
             return sections;
         }
 
-        private static IOrderedEnumerable<ConfigPageElement> GetElements(PropertyInfo[] properties, object value)
+        private static IOrderedEnumerable<ConfigPageElement> GetElements(IEnumerable<MemberInfo> members, object parent)
         {
-            var elements = properties
-                .Select(p => GetSettingElement(value, p))
+            var elements = members
+                .Select(p => GetSettingElement(parent, p))
                 .Where(e => e != null)
                 .OrderBy(e => e.Position)
-                .ThenBy(e => e.Property.MetadataToken);
+                .ThenBy(e => e.Member.MetadataToken);
             return elements;
         }
 
-        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, object att)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member, object att)
         {
             return null;
         }
 
-        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, SettingGroupAttribute attribute)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member, SettingGroupAttribute attribute)
         {
-            PropertyInfo[] properties = prop.PropertyType.GetProperties();
-            object value = prop.GetValue(parent);
+            Type type = member.GetValueType();
+            MemberInfo[] properties = type.GetMembers();
+            object value = member.GetValue(parent);
             var elements = GetElements(properties, value);
-            Type type = prop.PropertyType;
             if (!type.IsClass)
                 throw new ArgumentException("SettingGroupAttribute must target a class (not a value type or interface)");
-            ConfigGroup element = new ConfigGroup(parent, prop)
+            ConfigGroup element = new ConfigGroup(parent, member)
             {
                 Elements = new ObservableCollection<ConfigPageElement>(elements)
             };
@@ -114,54 +113,54 @@ namespace WpfSettings.Config
             return element;
         }
 
-        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, SettingStringAttribute attribute)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member, SettingStringAttribute attribute)
         {
-            Type type = prop.PropertyType;
+            Type type = member.GetValueType();
             if (type != typeof(string))
                 throw new ArgumentException("SettingStringAttribute must target a string");
-            StringConfig element = new StringConfig(parent, prop);
+            StringConfig element = new StringConfig(parent, member);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             if (!string.IsNullOrEmpty(attribute.Details))
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
-            element.Value = (string) prop.GetValue(parent);
+            element.Value = (string) member.GetValue(parent);
             return element;
         }
 
-        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, SettingTextAttribute attribute)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member, SettingTextAttribute attribute)
         {
-            Type type = prop.PropertyType;
+            Type type = member.GetValueType();
             if (type != typeof(string))
                 throw new ArgumentException("SettingTextAttribute must target a string");
-            TextConfig element = new TextConfig(parent, prop);
+            TextConfig element = new TextConfig(parent, member);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             if (!string.IsNullOrEmpty(attribute.Details))
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
-            element.Value = (string) prop.GetValue(parent);
+            element.Value = (string) member.GetValue(parent);
             return element;
         }
 
-        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, SettingBoolAttribute attribute)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member, SettingBoolAttribute attribute)
         {
-            Type type = prop.PropertyType;
+            Type type = member.GetValueType();
             if (type != typeof(bool))
                 throw new ArgumentException("SettingBoolAttribute must target a boolean");
-            BoolConfig element = new BoolConfig(parent, prop);
+            BoolConfig element = new BoolConfig(parent, member);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             if (!string.IsNullOrEmpty(attribute.Details))
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
-            element.Value = (bool) prop.GetValue(parent);
+            element.Value = (bool) member.GetValue(parent);
             return element;
         }
 
-        private static ConfigPageElement GetElement(object parent, PropertyInfo prop, SettingChoiceAttribute attribute)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member, SettingChoiceAttribute attribute)
         {
-            Type type = prop.PropertyType;
+            Type type = member.GetValueType();
             if (!type.IsEnum)
                 throw new ArgumentException("SettingChoiceAttribute must target an enum");
             var choices = new ObservableCollection<string>();
@@ -173,15 +172,15 @@ namespace WpfSettings.Config
                     choices.Add(label);
             }
             var element = attribute.Type == ChoiceType.DropDown
-                ? (ChoiceConfig) new DropDownConfig(parent, prop)
-                : new RadioButtonsConfig(parent, prop);
+                ? (ChoiceConfig) new DropDownConfig(parent, member)
+                : new RadioButtonsConfig(parent, member);
             element.Choices = choices;
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             if (!string.IsNullOrEmpty(attribute.Details))
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
-            string enumValue = GetFieldLabel(type, prop.GetValue(parent).ToString());
+            string enumValue = GetFieldLabel(type, member.GetValue(parent).ToString());
             element.SelectedValue = enumValue;
             return element;
         }

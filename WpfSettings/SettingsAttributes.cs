@@ -2,7 +2,7 @@
 
 namespace WpfSettings
 {
-    [AttributeUsage(AttributeTargets.Property)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public abstract class SettingAttribute : Attribute
     {
         public int Position { get; set; }

@@ -5,15 +5,15 @@ namespace WpfSettings.Example
     public class GlobalSettings
     {
         [SettingSection("General",
-            Image = "Resources.icon-bulb.png")]
+             Image = "Resources.icon-bulb.png")]
         public GeneralSettings General { get; }
 
         [SettingSection("Profile",
-            Image = "Resources.icon-skull.png")]
+             Image = "Resources.icon-skull.png")]
         public UserSettings User { get; }
 
         [SettingSection("Interface",
-            Image = "Resources.icon-window-system.png")]
+             Image = "Resources.icon-window-system.png")]
         public InterfaceSettings Interface { get; }
 
         public GlobalSettings()
@@ -58,11 +58,11 @@ namespace WpfSettings.Example
     public class InterfaceSettings
     {
         [SettingSection("Style",
-            Image = "Resources.icon-flask.png")]
+             Image = "Resources.icon-flask.png")]
         public StyleSettings Style { get; set; }
 
         [SettingSection("Content",
-            Image = "Resources.icon-gift.png")]
+             Image = "Resources.icon-gift.png")]
         public ContentSettings Content { get; set; }
 
         public InterfaceSettings()
