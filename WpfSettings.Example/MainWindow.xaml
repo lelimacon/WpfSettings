@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WpfSettings.Example"
         DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
-        Title="My Note"
+        Title="{Binding WindowTitle}"
         Icon="Resources/icon-note.ico"
         Height="260" Width="400" ResizeMode="CanResizeWithGrip">
 
