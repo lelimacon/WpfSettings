@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
@@ -57,19 +58,14 @@ namespace WpfSettings.Config
 
     public class ConfigGroup : ConfigPageElement
     {
-        public ObservableCollection<ConfigPageElement> Elements { get; set; }
+        public IEnumerable<ConfigPageElement> Elements { get; set; }
 
-        public ConfigGroup(object parent, MemberInfo member)
+        public ConfigGroup(object parent, MemberInfo member, IEnumerable<ConfigPageElement> elements)
             : base(parent, member)
         {
-            Elements = new ObservableCollection<ConfigPageElement>();
+            Elements = elements;
         }
-
-        public void Add(ConfigPageElement element)
-        {
-            Elements.Add(element);
-        }
-
+        
         public override void Save()
         {
             foreach (ConfigPageElement element in Elements)

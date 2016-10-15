@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -8,22 +8,28 @@ using WpfSettings.Utils;
 
 namespace WpfSettings.Config
 {
-    internal class ConfigConverter
+    internal static class SettingsConverter
     {
-        public object ExternalConfig { get; }
-        public ObservableCollection<ConfigSection> InternalConfig { get; private set; }
-
-        public ConfigConverter(object config)
+        public static ObservableCollection<ConfigSection> GetSections(object settings)
         {
-            ExternalConfig = config;
+            MemberInfo[] members = settings.GetType().GetMembers();
+            var sections = members
+                .Where(IsSection)
+                .Select(p => GetSection(settings, p))
+                .OrderBy(s => s.Position)
+                .ThenBy(s => s.Member.MetadataToken);
+            return new ObservableCollection<ConfigSection>(sections);
         }
 
-        public ObservableCollection<ConfigSection> ConvertConfig()
+        public static ObservableCollection<ConfigPageElement> GetElements(object settings)
         {
-            MemberInfo[] members = ExternalConfig.GetType().GetMembers();
-            var sections = GetSections(members, ExternalConfig);
-            InternalConfig = new ObservableCollection<ConfigSection>(sections);
-            return InternalConfig;
+            MemberInfo[] members = settings.GetType().GetMembers();
+            var elements = members
+                .Select(p => GetElement(settings, p))
+                .Where(e => e != null)
+                .OrderBy(e => e.Position)
+                .ThenBy(e => e.Member.MetadataToken);
+            return new ObservableCollection<ConfigPageElement>(elements);
         }
 
         private static bool IsSection(MemberInfo member)
@@ -32,18 +38,16 @@ namespace WpfSettings.Config
             return attribute != null;
         }
 
-        private static ConfigSection GetSettingSection(object parent, MemberInfo member)
+        private static ConfigSection GetSection(object parent, MemberInfo member)
         {
             var attribute = member.GetCustomAttribute<SettingSectionAttribute>(false);
-            Type type = member.GetValueType();
-            MemberInfo[] members = type.GetMembers();
             object value = member.GetValue(parent);
-            var sections = GetSections(members, value);
-            var elements = GetElements(members, value);
+            var sections = GetSections(value);
+            var elements = GetElements(value);
             ConfigSection section = new ConfigSection(parent, member)
             {
-                SubSections = new ObservableCollection<ConfigSection>(sections),
-                Elements = new ObservableCollection<ConfigPageElement>(elements)
+                SubSections = sections,
+                Elements = elements
             };
             if (!string.IsNullOrEmpty(attribute.Label))
                 section.Label = attribute.Label;
@@ -57,7 +61,7 @@ namespace WpfSettings.Config
             return section;
         }
 
-        private static ConfigPageElement GetSettingElement(object parent, MemberInfo member)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member)
         {
             var attributes = member.GetCustomAttributes(false);
             // Return the first valid attribute
@@ -70,26 +74,7 @@ namespace WpfSettings.Config
             return null;
         }
 
-        private static IOrderedEnumerable<ConfigSection> GetSections(IEnumerable<MemberInfo> members, object parent)
-        {
-            var sections = members
-                .Where(IsSection)
-                .Select(p => GetSettingSection(parent, p))
-                .OrderBy(s => s.Position)
-                .ThenBy(s => s.Member.MetadataToken);
-            return sections;
-        }
-
-        private static IOrderedEnumerable<ConfigPageElement> GetElements(IEnumerable<MemberInfo> members, object parent)
-        {
-            var elements = members
-                .Select(p => GetSettingElement(parent, p))
-                .Where(e => e != null)
-                .OrderBy(e => e.Position)
-                .ThenBy(e => e.Member.MetadataToken);
-            return elements;
-        }
-
+        [SuppressMessage("ReSharper", "UnusedParameter.Local")]
         private static ConfigPageElement GetElement(object parent, MemberInfo member, object att)
         {
             return null;
@@ -98,15 +83,11 @@ namespace WpfSettings.Config
         private static ConfigPageElement GetElement(object parent, MemberInfo member, SettingGroupAttribute attribute)
         {
             Type type = member.GetValueType();
-            MemberInfo[] properties = type.GetMembers();
             object value = member.GetValue(parent);
-            var elements = GetElements(properties, value);
+            var elements = GetElements(value);
             if (!type.IsClass)
                 throw new ArgumentException("SettingGroupAttribute must target a class (not a value type or interface)");
-            ConfigGroup element = new ConfigGroup(parent, member)
-            {
-                Elements = new ObservableCollection<ConfigPageElement>(elements)
-            };
+            ConfigGroup element = new ConfigGroup(parent, member, elements);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             element.Position = attribute.Position;

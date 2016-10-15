@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using WpfSettings.Annotations;
@@ -14,7 +15,6 @@ namespace WpfSettings.ViewModels
         private ObservableCollection<ConfigPageElement> _currentPageConfig;
         private ObservableCollection<ConfigSection> _internalConfig;
         private string _categoryTitle;
-        internal ConfigConverter ConfigConverter { get; set; }
         public object ExternalConfig { get; set; }
 
         public ObservableCollection<ConfigSection> InternalConfig
@@ -65,10 +65,10 @@ namespace WpfSettings.ViewModels
         public SettingsWindowViewModel(object config)
         {
             ExternalConfig = config;
-            ConfigConverter = new ConfigConverter(config);
-            InternalConfig = ConfigConverter.ConvertConfig();
+            var sections = SettingsConverter.GetSections(config);
+            InternalConfig = sections;
             ChangeSectionAction = ChangeSection;
-            ChangeSection(InternalConfig[0]);
+            ChangeSection(InternalConfig.First());
         }
 
         private void ChangeSection(ConfigSection section)

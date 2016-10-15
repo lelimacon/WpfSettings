@@ -11,9 +11,7 @@ namespace WpfSettings.Example
         #region Properties
 
         public ICommand ShowSettingsCommand => new RelayCommand(ShowSettings);
-
         public GlobalSettings Settings { get; set; }
-
         public string WindowTitle { get; set; }
 
         #endregion Properties
