@@ -84,6 +84,8 @@ namespace WpfSettings.ViewModels
 
         private void Ok(SettingsWindow window)
         {
+            // Changes the focus so the current setting (if changed) is saved
+            window.OkButton.Focus();
             Save();
             window.Close();
         }
