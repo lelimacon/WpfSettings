@@ -2,6 +2,32 @@
 
 namespace WpfSettings.Example
 {
+    [ImplementPropertyChanged]
+    public class QuickSettings
+    {
+        private readonly GlobalSettings _settings;
+
+        [SettingChoice("Gender",
+             Details = "This will change the background to match your color preferences! No questions.")]
+        public UserSettings.EGender Gender
+        {
+            get { return _settings.User.Gender; }
+            set { _settings.User.Gender = value; }
+        }
+
+        [SettingString("Name")]
+        public string Name
+        {
+            get { return _settings.User.Name; }
+            set { _settings.User.Name = value; }
+        }
+
+        public QuickSettings(GlobalSettings settings)
+        {
+            _settings = settings;
+        }
+    }
+
     public class GlobalSettings
     {
         [SettingSection("General",

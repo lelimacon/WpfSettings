@@ -65,7 +65,7 @@ namespace WpfSettings.Config
         {
             Elements = elements;
         }
-        
+
         public override void Save()
         {
             foreach (ConfigPageElement element in Elements)

@@ -11,6 +11,7 @@ namespace WpfSettings.Example
         #region Properties
 
         public ICommand ShowSettingsCommand => new RelayCommand(ShowSettings);
+        public QuickSettings QuickSettings { get; set; }
         public GlobalSettings Settings { get; set; }
         public string WindowTitle { get; set; }
 
@@ -19,6 +20,7 @@ namespace WpfSettings.Example
         public MainViewModel()
         {
             Settings = new GlobalSettings();
+            QuickSettings = new QuickSettings(Settings);
             SetTitle();
             dynamic userSettings = Settings.User;
             userSettings.PropertyChanged += new PropertyChangedEventHandler(SettingChanged);

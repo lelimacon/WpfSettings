@@ -59,7 +59,7 @@ namespace WpfSettings.Utils
         {
             if (prop == null)
                 throw new ArgumentNullException(nameof(prop));
-            string ending = "Property";
+            const string ending = "Property";
             if (!prop.EndsWith(ending))
                 throw new ArgumentException($"Property name must end with {ending}: {prop}");
             prop = prop.Remove(prop.Length - ending.Length);

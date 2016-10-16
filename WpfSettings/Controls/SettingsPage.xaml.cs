@@ -13,10 +13,24 @@ namespace WpfSettings.Controls
         public static readonly DependencyProperty ConfigElementsProperty =
             MvvmUtils.RegisterDp<SettingsPage>();
 
+        public static readonly DependencyProperty SettingsProperty =
+            MvvmUtils.RegisterDp<SettingsPage>();
+
         public ObservableCollection<ConfigPageElement> ConfigElements
         {
-            get { return (ObservableCollection<ConfigPageElement>)GetValue(ConfigElementsProperty); }
+            get { return (ObservableCollection<ConfigPageElement>) GetValue(ConfigElementsProperty); }
             set { SetValueDp(ConfigElementsProperty, value); }
+        }
+
+        public object Settings
+        {
+            get { return GetValue(SettingsProperty); }
+            set
+            {
+                SetValueDp(SettingsProperty, value);
+                var elements = SettingsConverter.GetElements(value);
+                ConfigElements = elements;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

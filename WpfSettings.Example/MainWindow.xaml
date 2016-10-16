@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfSettings.Example"
+        xmlns:controls="clr-namespace:WpfSettings.Controls;assembly=WpfSettings"
         DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}"
         Icon="Resources/icon-note.ico"
-        Height="260" Width="400" ResizeMode="CanResizeWithGrip">
+        Height="400" Width="600"
+        ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>
         <local:GenderToColorConverter x:Key="GenderToColor" />
@@ -20,6 +22,7 @@
         <Grid Margin="6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="300" />
                 <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -31,14 +34,19 @@
                      VerticalContentAlignment="Center"
                      FontWeight="{Binding Settings.Interface.Style.TitleStyle.Style, Converter={StaticResource StyleToWeight}}"
                      FontStyle="{Binding Settings.Interface.Style.TitleStyle.Style, Converter={StaticResource StyleToFontStyle}}" />
-            <Button Grid.Row="0" Grid.Column="1" Margin="3" Height="26"
-                    Content="Settings"
-                    Command="{Binding ShowSettingsCommand}" />
-            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="3"
+            <TextBox Grid.Row="1" Grid.Column="0" Margin="3"
                      Text="{Binding Settings.Interface.Content.PageContent}"
                      FontWeight="{Binding Settings.Interface.Style.ContentStyle.Style, Converter={StaticResource StyleToWeight}}"
                      FontStyle="{Binding Settings.Interface.Style.ContentStyle.Style, Converter={StaticResource StyleToFontStyle}}"
                      TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" />
+            <TextBlock Grid.Row="0" Grid.Column="1" Margin="3"
+                       VerticalAlignment="Center" Text="Quick Settings" FontWeight="Bold" />
+            <Button Grid.Row="0" Grid.Column="2" Margin="3" Height="26"
+                    Content="All Settings"
+                    Command="{Binding ShowSettingsCommand}" />
+            <controls:SettingsPage Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                   x:Name="QuickSettings" Margin="3"
+                                   Settings="{Binding QuickSettings, Mode=TwoWay}" />
         </Grid>
     </Border>
 </Window>
