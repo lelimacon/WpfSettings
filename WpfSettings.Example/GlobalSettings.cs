@@ -8,6 +8,7 @@ namespace WpfSettings.Example
         private readonly GlobalSettings _settings;
 
         [SettingChoice("Gender",
+             LabelWidth = 80,
              Details = "This will change the background to match your color preferences! No questions.")]
         public UserSettings.EGender Gender
         {
@@ -15,7 +16,7 @@ namespace WpfSettings.Example
             set { _settings.User.Gender = value; }
         }
 
-        [SettingString("Name")]
+        [SettingString("Name", LabelWidth = 80)]
         public string Name
         {
             get { return _settings.User.Name; }
@@ -32,14 +33,17 @@ namespace WpfSettings.Example
     public class GlobalSettings
     {
         [SettingSection("General",
+             LabelWidth = 100,
              Image = "Resources.icon-bulb.png")]
         public GeneralSettings General { get; }
 
         [SettingSection("Profile",
+             LabelWidth = 100,
              Image = "Resources.icon-skull.png")]
         public UserSettings User { get; }
 
         [SettingSection("Interface",
+             LabelWidth = 100,
              Image = "Resources.icon-window-system.png")]
         public InterfaceSettings Interface { get; }
 
@@ -120,10 +124,12 @@ namespace WpfSettings.Example
     [ImplementPropertyChanged]
     public class StyleSettings
     {
-        [SettingGroup(1, "Title Style")]
+        [SettingGroup(1, "Title Style",
+             LabelWidth = 70)]
         public BoxStyle TitleStyle { get; }
 
-        [SettingGroup(2, "Content Style")]
+        [SettingGroup(2, "Content Style",
+             LabelWidth = 70)]
         public BoxStyle ContentStyle { get; }
 
         public StyleSettings()

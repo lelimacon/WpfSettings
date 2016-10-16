@@ -42,6 +42,11 @@ namespace WpfSettings.Config
         {
             var attribute = member.GetCustomAttribute<SettingSectionAttribute>(false);
             object value = member.GetValue(parent);
+
+            e = new ConverterArgs(e)
+            {
+                LabelWidth = attribute.LabelWidth
+            };
             var sections = GetSections(value, e);
             var elements = GetElements(value, e);
             ConfigSection section = new ConfigSection(parent, member)
@@ -86,6 +91,10 @@ namespace WpfSettings.Config
         {
             Type type = member.GetValueType();
             object value = member.GetValue(parent);
+            e = new ConverterArgs(e)
+            {
+                LabelWidth = attribute.LabelWidth
+            };
             var elements = GetElements(value, e);
             if (!type.IsClass)
                 throw new ArgumentException("SettingGroupAttribute must target a class (not a value type or interface)");
@@ -110,6 +119,7 @@ namespace WpfSettings.Config
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
             element.Value = (string) member.GetValue(parent);
+            element.LabelWidth = attribute.LabelWidth > 0 ? attribute.LabelWidth : e.LabelWidth;
             element.AutoSave = e.AutoSave;
             return element;
         }
@@ -127,6 +137,7 @@ namespace WpfSettings.Config
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
             element.Value = (string) member.GetValue(parent);
+            element.LabelWidth = attribute.LabelWidth > 0 ? attribute.LabelWidth : e.LabelWidth;
             element.AutoSave = e.AutoSave;
             return element;
         }
@@ -144,6 +155,7 @@ namespace WpfSettings.Config
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
             element.Value = (bool) member.GetValue(parent);
+            element.LabelWidth = attribute.LabelWidth > 0 ? attribute.LabelWidth : e.LabelWidth;
             element.AutoSave = e.AutoSave;
             return element;
         }
@@ -173,6 +185,7 @@ namespace WpfSettings.Config
             element.Position = attribute.Position;
             string enumValue = GetFieldLabel(type, member.GetValue(parent).ToString());
             element.SelectedValue = enumValue;
+            element.LabelWidth = attribute.LabelWidth > 0 ? attribute.LabelWidth : e.LabelWidth;
             element.AutoSave = e.AutoSave;
             return element;
         }

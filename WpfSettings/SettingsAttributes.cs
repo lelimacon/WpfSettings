@@ -5,9 +5,22 @@ namespace WpfSettings
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public abstract class SettingAttribute : Attribute
     {
+        private int _labelWidth;
+
         public int Position { get; set; }
         public string Label { get; set; }
-        
+
+        public int LabelWidth
+        {
+            get { return _labelWidth; }
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException("LabelWidth must be > 0");
+                _labelWidth = value;
+            }
+        }
+
         protected SettingAttribute()
         {
             Position = 0;
