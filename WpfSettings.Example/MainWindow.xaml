@@ -43,7 +43,8 @@
                        VerticalAlignment="Center" Text="Quick Settings" FontWeight="Bold" />
             <Button Grid.Row="0" Grid.Column="2" Margin="3" Height="26"
                     Content="All Settings"
-                    Command="{Binding ShowSettingsCommand}" />
+                    Command="{Binding ShowSettingsCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
             <controls:SettingsPage Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
                                    x:Name="QuickSettings" Margin="3"
                                    Settings="{Binding QuickSettings, Mode=TwoWay}" />

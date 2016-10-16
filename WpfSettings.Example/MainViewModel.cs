@@ -8,19 +8,16 @@ namespace WpfSettings.Example
     [ImplementPropertyChanged]
     public class MainViewModel
     {
-        #region Properties
-
-        public ICommand ShowSettingsCommand => new RelayCommand(ShowSettings);
+        public ICommand ShowSettingsCommand { get; set; }
         public QuickSettings QuickSettings { get; set; }
         public GlobalSettings Settings { get; set; }
         public string WindowTitle { get; set; }
-
-        #endregion Properties
 
         public MainViewModel()
         {
             Settings = new GlobalSettings();
             QuickSettings = new QuickSettings(Settings);
+            ShowSettingsCommand = new RelayCommand<MainWindow>(ShowSettings);
             SetTitle();
             dynamic userSettings = Settings.User;
             userSettings.PropertyChanged += new PropertyChangedEventHandler(SettingChanged);
@@ -37,11 +34,14 @@ namespace WpfSettings.Example
             WindowTitle = $"{Settings?.User?.Name}'s note";
         }
 
-        private void ShowSettings()
+        private void ShowSettings(MainWindow mainWindow)
         {
-            SettingsWindow window = new SettingsWindow(Settings);
-            window.IconSource = "Resources.icon-cog.png";
-            window.ShowDialog();
+            SettingsWindow settingsWindow = new SettingsWindow(Settings)
+            {
+                IconSource = "Resources.icon-cog.png",
+                Owner = mainWindow
+            };
+            settingsWindow.ShowDialog();
         }
     }
 }
