@@ -73,6 +73,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MvvmUtils.cs" />
     <Compile Include="StyleToFontStyleConverter.cs" />
     <Compile Include="StyleToWeightConverter.cs" />
     <Compile Include="GenderToColorConverter.cs" />

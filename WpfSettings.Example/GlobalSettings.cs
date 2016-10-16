@@ -25,6 +25,7 @@ namespace WpfSettings.Example
         public QuickSettings(GlobalSettings settings)
         {
             _settings = settings;
+            settings.User.ReflectPropertyChanged(this);
         }
     }
 

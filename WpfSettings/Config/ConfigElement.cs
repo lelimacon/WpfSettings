@@ -46,6 +46,9 @@ namespace WpfSettings.Config
             Parent = parent;
             Member = member;
             Label = member?.Name;
+            var propertyChanged = parent as INotifyPropertyChanged;
+            if (propertyChanged != null)
+                propertyChanged.PropertyChanged += OuterPropertyChanged;
         }
 
         public virtual void Save()
@@ -59,6 +62,8 @@ namespace WpfSettings.Config
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        protected abstract void OuterPropertyChanged(object sender, PropertyChangedEventArgs e);
     }
 
     public class ConfigSection : ConfigElement
@@ -112,6 +117,10 @@ namespace WpfSettings.Config
             foreach (ConfigPageElement element in Elements)
                 element.Save();
         }
+
+        protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+        }
     }
 
     public abstract class ConfigPageElement : ConfigElement
@@ -161,6 +170,10 @@ namespace WpfSettings.Config
             foreach (ConfigPageElement element in Elements)
                 element.Save();
         }
+
+        protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+        }
     }
 
     public class StringConfig : ConfigPageElement
@@ -199,6 +212,12 @@ namespace WpfSettings.Config
         public override void Save()
         {
             Member.SetValue(Parent, Value);
+        }
+
+        protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == Member.Name)
+                Value = (string) Member.GetValue(Parent);
         }
     }
 
@@ -252,6 +271,12 @@ namespace WpfSettings.Config
         {
             Member.SetValue(Parent, Value);
         }
+
+        protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == Member.Name)
+                Value = (string) Member.GetValue(Parent);
+        }
     }
 
     public class BoolConfig : ConfigPageElement
@@ -290,6 +315,12 @@ namespace WpfSettings.Config
         public override void Save()
         {
             Member.SetValue(Parent, Value);
+        }
+
+        protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == Member.Name)
+                Value = (bool) Member.GetValue(Parent);
         }
     }
 
@@ -352,6 +383,23 @@ namespace WpfSettings.Config
             MemberInfo info = type.GetMember(n)[0];
             var attribute = info.GetCustomAttribute<SettingFieldAttribute>(false);
             return attribute?.Label;
+        }
+
+        protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == Member.Name)
+            {
+                Type type = Member.GetValueType();
+                string enumValue = GetFieldLabel(type, Member.GetValue(Parent).ToString());
+                SelectedValue = enumValue;
+            }
+        }
+
+        private static string GetFieldLabel(Type enumType, string fieldName)
+        {
+            var memberInfos = enumType.GetMember(fieldName);
+            var attr = memberInfos[0].GetCustomAttribute<SettingFieldAttribute>(false);
+            return attr?.Label;
         }
     }
 
