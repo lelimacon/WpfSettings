@@ -116,6 +116,19 @@ namespace WpfSettings.Config
 
     public abstract class ConfigPageElement : ConfigElement
     {
+        private bool _autoSave;
+
+        public bool AutoSave
+        {
+            get { return _autoSave; }
+            set
+            {
+                if (value == _autoSave) return;
+                _autoSave = value;
+                OnPropertyChanged();
+            }
+        }
+
         protected ConfigPageElement(object parent, MemberInfo member)
             : base(parent, member)
         {
@@ -163,6 +176,7 @@ namespace WpfSettings.Config
                 if (value == _value) return;
                 _value = value;
                 OnPropertyChanged();
+                if (AutoSave) Save();
             }
         }
 
@@ -202,6 +216,7 @@ namespace WpfSettings.Config
                 if (value == _value) return;
                 _value = value;
                 OnPropertyChanged();
+                if (AutoSave) Save();
             }
         }
 
@@ -252,6 +267,7 @@ namespace WpfSettings.Config
                 if (value == _value) return;
                 _value = value;
                 OnPropertyChanged();
+                if (AutoSave) Save();
             }
         }
 
@@ -302,6 +318,7 @@ namespace WpfSettings.Config
                 if (value == _selectedValue) return;
                 _selectedValue = value;
                 OnPropertyChanged();
+                if (AutoSave) Save();
             }
         }
 

@@ -65,7 +65,7 @@ namespace WpfSettings.ViewModels
         public SettingsWindowViewModel(object config)
         {
             ExternalConfig = config;
-            var sections = SettingsConverter.GetSections(config);
+            var sections = SettingsConverter.GetSections(config, false);
             InternalConfig = sections;
             ChangeSectionAction = ChangeSection;
             ChangeSection(InternalConfig.First());

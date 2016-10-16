@@ -16,6 +16,9 @@ namespace WpfSettings.Controls
         public static readonly DependencyProperty SettingsProperty =
             MvvmUtils.RegisterDp<SettingsPage>();
 
+        public static readonly DependencyProperty AutoSaveProperty =
+            MvvmUtils.RegisterDp<SettingsPage>();
+
         public ObservableCollection<ConfigPageElement> ConfigElements
         {
             get { return (ObservableCollection<ConfigPageElement>) GetValue(ConfigElementsProperty); }
@@ -28,9 +31,15 @@ namespace WpfSettings.Controls
             set
             {
                 SetValueDp(SettingsProperty, value);
-                var elements = SettingsConverter.GetElements(value);
+                var elements = SettingsConverter.GetElements(value, AutoSave);
                 ConfigElements = elements;
             }
+        }
+
+        public bool AutoSave
+        {
+            get { return (bool) GetValue(AutoSaveProperty); }
+            set { SetValueDp(AutoSaveProperty, value); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -45,6 +54,7 @@ namespace WpfSettings.Controls
         public SettingsPage()
         {
             InitializeComponent();
+            AutoSave = true;
         }
     }
 }

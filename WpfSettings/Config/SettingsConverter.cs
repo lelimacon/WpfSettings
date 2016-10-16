@@ -10,22 +10,22 @@ namespace WpfSettings.Config
 {
     internal static class SettingsConverter
     {
-        public static ObservableCollection<ConfigSection> GetSections(object settings)
+        public static ObservableCollection<ConfigSection> GetSections(object settings, bool autoSave)
         {
             MemberInfo[] members = settings.GetType().GetMembers();
             var sections = members
                 .Where(IsSection)
-                .Select(p => GetSection(settings, p))
+                .Select(p => GetSection(settings, p, autoSave))
                 .OrderBy(s => s.Position)
                 .ThenBy(s => s.Member.MetadataToken);
             return new ObservableCollection<ConfigSection>(sections);
         }
 
-        public static ObservableCollection<ConfigPageElement> GetElements(object settings)
+        public static ObservableCollection<ConfigPageElement> GetElements(object settings, bool autoSave)
         {
             MemberInfo[] members = settings.GetType().GetMembers();
             var elements = members
-                .Select(p => GetElement(settings, p))
+                .Select(p => GetElement(settings, p, autoSave))
                 .Where(e => e != null)
                 .OrderBy(e => e.Position)
                 .ThenBy(e => e.Member.MetadataToken);
@@ -38,12 +38,12 @@ namespace WpfSettings.Config
             return attribute != null;
         }
 
-        private static ConfigSection GetSection(object parent, MemberInfo member)
+        private static ConfigSection GetSection(object parent, MemberInfo member, bool autoSave)
         {
             var attribute = member.GetCustomAttribute<SettingSectionAttribute>(false);
             object value = member.GetValue(parent);
-            var sections = GetSections(value);
-            var elements = GetElements(value);
+            var sections = GetSections(value, autoSave);
+            var elements = GetElements(value, autoSave);
             ConfigSection section = new ConfigSection(parent, member)
             {
                 SubSections = sections,
@@ -61,13 +61,13 @@ namespace WpfSettings.Config
             return section;
         }
 
-        private static ConfigPageElement GetElement(object parent, MemberInfo member)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member, bool autoSave)
         {
             var attributes = member.GetCustomAttributes(false);
             // Return the first valid attribute
             foreach (object attribute in attributes)
             {
-                ConfigPageElement element = GetElement(parent, member, (dynamic) attribute);
+                ConfigPageElement element = GetElement(parent, member, (dynamic) attribute, autoSave);
                 if (element != null)
                     return element;
             }
@@ -75,26 +75,30 @@ namespace WpfSettings.Config
         }
 
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]
-        private static ConfigPageElement GetElement(object parent, MemberInfo member, object att)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member,
+            object attribute, bool autoSave)
         {
             return null;
         }
 
-        private static ConfigPageElement GetElement(object parent, MemberInfo member, SettingGroupAttribute attribute)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member,
+            SettingGroupAttribute attribute, bool autoSave)
         {
             Type type = member.GetValueType();
             object value = member.GetValue(parent);
-            var elements = GetElements(value);
+            var elements = GetElements(value, autoSave);
             if (!type.IsClass)
                 throw new ArgumentException("SettingGroupAttribute must target a class (not a value type or interface)");
             ConfigGroup element = new ConfigGroup(parent, member, elements);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             element.Position = attribute.Position;
+            element.AutoSave = autoSave;
             return element;
         }
 
-        private static ConfigPageElement GetElement(object parent, MemberInfo member, SettingStringAttribute attribute)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member,
+            SettingStringAttribute attribute, bool autoSave)
         {
             Type type = member.GetValueType();
             if (type != typeof(string))
@@ -106,10 +110,12 @@ namespace WpfSettings.Config
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
             element.Value = (string) member.GetValue(parent);
+            element.AutoSave = autoSave;
             return element;
         }
 
-        private static ConfigPageElement GetElement(object parent, MemberInfo member, SettingTextAttribute attribute)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member,
+            SettingTextAttribute attribute, bool autoSave)
         {
             Type type = member.GetValueType();
             if (type != typeof(string))
@@ -121,10 +127,12 @@ namespace WpfSettings.Config
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
             element.Value = (string) member.GetValue(parent);
+            element.AutoSave = autoSave;
             return element;
         }
 
-        private static ConfigPageElement GetElement(object parent, MemberInfo member, SettingBoolAttribute attribute)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member,
+            SettingBoolAttribute attribute, bool autoSave)
         {
             Type type = member.GetValueType();
             if (type != typeof(bool))
@@ -136,10 +144,12 @@ namespace WpfSettings.Config
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
             element.Value = (bool) member.GetValue(parent);
+            element.AutoSave = autoSave;
             return element;
         }
 
-        private static ConfigPageElement GetElement(object parent, MemberInfo member, SettingChoiceAttribute attribute)
+        private static ConfigPageElement GetElement(object parent, MemberInfo member,
+            SettingChoiceAttribute attribute, bool autoSave)
         {
             Type type = member.GetValueType();
             if (!type.IsEnum)
@@ -163,6 +173,7 @@ namespace WpfSettings.Config
             element.Position = attribute.Position;
             string enumValue = GetFieldLabel(type, member.GetValue(parent).ToString());
             element.SelectedValue = enumValue;
+            element.AutoSave = autoSave;
             return element;
         }
 
