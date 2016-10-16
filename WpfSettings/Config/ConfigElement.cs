@@ -16,6 +16,7 @@ namespace WpfSettings.Config
     {
         private int _position;
         private string _label;
+        private int _labelWidth;
         public object Parent { get; }
         public MemberInfo Member { get; }
 
@@ -37,6 +38,17 @@ namespace WpfSettings.Config
             {
                 if (value == _label) return;
                 _label = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int LabelWidth
+        {
+            get { return _labelWidth; }
+            set
+            {
+                if (value == _labelWidth) return;
+                _labelWidth = value;
                 OnPropertyChanged();
             }
         }

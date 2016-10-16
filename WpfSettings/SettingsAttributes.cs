@@ -7,7 +7,7 @@ namespace WpfSettings
     {
         public int Position { get; set; }
         public string Label { get; set; }
-
+        
         protected SettingAttribute()
         {
             Position = 0;

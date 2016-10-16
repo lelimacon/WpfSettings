@@ -31,7 +31,8 @@ namespace WpfSettings.Controls
             set
             {
                 SetValueDp(SettingsProperty, value);
-                var elements = SettingsConverter.GetElements(value, AutoSave);
+                ConverterArgs args = new ConverterArgs {AutoSave = AutoSave};
+                var elements = SettingsConverter.GetElements(value, args);
                 ConfigElements = elements;
             }
         }
