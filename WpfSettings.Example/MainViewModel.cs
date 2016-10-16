@@ -26,6 +26,9 @@ namespace WpfSettings.Example
             var settingsWindow = new SettingsWindow(Settings)
             {
                 IconSource = "Resources.icon-cog.png",
+                ExplorerWidth = 180,
+                Width = 600,
+                Height = 400,
                 Owner = mainWindow
             };
             settingsWindow.ShowDialog();

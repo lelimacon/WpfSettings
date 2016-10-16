@@ -15,6 +15,7 @@ namespace WpfSettings.ViewModels
         private ObservableCollection<ConfigPageElement> _currentPageConfig;
         private ObservableCollection<ConfigSection> _internalConfig;
         private string _categoryTitle;
+        private int _explorerWidth;
         public object ExternalConfig { get; set; }
 
         public ObservableCollection<ConfigSection> InternalConfig
@@ -22,6 +23,7 @@ namespace WpfSettings.ViewModels
             get { return _internalConfig; }
             set
             {
+                if (value == _internalConfig) return;
                 _internalConfig = value;
                 OnPropertyChanged();
             }
@@ -32,6 +34,7 @@ namespace WpfSettings.ViewModels
             get { return _currentPageConfig; }
             set
             {
+                if (value == _currentPageConfig) return;
                 _currentPageConfig = value;
                 OnPropertyChanged();
             }
@@ -42,7 +45,19 @@ namespace WpfSettings.ViewModels
             get { return _categoryTitle; }
             set
             {
+                if (value == _categoryTitle) return;
                 _categoryTitle = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int ExplorerWidth
+        {
+            get { return _explorerWidth; }
+            set
+            {
+                if (value == _explorerWidth) return;
+                _explorerWidth = value;
                 OnPropertyChanged();
             }
         }
@@ -65,6 +80,7 @@ namespace WpfSettings.ViewModels
         public SettingsWindowViewModel(object config)
         {
             ExternalConfig = config;
+            ExplorerWidth = 220;
             ConverterArgs args = new ConverterArgs {AutoSave = false};
             var sections = SettingsConverter.GetSections(config, args);
             InternalConfig = sections;

@@ -22,6 +22,12 @@ namespace WpfSettings
             }
         }
 
+        public int ExplorerWidth
+        {
+            get { return ViewModel.ExplorerWidth; }
+            set { ViewModel.ExplorerWidth = value; }
+        }
+
         public SettingsWindow(object config)
         {
             ViewModel = new SettingsWindowViewModel(config);
