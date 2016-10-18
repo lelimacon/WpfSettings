@@ -95,6 +95,10 @@
     <Compile Include="Controls\ShyTextBlock.cs" />
     <Compile Include="Utils\TreeViewItemExtensions.cs" />
     <Compile Include="Utils\MvvmUtils.cs" />
+    <Page Include="Controls\SettingElementsTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\SettingsExplorer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
