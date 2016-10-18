@@ -195,7 +195,7 @@
                 <Border BorderBrush="{x:Null}" Height="22">
                     <StackPanel x:Name="TreeViewFolderItem" Orientation="Horizontal"
                                 VerticalAlignment="Center">
-                        <Image Source="{Binding Image}" Margin="0,0,5,0" MaxWidth="16" MaxHeight="16" />
+                        <Image Source="{Binding Icon}" Margin="0,0,5,0" MaxWidth="16" MaxHeight="16" />
                         <TextBlock Text="{Binding Label}" />
                     </StackPanel>
                 </Border>

@@ -80,18 +80,18 @@ namespace WpfSettings.Config
 
     public class ConfigSection : ConfigElement
     {
-        private BitmapSource _image;
+        private BitmapSource _icon;
         private ObservableCollection<ConfigSection> _subSections;
         private ObservableCollection<ConfigPageElement> _elements;
         private bool _isExpanded;
 
-        public BitmapSource Image
+        public BitmapSource Icon
         {
-            get { return _image; }
+            get { return _icon; }
             set
             {
-                if (Equals(value, _image)) return;
-                _image = value;
+                if (Equals(value, _icon)) return;
+                _icon = value;
                 OnPropertyChanged();
             }
         }

@@ -34,18 +34,18 @@ namespace WpfSettings.Example
     {
         [SettingSection("General",
              LabelWidth = 100,
-             Image = "Resources.icon-bulb.png")]
+             Icon = "Resources.icon-bulb.png")]
         public GeneralSettings General { get; }
 
         [SettingSection("Profile",
              LabelWidth = 100,
-             Image = "Resources.icon-skull.png")]
+             Icon = "Resources.icon-skull.png")]
         public UserSettings User { get; }
 
         [SettingSection("Interface",
              LabelWidth = 100,
              Expansion = SectionExpansion.Expanded,
-             Image = "Resources.icon-window-system.png")]
+             Icon = "Resources.icon-window-system.png")]
         public InterfaceSettings Interface { get; }
 
         public GlobalSettings()
@@ -90,11 +90,11 @@ namespace WpfSettings.Example
     public class InterfaceSettings
     {
         [SettingSection("Style",
-             Image = "Resources.icon-flask.png")]
+             Icon = "Resources.icon-flask.png")]
         public StyleSettings Style { get; set; }
 
         [SettingSection("Content",
-             Image = "Resources.icon-gift.png")]
+             Icon = "Resources.icon-gift.png")]
         public ContentSettings Content { get; set; }
 
         public InterfaceSettings()

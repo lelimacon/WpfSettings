@@ -51,7 +51,7 @@ namespace WpfSettings
 
     public class SettingSectionAttribute : SettingAttribute
     {
-        public string Image { get; set; }
+        public string Icon { get; set; }
         public SectionExpansion Expansion { get; set; } = SectionExpansion.Unset;
 
         public SettingSectionAttribute()

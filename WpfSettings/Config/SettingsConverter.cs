@@ -54,11 +54,11 @@ namespace WpfSettings.Config
             section.Elements = GetElements(value, e);
             if (!string.IsNullOrEmpty(attribute.Label))
                 section.Label = attribute.Label;
-            if (!string.IsNullOrEmpty(attribute.Image))
+            if (!string.IsNullOrEmpty(attribute.Icon))
             {
-                var stream = ResourceUtils.FromParentAssembly(attribute.Image);
+                var stream = ResourceUtils.FromParentAssembly(attribute.Icon);
                 var image = new Bitmap(stream);
-                section.Image = image.ToBitmapSource();
+                section.Icon = image.ToBitmapSource();
             }
             section.Position = attribute.Position;
             return section;
