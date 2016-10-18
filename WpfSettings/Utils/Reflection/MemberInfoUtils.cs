@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace WpfSettings.Utils
+namespace WpfSettings.Utils.Reflection
 {
     internal static class MemberInfoUtils
     {

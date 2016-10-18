@@ -4,19 +4,19 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using WpfSettings.Config;
-using WpfSettings.Utils;
+using WpfSettings.SettingElements;
+using WpfSettings.Utils.Wpf;
 
-namespace WpfSettings.Controls
+namespace WpfSettings
 {
     internal partial class SettingsExplorer : UserControl
     {
         public static readonly DependencyProperty ItemsProperty =
             MvvmUtils.RegisterDp<SettingsExplorer>();
 
-        public ObservableCollection<ConfigSection> Items
+        public ObservableCollection<SettingSection> Items
         {
-            get { return (ObservableCollection<ConfigSection>) GetValue(ItemsProperty); }
+            get { return (ObservableCollection<SettingSection>) GetValue(ItemsProperty); }
             set { SetValueDp(ItemsProperty, value); }
         }
 
@@ -32,9 +32,9 @@ namespace WpfSettings.Controls
         public static readonly DependencyProperty ChangeActionProperty =
             MvvmUtils.RegisterDp<SettingsExplorer>();
 
-        public Action<ConfigSection> ChangeAction
+        public Action<SettingSection> ChangeAction
         {
-            get { return (Action<ConfigSection>)GetValue(ChangeActionProperty); }
+            get { return (Action<SettingSection>) GetValue(ChangeActionProperty); }
             set { SetValueDp(ChangeActionProperty, value); }
         }
 
@@ -54,7 +54,7 @@ namespace WpfSettings.Controls
 
         private void OnSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            ConfigSection section = (ConfigSection) e.NewValue;
+            SettingSection section = (SettingSection) e.NewValue;
             ChangeAction?.Invoke(section);
         }
     }

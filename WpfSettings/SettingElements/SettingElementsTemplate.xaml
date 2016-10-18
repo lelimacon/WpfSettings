@@ -1,10 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:WpfSettings.Controls"
-                    xmlns:config="clr-namespace:WpfSettings.Config">
+                    xmlns:settingElements="clr-namespace:WpfSettings.SettingElements"
+                    xmlns:utils="clr-namespace:WpfSettings.Utils" 
+                    xmlns:wpf="clr-namespace:WpfSettings.Utils.Wpf">
 
     <!-- Group -->
-    <DataTemplate DataType="{x:Type config:ConfigGroup}">
+    <DataTemplate DataType="{x:Type settingElements:SettingGroup}">
         <StackPanel Orientation="Vertical" Margin="6,2,0,2">
             <GroupBox Header="{Binding Label}">
                 <ItemsControl ItemsSource="{Binding Elements}" />
@@ -13,7 +14,7 @@
     </DataTemplate>
 
     <!-- String -->
-    <DataTemplate DataType="{x:Type config:StringConfig}">
+    <DataTemplate DataType="{x:Type settingElements:StringSetting}">
         <Grid Margin="6,2,0,2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding LabelWidth}" />
@@ -30,14 +31,14 @@
             <TextBox Grid.Row="0" Grid.Column="1"
                      Height="24" Text="{Binding Value}"
                      VerticalContentAlignment="Center" />
-            <local:ShyTextBlock Grid.Row="1" Grid.Column="1"
+            <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
                                 Text="{Binding Details}"
                                 TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
     <!-- Text -->
-    <DataTemplate DataType="{x:Type config:TextConfig}">
+    <DataTemplate DataType="{x:Type settingElements:TextSetting}">
         <Grid Margin="6,2,0,2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding LabelWidth}" />
@@ -53,24 +54,24 @@
             <TextBox Grid.Row="0" Grid.Column="1"
                      TextWrapping="Wrap" AcceptsReturn="True"
                      Height="{Binding Height}" Text="{Binding Value}" />
-            <local:ShyTextBlock Grid.Row="1" Grid.Column="1"
+            <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
                                 Text="{Binding Details}"
                                 TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
     <!-- Bool -->
-    <DataTemplate DataType="{x:Type config:BoolConfig}">
+    <DataTemplate DataType="{x:Type settingElements:BoolSetting}">
         <StackPanel Orientation="Vertical" Margin="6,2,0,2">
             <CheckBox Content="{Binding Label}"
                       IsChecked="{Binding Value}" />
-            <local:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
+            <wpf:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
                                 TextWrapping="Wrap" Margin="18,2,0,4" />
         </StackPanel>
     </DataTemplate>
 
     <!-- Choice: DropDown -->
-    <DataTemplate DataType="{x:Type config:DropDownConfig}">
+    <DataTemplate DataType="{x:Type settingElements:DropDownSetting}">
         <Grid Margin="6,2,0,2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding LabelWidth}" />
@@ -83,14 +84,14 @@
             <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Label}" Margin="0,2,0,0" />
             <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Choices}"
                       SelectedItem="{Binding SelectedValue}" />
-            <local:ShyTextBlock Grid.Row="1" Grid.Column="1"
+            <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
                                 Text="{Binding Details}" FontStyle="Italic"
                                 TextWrapping="Wrap" Margin="8,-2,0,0" />
         </Grid>
     </DataTemplate>
 
     <!-- Choice: RadioButtons -->
-    <DataTemplate DataType="{x:Type config:RadioButtonsConfig}">
+    <DataTemplate DataType="{x:Type settingElements:RadioButtonsSetting}">
         <Grid Margin="6,2,0,2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding LabelWidth}" />
@@ -111,7 +112,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <DataTemplate.Resources>
-                            <config:IndexToCheckedConverter x:Key="IndexToChecked" />
+                            <wpf:IndexToCheckedConverter x:Key="IndexToChecked" />
                         </DataTemplate.Resources>
                         <RadioButton Content="{Binding .}"
                                      GroupName="{Binding DataContext.GroupName,
@@ -130,7 +131,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <local:ShyTextBlock Grid.Row="1" Grid.Column="1"
+            <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
                                 Text="{Binding Details}" FontStyle="Italic"
                                 TextWrapping="Wrap" Margin="8,-2,0,0" />
         </Grid>

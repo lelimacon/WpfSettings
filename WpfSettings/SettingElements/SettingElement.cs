@@ -8,11 +8,12 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using WpfSettings.Annotations;
-using WpfSettings.Utils;
+using WpfSettings.Utils.Reflection;
+using WpfSettings.Utils.Wpf;
 
-namespace WpfSettings.Config
+namespace WpfSettings.SettingElements
 {
-    public abstract class ConfigElement : INotifyPropertyChanged
+    public abstract class SettingElement : INotifyPropertyChanged
     {
         private int _position;
         private string _label;
@@ -53,7 +54,7 @@ namespace WpfSettings.Config
             }
         }
 
-        protected ConfigElement(object parent, MemberInfo member)
+        protected SettingElement(object parent, MemberInfo member)
         {
             Parent = parent;
             Member = member;
@@ -78,11 +79,11 @@ namespace WpfSettings.Config
         protected abstract void OuterPropertyChanged(object sender, PropertyChangedEventArgs e);
     }
 
-    public class ConfigSection : ConfigElement
+    public class SettingSection : SettingElement
     {
         private BitmapSource _icon;
-        private ObservableCollection<ConfigSection> _subSections;
-        private ObservableCollection<ConfigPageElement> _elements;
+        private ObservableCollection<SettingSection> _subSections;
+        private ObservableCollection<SettingPageElement> _elements;
         private bool _isExpanded;
 
         public BitmapSource Icon
@@ -96,7 +97,7 @@ namespace WpfSettings.Config
             }
         }
 
-        public ObservableCollection<ConfigSection> SubSections
+        public ObservableCollection<SettingSection> SubSections
         {
             get { return _subSections; }
             set
@@ -107,7 +108,7 @@ namespace WpfSettings.Config
             }
         }
 
-        public ObservableCollection<ConfigPageElement> Elements
+        public ObservableCollection<SettingPageElement> Elements
         {
             get { return _elements; }
             set
@@ -129,16 +130,16 @@ namespace WpfSettings.Config
             }
         }
 
-        public ConfigSection(object parent, MemberInfo member)
+        public SettingSection(object parent, MemberInfo member)
             : base(parent, member)
         {
         }
 
         public override void Save()
         {
-            foreach (ConfigSection section in SubSections)
+            foreach (SettingSection section in SubSections)
                 section.Save();
-            foreach (ConfigPageElement element in Elements)
+            foreach (SettingPageElement element in Elements)
                 element.Save();
         }
 
@@ -147,7 +148,7 @@ namespace WpfSettings.Config
         }
     }
 
-    public abstract class ConfigPageElement : ConfigElement
+    public abstract class SettingPageElement : SettingElement
     {
         private bool _autoSave;
 
@@ -162,17 +163,17 @@ namespace WpfSettings.Config
             }
         }
 
-        protected ConfigPageElement(object parent, MemberInfo member)
+        protected SettingPageElement(object parent, MemberInfo member)
             : base(parent, member)
         {
         }
     }
 
-    public class ConfigGroup : ConfigPageElement
+    public class SettingGroup : SettingPageElement
     {
-        private IEnumerable<ConfigPageElement> _elements;
+        private IEnumerable<SettingPageElement> _elements;
 
-        public IEnumerable<ConfigPageElement> Elements
+        public IEnumerable<SettingPageElement> Elements
         {
             get { return _elements; }
             set
@@ -183,7 +184,7 @@ namespace WpfSettings.Config
             }
         }
 
-        public ConfigGroup(object parent, MemberInfo member, IEnumerable<ConfigPageElement> elements)
+        public SettingGroup(object parent, MemberInfo member, IEnumerable<SettingPageElement> elements)
             : base(parent, member)
         {
             Elements = elements;
@@ -191,7 +192,7 @@ namespace WpfSettings.Config
 
         public override void Save()
         {
-            foreach (ConfigPageElement element in Elements)
+            foreach (SettingPageElement element in Elements)
                 element.Save();
         }
 
@@ -200,7 +201,7 @@ namespace WpfSettings.Config
         }
     }
 
-    public class StringConfig : ConfigPageElement
+    public class StringSetting : SettingPageElement
     {
         private string _value;
         private string _details;
@@ -228,7 +229,7 @@ namespace WpfSettings.Config
             }
         }
 
-        public StringConfig(object parent, MemberInfo member)
+        public StringSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
         }
@@ -245,7 +246,7 @@ namespace WpfSettings.Config
         }
     }
 
-    public class TextConfig : ConfigPageElement
+    public class TextSetting : SettingPageElement
     {
         private string _value;
         private string _details;
@@ -285,7 +286,7 @@ namespace WpfSettings.Config
             }
         }
 
-        public TextConfig(object parent, MemberInfo member)
+        public TextSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
             Height = 60;
@@ -303,7 +304,7 @@ namespace WpfSettings.Config
         }
     }
 
-    public class BoolConfig : ConfigPageElement
+    public class BoolSetting : SettingPageElement
     {
         private bool _value;
         private string _details;
@@ -331,7 +332,7 @@ namespace WpfSettings.Config
             }
         }
 
-        public BoolConfig(object parent, MemberInfo member)
+        public BoolSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
         }
@@ -348,7 +349,7 @@ namespace WpfSettings.Config
         }
     }
 
-    public class ChoiceConfig : ConfigPageElement
+    public class ChoiceSetting : SettingPageElement
     {
         private ObservableCollection<string> _choices;
         private string _selectedValue;
@@ -388,7 +389,7 @@ namespace WpfSettings.Config
             }
         }
 
-        public ChoiceConfig(object parent, MemberInfo member)
+        public ChoiceSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
         }
@@ -427,21 +428,21 @@ namespace WpfSettings.Config
         }
     }
 
-    public class DropDownConfig : ChoiceConfig
+    public class DropDownSetting : ChoiceSetting
     {
-        public DropDownConfig(object parent, MemberInfo member)
+        public DropDownSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
         }
     }
 
-    public class RadioButtonsConfig : ChoiceConfig
+    public class RadioButtonsSetting : ChoiceSetting
     {
         private static int _id = 0;
         public string GroupName { get; }
         public ICommand OnSelectionCommand { get; }
 
-        public RadioButtonsConfig(object parent, MemberInfo member)
+        public RadioButtonsSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
             OnSelectionCommand = new RelayCommand<string>(ChangeSelection);

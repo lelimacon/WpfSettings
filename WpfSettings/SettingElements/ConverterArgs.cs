@@ -1,4 +1,4 @@
-﻿namespace WpfSettings.Config
+﻿namespace WpfSettings.SettingElements
 {
     internal class ConverterArgs
     {

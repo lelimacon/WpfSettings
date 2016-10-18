@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 
-namespace WpfSettings.Utils
+namespace WpfSettings.Utils.Wpf
 {
     internal static class MvvmUtils
     {

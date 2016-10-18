@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows;
 using WpfSettings.Utils;
+using WpfSettings.Utils.Reflection;
 using WpfSettings.ViewModels;
 
 namespace WpfSettings

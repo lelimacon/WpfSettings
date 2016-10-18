@@ -5,20 +5,20 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using WpfSettings.Annotations;
-using WpfSettings.Config;
-using WpfSettings.Utils;
+using WpfSettings.SettingElements;
+using WpfSettings.Utils.Wpf;
 
 namespace WpfSettings.ViewModels
 {
     public class SettingsWindowViewModel : INotifyPropertyChanged
     {
-        private ObservableCollection<ConfigPageElement> _currentPageConfig;
-        private ObservableCollection<ConfigSection> _internalConfig;
+        private ObservableCollection<SettingPageElement> _currentPageConfig;
+        private ObservableCollection<SettingSection> _internalConfig;
         private string _categoryTitle;
         private int _explorerWidth;
         public object ExternalConfig { get; set; }
 
-        public ObservableCollection<ConfigSection> InternalConfig
+        public ObservableCollection<SettingSection> InternalConfig
         {
             get { return _internalConfig; }
             set
@@ -29,7 +29,7 @@ namespace WpfSettings.ViewModels
             }
         }
 
-        public ObservableCollection<ConfigPageElement> CurrentPageConfig
+        public ObservableCollection<SettingPageElement> CurrentPageConfig
         {
             get { return _currentPageConfig; }
             set
@@ -62,7 +62,7 @@ namespace WpfSettings.ViewModels
             }
         }
 
-        public Action<ConfigSection> ChangeSectionAction { get; set; }
+        public Action<SettingSection> ChangeSectionAction { get; set; }
 
         public ICommand ApplyCommand => new RelayCommand<SettingsWindow>(Apply);
         public ICommand OkCommand => new RelayCommand<SettingsWindow>(Ok);
@@ -88,7 +88,7 @@ namespace WpfSettings.ViewModels
             ChangeSection(InternalConfig.First());
         }
 
-        private void ChangeSection(ConfigSection section)
+        private void ChangeSection(SettingSection section)
         {
             CategoryTitle = section.Label;
             CurrentPageConfig = section.Elements;
@@ -114,7 +114,7 @@ namespace WpfSettings.ViewModels
 
         private void Save()
         {
-            foreach (ConfigSection section in InternalConfig)
+            foreach (SettingSection section in InternalConfig)
                 section.Save();
         }
     }

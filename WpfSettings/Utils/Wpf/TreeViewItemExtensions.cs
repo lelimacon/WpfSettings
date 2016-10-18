@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace WpfSettings.Utils
+namespace WpfSettings.Utils.Wpf
 {
     internal static class TreeViewItemExtensions
     {

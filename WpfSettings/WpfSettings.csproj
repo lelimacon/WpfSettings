@@ -73,33 +73,33 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\ConfigElement.cs" />
-    <Compile Include="Config\ConverterArgs.cs" />
-    <Compile Include="Config\SettingsConverter.cs" />
-    <Compile Include="Config\IndexToCheckedConverter.cs" />
+    <Compile Include="SettingElements\SettingElement.cs" />
+    <Compile Include="SettingElements\ConverterArgs.cs" />
+    <Compile Include="SettingElements\SettingsConverter.cs" />
+    <Compile Include="Utils\Wpf\IndexToCheckedConverter.cs" />
     <Compile Include="Utils\BitmapUtils.cs" />
-    <Compile Include="Utils\LeftMarginMultiplierConverter.cs" />
-    <Compile Include="Controls\PlaceHolderTextBox.cs" />
+    <Compile Include="Utils\Wpf\LeftMarginMultiplierConverter.cs" />
+    <Compile Include="Utils\Wpf\PlaceHolderTextBox.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Utils\MemberInfoUtils.cs" />
-    <Compile Include="Utils\RelayCommand.cs" />
-    <Compile Include="Controls\SettingsExplorer.xaml.cs">
+    <Compile Include="Utils\Reflection\MemberInfoUtils.cs" />
+    <Compile Include="Utils\Wpf\RelayCommand.cs" />
+    <Compile Include="SettingsExplorer.xaml.cs">
       <DependentUpon>SettingsExplorer.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsAttributes.cs" />
-    <Compile Include="Controls\SettingsPage.xaml.cs">
+    <Compile Include="SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\ResourceUtils.cs" />
+    <Compile Include="Utils\Reflection\ResourceUtils.cs" />
     <Compile Include="ViewModels\SettingsWindowViewModel.cs" />
-    <Compile Include="Controls\ShyTextBlock.cs" />
-    <Compile Include="Utils\TreeViewItemExtensions.cs" />
-    <Compile Include="Utils\MvvmUtils.cs" />
-    <Page Include="Controls\SettingElementsTemplate.xaml">
+    <Compile Include="Utils\Wpf\ShyTextBlock.cs" />
+    <Compile Include="Utils\Wpf\TreeViewItemExtensions.cs" />
+    <Compile Include="Utils\Wpf\MvvmUtils.cs" />
+    <Page Include="SettingElements\SettingElementsTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\SettingsExplorer.xaml">
+    <Page Include="SettingsExplorer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -111,7 +111,7 @@
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Controls\SettingsPage.xaml">
+    <Page Include="SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -158,6 +158,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -5,12 +5,13 @@ using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using WpfSettings.Utils;
+using WpfSettings.Utils.Reflection;
 
-namespace WpfSettings.Config
+namespace WpfSettings.SettingElements
 {
     internal static class SettingsConverter
     {
-        public static ObservableCollection<ConfigSection> GetSections(object settings, ConverterArgs e)
+        public static ObservableCollection<SettingSection> GetSections(object settings, ConverterArgs e)
         {
             MemberInfo[] members = settings.GetType().GetMembers();
             var sections = members
@@ -18,10 +19,10 @@ namespace WpfSettings.Config
                 .Select(p => GetSection(settings, p, e))
                 .OrderBy(s => s.Position)
                 .ThenBy(s => s.Member.MetadataToken);
-            return new ObservableCollection<ConfigSection>(sections);
+            return new ObservableCollection<SettingSection>(sections);
         }
 
-        public static ObservableCollection<ConfigPageElement> GetElements(object settings, ConverterArgs e)
+        public static ObservableCollection<SettingPageElement> GetElements(object settings, ConverterArgs e)
         {
             MemberInfo[] members = settings.GetType().GetMembers();
             var elements = members
@@ -29,7 +30,7 @@ namespace WpfSettings.Config
                 .Where(el => el != null)
                 .OrderBy(el => el.Position)
                 .ThenBy(el => el.Member.MetadataToken);
-            return new ObservableCollection<ConfigPageElement>(elements);
+            return new ObservableCollection<SettingPageElement>(elements);
         }
 
         private static bool IsSection(MemberInfo member)
@@ -38,13 +39,13 @@ namespace WpfSettings.Config
             return attribute != null;
         }
 
-        private static ConfigSection GetSection(object parent, MemberInfo member, ConverterArgs e)
+        private static SettingSection GetSection(object parent, MemberInfo member, ConverterArgs e)
         {
             var attribute = member.GetCustomAttribute<SettingSectionAttribute>(false);
             object value = member.GetValue(parent);
 
             e = e.Integrate(attribute);
-            ConfigSection section = new ConfigSection(parent, member)
+            SettingSection section = new SettingSection(parent, member)
             {
                 IsExpanded = e.Expansion == SectionExpansion.Expanded ||
                              e.Expansion == SectionExpansion.ExpandedRecursive
@@ -64,13 +65,13 @@ namespace WpfSettings.Config
             return section;
         }
 
-        private static ConfigPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        private static SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             var attributes = member.GetCustomAttributes(false);
             // Return the first valid attribute
             foreach (object attribute in attributes)
             {
-                ConfigPageElement element = GetElement(parent, member, (dynamic) attribute, e);
+                SettingPageElement element = GetElement(parent, member, (dynamic) attribute, e);
                 if (element != null)
                     return element;
             }
@@ -78,13 +79,13 @@ namespace WpfSettings.Config
         }
 
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]
-        private static ConfigPageElement GetElement(object parent, MemberInfo member,
+        private static SettingPageElement GetElement(object parent, MemberInfo member,
             object attribute, ConverterArgs e)
         {
             return null;
         }
 
-        private static ConfigPageElement GetElement(object parent, MemberInfo member,
+        private static SettingPageElement GetElement(object parent, MemberInfo member,
             SettingGroupAttribute attribute, ConverterArgs e)
         {
             Type type = member.GetValueType();
@@ -94,7 +95,7 @@ namespace WpfSettings.Config
             e = e.Integrate(attribute);
             e = e.NextArgs(attribute);
             var elements = GetElements(value, e);
-            ConfigGroup element = new ConfigGroup(parent, member, elements);
+            SettingGroup element = new SettingGroup(parent, member, elements);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             element.Position = attribute.Position;
@@ -102,14 +103,14 @@ namespace WpfSettings.Config
             return element;
         }
 
-        private static ConfigPageElement GetElement(object parent, MemberInfo member,
+        private static SettingPageElement GetElement(object parent, MemberInfo member,
             SettingStringAttribute attribute, ConverterArgs e)
         {
             Type type = member.GetValueType();
             if (type != typeof(string))
                 throw new ArgumentException("SettingStringAttribute must target a string");
             e = e.Integrate(attribute);
-            StringConfig element = new StringConfig(parent, member);
+            StringSetting element = new StringSetting(parent, member);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             if (!string.IsNullOrEmpty(attribute.Details))
@@ -121,14 +122,14 @@ namespace WpfSettings.Config
             return element;
         }
 
-        private static ConfigPageElement GetElement(object parent, MemberInfo member,
+        private static SettingPageElement GetElement(object parent, MemberInfo member,
             SettingTextAttribute attribute, ConverterArgs e)
         {
             Type type = member.GetValueType();
             if (type != typeof(string))
                 throw new ArgumentException("SettingTextAttribute must target a string");
             e = e.Integrate(attribute);
-            TextConfig element = new TextConfig(parent, member);
+            TextSetting element = new TextSetting(parent, member);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             if (!string.IsNullOrEmpty(attribute.Details))
@@ -140,14 +141,14 @@ namespace WpfSettings.Config
             return element;
         }
 
-        private static ConfigPageElement GetElement(object parent, MemberInfo member,
+        private static SettingPageElement GetElement(object parent, MemberInfo member,
             SettingBoolAttribute attribute, ConverterArgs e)
         {
             Type type = member.GetValueType();
             if (type != typeof(bool))
                 throw new ArgumentException("SettingBoolAttribute must target a boolean");
             e = e.Integrate(attribute);
-            BoolConfig element = new BoolConfig(parent, member);
+            BoolSetting element = new BoolSetting(parent, member);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
             if (!string.IsNullOrEmpty(attribute.Details))
@@ -159,7 +160,7 @@ namespace WpfSettings.Config
             return element;
         }
 
-        private static ConfigPageElement GetElement(object parent, MemberInfo member,
+        private static SettingPageElement GetElement(object parent, MemberInfo member,
             SettingChoiceAttribute attribute, ConverterArgs e)
         {
             Type type = member.GetValueType();
@@ -175,8 +176,8 @@ namespace WpfSettings.Config
                     choices.Add(label);
             }
             var element = attribute.Type == ChoiceType.DropDown
-                ? (ChoiceConfig) new DropDownConfig(parent, member)
-                : new RadioButtonsConfig(parent, member);
+                ? (ChoiceSetting) new DropDownSetting(parent, member)
+                : new RadioButtonsSetting(parent, member);
             element.Choices = choices;
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;

@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using WpfSettings.Config;
-using WpfSettings.Utils;
+using WpfSettings.SettingElements;
+using WpfSettings.Utils.Wpf;
 
-namespace WpfSettings.Controls
+namespace WpfSettings
 {
     public partial class SettingsPage : UserControl
     {
@@ -19,9 +19,9 @@ namespace WpfSettings.Controls
         public static readonly DependencyProperty AutoSaveProperty =
             MvvmUtils.RegisterDp<SettingsPage>();
 
-        public ObservableCollection<ConfigPageElement> ConfigElements
+        public ObservableCollection<SettingPageElement> ConfigElements
         {
-            get { return (ObservableCollection<ConfigPageElement>) GetValue(ConfigElementsProperty); }
+            get { return (ObservableCollection<SettingPageElement>) GetValue(ConfigElementsProperty); }
             set { SetValueDp(ConfigElementsProperty, value); }
         }
 

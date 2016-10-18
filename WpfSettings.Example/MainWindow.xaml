@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfSettings.Example"
-        xmlns:controls="clr-namespace:WpfSettings.Controls;assembly=WpfSettings"
+        xmlns:wpfSettings="clr-namespace:WpfSettings;assembly=WpfSettings"
         DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
         Title="{Binding WindowTitle}"
@@ -45,7 +45,7 @@
                     Content="All Settings"
                     Command="{Binding ShowSettingsCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
-            <controls:SettingsPage Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+            <wpfSettings:SettingsPage Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
                                    x:Name="QuickSettings" Margin="3"
                                    Settings="{Binding QuickSettings, Mode=TwoWay}" />
         </Grid>

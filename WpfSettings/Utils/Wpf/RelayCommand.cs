@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace WpfSettings.Utils
+namespace WpfSettings.Utils.Wpf
 {
     public class RelayCommand<T> : RelayCommand
     {
@@ -11,7 +11,7 @@ namespace WpfSettings.Utils
         }
 
         public RelayCommand(Action<T> execute, Predicate<T> canExecute)
-            : base(o => execute((T)o), o => canExecute((T) o))
+            : base(o => execute((T) o), o => canExecute((T) o))
         {
         }
     }
