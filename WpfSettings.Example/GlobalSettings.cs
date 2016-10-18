@@ -44,6 +44,7 @@ namespace WpfSettings.Example
 
         [SettingSection("Interface",
              LabelWidth = 100,
+             Expansion = SectionExpansion.Expanded,
              Image = "Resources.icon-window-system.png")]
         public InterfaceSettings Interface { get; }
 

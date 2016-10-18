@@ -43,17 +43,15 @@ namespace WpfSettings.Config
             var attribute = member.GetCustomAttribute<SettingSectionAttribute>(false);
             object value = member.GetValue(parent);
 
-            e = new ConverterArgs(e)
-            {
-                LabelWidth = attribute.LabelWidth
-            };
-            var sections = GetSections(value, e);
-            var elements = GetElements(value, e);
+            e = e.Integrate(attribute);
             ConfigSection section = new ConfigSection(parent, member)
             {
-                SubSections = sections,
-                Elements = elements
+                IsExpanded = e.Expansion == SectionExpansion.Expanded ||
+                             e.Expansion == SectionExpansion.ExpandedRecursive
             };
+            e = e.NextArgs(attribute);
+            section.SubSections = GetSections(value, e);
+            section.Elements = GetElements(value, e);
             if (!string.IsNullOrEmpty(attribute.Label))
                 section.Label = attribute.Label;
             if (!string.IsNullOrEmpty(attribute.Image))
@@ -90,14 +88,12 @@ namespace WpfSettings.Config
             SettingGroupAttribute attribute, ConverterArgs e)
         {
             Type type = member.GetValueType();
-            object value = member.GetValue(parent);
-            e = new ConverterArgs(e)
-            {
-                LabelWidth = attribute.LabelWidth
-            };
-            var elements = GetElements(value, e);
             if (!type.IsClass)
                 throw new ArgumentException("SettingGroupAttribute must target a class (not a value type or interface)");
+            object value = member.GetValue(parent);
+            e = e.Integrate(attribute);
+            e = e.NextArgs(attribute);
+            var elements = GetElements(value, e);
             ConfigGroup element = new ConfigGroup(parent, member, elements);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
@@ -112,6 +108,7 @@ namespace WpfSettings.Config
             Type type = member.GetValueType();
             if (type != typeof(string))
                 throw new ArgumentException("SettingStringAttribute must target a string");
+            e = e.Integrate(attribute);
             StringConfig element = new StringConfig(parent, member);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
@@ -119,7 +116,7 @@ namespace WpfSettings.Config
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
             element.Value = (string) member.GetValue(parent);
-            element.LabelWidth = attribute.LabelWidth > 0 ? attribute.LabelWidth : e.LabelWidth;
+            element.LabelWidth = e.LabelWidth;
             element.AutoSave = e.AutoSave;
             return element;
         }
@@ -130,6 +127,7 @@ namespace WpfSettings.Config
             Type type = member.GetValueType();
             if (type != typeof(string))
                 throw new ArgumentException("SettingTextAttribute must target a string");
+            e = e.Integrate(attribute);
             TextConfig element = new TextConfig(parent, member);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
@@ -137,7 +135,7 @@ namespace WpfSettings.Config
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
             element.Value = (string) member.GetValue(parent);
-            element.LabelWidth = attribute.LabelWidth > 0 ? attribute.LabelWidth : e.LabelWidth;
+            element.LabelWidth = e.LabelWidth;
             element.AutoSave = e.AutoSave;
             return element;
         }
@@ -148,6 +146,7 @@ namespace WpfSettings.Config
             Type type = member.GetValueType();
             if (type != typeof(bool))
                 throw new ArgumentException("SettingBoolAttribute must target a boolean");
+            e = e.Integrate(attribute);
             BoolConfig element = new BoolConfig(parent, member);
             if (!string.IsNullOrEmpty(attribute.Label))
                 element.Label = attribute.Label;
@@ -155,7 +154,7 @@ namespace WpfSettings.Config
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
             element.Value = (bool) member.GetValue(parent);
-            element.LabelWidth = attribute.LabelWidth > 0 ? attribute.LabelWidth : e.LabelWidth;
+            element.LabelWidth = e.LabelWidth;
             element.AutoSave = e.AutoSave;
             return element;
         }
@@ -166,6 +165,7 @@ namespace WpfSettings.Config
             Type type = member.GetValueType();
             if (!type.IsEnum)
                 throw new ArgumentException("SettingChoiceAttribute must target an enum");
+            e = e.Integrate(attribute);
             var choices = new ObservableCollection<string>();
             Array names = Enum.GetNames(type);
             foreach (string name in names)
@@ -185,7 +185,7 @@ namespace WpfSettings.Config
             element.Position = attribute.Position;
             string enumValue = GetFieldLabel(type, member.GetValue(parent).ToString());
             element.SelectedValue = enumValue;
-            element.LabelWidth = attribute.LabelWidth > 0 ? attribute.LabelWidth : e.LabelWidth;
+            element.LabelWidth = e.LabelWidth;
             element.AutoSave = e.AutoSave;
             return element;
         }

@@ -39,9 +39,20 @@ namespace WpfSettings
         }
     }
 
+    public enum SectionExpansion
+    {
+        Unset,
+        Closed,
+        Expanded,
+        ExpandedRecursive,
+        ChildrenExpanded,
+        ChildrenExpandedRecursive
+    }
+
     public class SettingSectionAttribute : SettingAttribute
     {
         public string Image { get; set; }
+        public SectionExpansion Expansion { get; set; } = SectionExpansion.Unset;
 
         public SettingSectionAttribute()
         {

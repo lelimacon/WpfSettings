@@ -83,6 +83,7 @@ namespace WpfSettings.Config
         private BitmapSource _image;
         private ObservableCollection<ConfigSection> _subSections;
         private ObservableCollection<ConfigPageElement> _elements;
+        private bool _isExpanded;
 
         public BitmapSource Image
         {
@@ -113,6 +114,17 @@ namespace WpfSettings.Config
             {
                 if (Equals(value, _elements)) return;
                 _elements = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsExpanded
+        {
+            get { return _isExpanded; }
+            set
+            {
+                if (value == _isExpanded) return;
+                _isExpanded = value;
                 OnPropertyChanged();
             }
         }

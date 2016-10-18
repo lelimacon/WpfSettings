@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:utils="clr-namespace:WpfSettings.Utils" 
+             xmlns:utils="clr-namespace:WpfSettings.Utils"
              xmlns:config="clr-namespace:WpfSettings.Config"
              mc:Ignorable="d"
              x:Name="Root"
@@ -61,12 +61,14 @@
         <Style TargetType="{x:Type TreeViewItem}">
             <Setter Property="Background"
                     Value="Transparent" />
+            <Setter Property="IsExpanded"
+                    Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
             <Setter Property="HorizontalContentAlignment"
                     Value="{Binding Path=HorizontalContentAlignment,
-              RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+                                    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
             <Setter Property="VerticalContentAlignment"
                     Value="{Binding Path=VerticalContentAlignment,
-              RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+                                    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
             <Setter Property="Padding"
                     Value="1,0,0,0" />
             <Setter Property="Foreground"
@@ -87,7 +89,7 @@
                                     Padding="{TemplateBinding Padding}">
                                 <Grid
                                     Margin="{Binding Converter={StaticResource LengthConverter},
-                              RelativeSource={RelativeSource TemplatedParent}}">
+                                                                               RelativeSource={RelativeSource TemplatedParent}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="19" />
                                         <ColumnDefinition />
@@ -95,7 +97,7 @@
                                     <ToggleButton x:Name="Expander"
                                                   Style="{StaticResource ExpandCollapseToggleStyle}"
                                                   IsChecked="{Binding Path=IsExpanded,
-                              RelativeSource={RelativeSource TemplatedParent}}"
+                                                                      RelativeSource={RelativeSource TemplatedParent}}"
                                                   ClickMode="Press" />
 
                                     <ContentPresenter x:Name="PART_Header"
@@ -200,6 +202,6 @@
             </HierarchicalDataTemplate>
 
         </TreeView.Resources>
-
     </TreeView>
+
 </UserControl>
