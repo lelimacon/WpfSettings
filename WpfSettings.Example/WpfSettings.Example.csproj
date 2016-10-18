@@ -74,6 +74,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MvvmUtils.cs" />
+    <Compile Include="RelayCommand.cs" />
     <Compile Include="StyleToFontStyleConverter.cs" />
     <Compile Include="StyleToWeightConverter.cs" />
     <Compile Include="GenderToColorConverter.cs" />

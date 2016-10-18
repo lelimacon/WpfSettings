@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace WpfSettings.Utils.Wpf
+namespace WpfSettings.Example
 {
     internal class RelayCommand<T> : RelayCommand
     {
@@ -77,7 +77,6 @@ namespace WpfSettings.Utils.Wpf
         public void OnCanExecuteChanged()
         {
             EventHandler handler = CanExecuteChangedInternal;
-            //DispatcherHelper.BeginInvokeOnUIThread(() => handler.Invoke(this, EventArgs.Empty));
             handler?.Invoke(this, EventArgs.Empty);
         }
 

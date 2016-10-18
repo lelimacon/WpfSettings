@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:settingElements="clr-namespace:WpfSettings.SettingElements"
-                    xmlns:utils="clr-namespace:WpfSettings.Utils" 
                     xmlns:wpf="clr-namespace:WpfSettings.Utils.Wpf">
 
     <!-- Group -->
@@ -32,8 +31,8 @@
                      Height="24" Text="{Binding Value}"
                      VerticalContentAlignment="Center" />
             <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                Text="{Binding Details}"
-                                TextWrapping="Wrap" FontStyle="Italic" />
+                              Text="{Binding Details}"
+                              TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
@@ -55,8 +54,8 @@
                      TextWrapping="Wrap" AcceptsReturn="True"
                      Height="{Binding Height}" Text="{Binding Value}" />
             <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                Text="{Binding Details}"
-                                TextWrapping="Wrap" FontStyle="Italic" />
+                              Text="{Binding Details}"
+                              TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
@@ -66,7 +65,7 @@
             <CheckBox Content="{Binding Label}"
                       IsChecked="{Binding Value}" />
             <wpf:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
-                                TextWrapping="Wrap" Margin="18,2,0,4" />
+                              TextWrapping="Wrap" Margin="18,2,0,4" />
         </StackPanel>
     </DataTemplate>
 
@@ -85,8 +84,8 @@
             <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Choices}"
                       SelectedItem="{Binding SelectedValue}" />
             <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                Text="{Binding Details}" FontStyle="Italic"
-                                TextWrapping="Wrap" Margin="8,-2,0,0" />
+                              Text="{Binding Details}" FontStyle="Italic"
+                              TextWrapping="Wrap" Margin="8,-2,0,0" />
         </Grid>
     </DataTemplate>
 
@@ -132,8 +131,8 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
             <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                Text="{Binding Details}" FontStyle="Italic"
-                                TextWrapping="Wrap" Margin="8,-2,0,0" />
+                              Text="{Binding Details}" FontStyle="Italic"
+                              TextWrapping="Wrap" Margin="8,-2,0,0" />
         </Grid>
     </DataTemplate>
 

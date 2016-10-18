@@ -169,7 +169,7 @@ namespace WpfSettings.SettingElements
         }
     }
 
-    public class SettingGroup : SettingPageElement
+    internal class SettingGroup : SettingPageElement
     {
         private IEnumerable<SettingPageElement> _elements;
 
@@ -201,7 +201,7 @@ namespace WpfSettings.SettingElements
         }
     }
 
-    public class StringSetting : SettingPageElement
+    internal class StringSetting : SettingPageElement
     {
         private string _value;
         private string _details;
@@ -246,7 +246,7 @@ namespace WpfSettings.SettingElements
         }
     }
 
-    public class TextSetting : SettingPageElement
+    internal class TextSetting : SettingPageElement
     {
         private string _value;
         private string _details;
@@ -304,7 +304,7 @@ namespace WpfSettings.SettingElements
         }
     }
 
-    public class BoolSetting : SettingPageElement
+    internal class BoolSetting : SettingPageElement
     {
         private bool _value;
         private string _details;
@@ -349,7 +349,7 @@ namespace WpfSettings.SettingElements
         }
     }
 
-    public class ChoiceSetting : SettingPageElement
+    internal class ChoiceSetting : SettingPageElement
     {
         private ObservableCollection<string> _choices;
         private string _selectedValue;
@@ -428,7 +428,7 @@ namespace WpfSettings.SettingElements
         }
     }
 
-    public class DropDownSetting : ChoiceSetting
+    internal class DropDownSetting : ChoiceSetting
     {
         public DropDownSetting(object parent, MemberInfo member)
             : base(parent, member)
@@ -436,7 +436,7 @@ namespace WpfSettings.SettingElements
         }
     }
 
-    public class RadioButtonsSetting : ChoiceSetting
+    internal class RadioButtonsSetting : ChoiceSetting
     {
         private static int _id = 0;
         public string GroupName { get; }

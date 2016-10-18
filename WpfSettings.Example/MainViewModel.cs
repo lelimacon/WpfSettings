@@ -1,6 +1,5 @@
 ﻿using PropertyChanged;
 using System.Windows.Input;
-using WpfSettings.Utils.Wpf;
 
 namespace WpfSettings.Example
 {

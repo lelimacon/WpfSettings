@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace WpfSettings.Utils.Wpf
 {
-    public class IndexToCheckedConverter : IMultiValueConverter
+    internal class IndexToCheckedConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
