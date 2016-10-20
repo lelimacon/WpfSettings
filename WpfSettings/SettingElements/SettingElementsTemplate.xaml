@@ -82,7 +82,8 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Label}" Margin="0,2,0,0" />
             <ComboBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding Choices}"
-                      SelectedItem="{Binding SelectedValue}" />
+                      SelectedItem="{Binding SelectedValue}"
+                      IsEditable="True" IsReadOnly="True" />
             <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
                               Text="{Binding Details}" FontStyle="Italic"
                               TextWrapping="Wrap" Margin="8,-2,0,0" />
