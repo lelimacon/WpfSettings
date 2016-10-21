@@ -88,7 +88,20 @@ namespace WpfSettings
 
     public class SettingTextAttribute : SettingAttribute
     {
+        private int _height;
+
         public string Details { get; set; }
+
+        public int Height
+        {
+            get { return _height; }
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException("Height must be > 0");
+                _height = value;
+            }
+        }
 
         public SettingTextAttribute()
         {

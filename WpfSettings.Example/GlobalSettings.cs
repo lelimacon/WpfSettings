@@ -161,7 +161,7 @@ namespace WpfSettings.Example
         [SettingString("Title")]
         public string Title { get; set; } = "My Poetry";
 
-        [SettingText("Page content")]
+        [SettingText("Page content", Height = 80)]
         public string PageContent { get; set; }
 
         [SettingButton("Randomize content")]

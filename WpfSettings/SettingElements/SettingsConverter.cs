@@ -134,6 +134,8 @@ namespace WpfSettings.SettingElements
                 element.Label = attribute.Label;
             if (!string.IsNullOrEmpty(attribute.Details))
                 element.Details = attribute.Details;
+            if (attribute.Height > 0)
+                element.Height = attribute.Height;
             element.Position = attribute.Position;
             element.Value = (string) member.GetValue(parent);
             element.LabelWidth = e.LabelWidth;
