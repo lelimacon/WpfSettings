@@ -137,4 +137,14 @@
         </Grid>
     </DataTemplate>
 
+    <!-- Button -->
+    <DataTemplate DataType="{x:Type settingElements:ButtonSetting}">
+        <StackPanel Orientation="Vertical" Margin="6,2,0,2">
+            <Button Height="26"
+                    Content="{Binding Label}" Command="{Binding PressedCommand}" />
+            <wpf:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
+                              TextWrapping="Wrap" Margin="18,2,0,4" />
+        </StackPanel>
+    </DataTemplate>
+
 </ResourceDictionary>

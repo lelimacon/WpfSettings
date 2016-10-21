@@ -1,4 +1,5 @@
 ﻿using PropertyChanged;
+using System;
 
 namespace WpfSettings.Example
 {
@@ -143,10 +144,43 @@ namespace WpfSettings.Example
     [ImplementPropertyChanged]
     public class ContentSettings
     {
+        private static readonly Random Rand = new Random();
+
+        private readonly string[] _endings =
+        {
+            "Sugar is sweet,\nAnd so are you.",
+            "I like donuts.\nDonuts are good.",
+            "I want to play video games with you",
+            "Cows are moo,\nWhat about you?",
+            "Vodka is cheaper\nThan dinner for two.",
+            "God made me pretty.\nWhat happen to you?",
+            "No matter how stupid,\nI still want a friend like you :)",
+            "Let's make purple together."
+        };
+
         [SettingString("Title")]
-        public string Title { get; set; } = "My Super Note!";
+        public string Title { get; set; } = "My Poetry";
 
         [SettingText("Page content")]
-        public string PageContent { get; set; } = "My Super Content!";
+        public string PageContent { get; set; }
+
+        [SettingButton("Randomize content")]
+        public Action Randomize { get; set; }
+
+        public ContentSettings()
+        {
+            Randomize = ChangeContent;
+            ChangeContent();
+        }
+
+        private void ChangeContent()
+        {
+            PageContent = "Roses are red,\nViolets are blue,\n" + GetRand(_endings);
+        }
+
+        private static T GetRand<T>(T[] array)
+        {
+            return array[Rand.Next(array.Length)];
+        }
     }
 }

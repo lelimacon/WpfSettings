@@ -191,6 +191,25 @@ namespace WpfSettings.SettingElements
             return element;
         }
 
+        private static SettingPageElement GetElement(object parent, MemberInfo member,
+            SettingButtonAttribute attribute, ConverterArgs e)
+        {
+            Type type = member.GetValueType();
+            if (type != typeof(Action))
+                throw new ArgumentException("SettingButtonAttribute must target an Action");
+            e = e.Integrate(attribute);
+            ButtonSetting element = new ButtonSetting(parent, member);
+            if (!string.IsNullOrEmpty(attribute.Label))
+                element.Label = attribute.Label;
+            if (!string.IsNullOrEmpty(attribute.Details))
+                element.Details = attribute.Details;
+            element.Position = attribute.Position;
+            element.Action = (Action) member.GetValue(parent);
+            element.LabelWidth = e.LabelWidth;
+            element.AutoSave = e.AutoSave;
+            return element;
+        }
+
         private static string GetFieldLabel(Type enumType, string fieldName)
         {
             var memberInfos = enumType.GetMember(fieldName);

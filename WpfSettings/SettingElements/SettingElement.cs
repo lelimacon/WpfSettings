@@ -438,7 +438,7 @@ namespace WpfSettings.SettingElements
 
     internal class RadioButtonsSetting : ChoiceSetting
     {
-        private static int _id = 0;
+        private static int _id;
         public string GroupName { get; }
         public ICommand OnSelectionCommand { get; }
 
@@ -452,6 +452,43 @@ namespace WpfSettings.SettingElements
         public void ChangeSelection(string selection)
         {
             SelectedValue = selection;
+        }
+    }
+
+    internal class ButtonSetting : SettingPageElement
+    {
+        private string _details;
+
+        public Action Action { get; set; }
+        public string GetAction { get; set; }
+        public ICommand PressedCommand { get; set; }
+
+        public string Details
+        {
+            get { return _details; }
+            set
+            {
+                if (value == _details) return;
+                _details = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ButtonSetting(object parent, MemberInfo member)
+            : base(parent, member)
+        {
+            PressedCommand = new RelayCommand(() => { Action(); });
+        }
+
+        public override void Save()
+        {
+            Member.SetValue(Parent, Action);
+        }
+
+        protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == Member.Name)
+                Action = (Action) Member.GetValue(Parent);
         }
     }
 }

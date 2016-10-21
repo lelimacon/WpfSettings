@@ -152,7 +152,6 @@ namespace WpfSettings
     public class SettingChoiceAttribute : SettingAttribute
     {
         public string Details { get; set; }
-
         public string GroupName { get; set; }
         public ChoiceType Type { get; set; } = ChoiceType.DropDown;
 
@@ -184,6 +183,25 @@ namespace WpfSettings
         }
 
         public SettingFieldAttribute(int position, string label)
+            : base(position, label)
+        {
+        }
+    }
+
+    public class SettingButtonAttribute : SettingAttribute
+    {
+        public string Details { get; set; }
+
+        public SettingButtonAttribute()
+        {
+        }
+
+        public SettingButtonAttribute(string label)
+            : base(label)
+        {
+        }
+
+        public SettingButtonAttribute(int position, string label)
             : base(position, label)
         {
         }
