@@ -1,4 +1,11 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Drawing;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using WpfSettings.SettingElements;
+using WpfSettings.Utils;
+using WpfSettings.Utils.Reflection;
 
 namespace WpfSettings
 {
@@ -20,6 +27,14 @@ namespace WpfSettings
                 _labelWidth = value;
             }
         }
+
+        protected static string InferLabel(string memberName)
+        {
+            string label = Regex.Replace(memberName.Substring(1), @"[A-Z]",
+                match => " " + char.ToLower(match.Value[0]));
+            string inferedLabel = char.ToUpper(memberName[0]) + label;
+            return inferedLabel;
+        }
     }
 
     public enum SectionExpansion
@@ -36,17 +51,81 @@ namespace WpfSettings
     {
         public string Icon { get; set; }
         public SectionExpansion Expansion { get; set; } = SectionExpansion.Unset;
+
+        internal SettingSection GetElement(object parent, MemberInfo member, ConverterArgs e)
+        {
+            object value = member.GetValue(parent);
+
+            e = e.Integrate(this);
+            SettingSection section = new SettingSection(parent, member)
+            {
+                IsExpanded = e.Expansion == SectionExpansion.Expanded ||
+                             e.Expansion == SectionExpansion.ExpandedRecursive
+            };
+            e = e.NextArgs(this);
+            section.SubSections = SettingsConverter.GetSections(value, e);
+            section.Elements = SettingsConverter.GetElements(value, e);
+            section.Label = Label ?? InferLabel(member.Name);
+            if (!string.IsNullOrEmpty(Icon))
+            {
+                var stream = ResourceUtils.FromParentAssembly(Icon);
+                var image = new Bitmap(stream);
+                section.Icon = image.ToBitmapSource();
+            }
+            section.Position = Position;
+            return section;
+        }
     }
 
-    public class SettingGroupAttribute : SettingAttribute
+    public abstract class SettingPageAttribute : SettingAttribute
     {
+        public string Details { get; set; }
+
+        internal abstract SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e);
     }
 
-    public class SettingTextAttribute : SettingAttribute
+    public class SettingGroupAttribute : SettingPageAttribute
+    {
+        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        {
+            Type type = member.GetValueType();
+            if (!type.IsClass)
+                throw new ArgumentException("SettingGroupAttribute must target a class (not a value type or interface)");
+            object value = member.GetValue(parent);
+            e = e.Integrate(this);
+            e = e.NextArgs(this);
+            var elements = SettingsConverter.GetElements(value, e);
+            SettingGroup element = new SettingGroup(parent, member, elements);
+            element.Label = Label ?? InferLabel(member.Name);
+            element.Position = Position;
+            element.AutoSave = e.AutoSave;
+            return element;
+        }
+    }
+
+    public class SettingStringAttribute : SettingPageAttribute
+    {
+        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        {
+            Type type = member.GetValueType();
+            if (type != typeof(string))
+                throw new ArgumentException("SettingStringAttribute must target a string");
+            e = e.Integrate(this);
+            StringSetting element = new StringSetting(parent, member);
+            element.Label = Label ?? InferLabel(member.Name);
+            if (!string.IsNullOrEmpty(Details))
+                element.Details = Details;
+            element.Position = Position;
+            element.Value = (string) member.GetValue(parent);
+            element.LabelWidth = e.LabelWidth;
+            element.AutoSave = e.AutoSave;
+            return element;
+        }
+    }
+
+    public class SettingTextAttribute : SettingPageAttribute
     {
         private int _height;
-
-        public string Details { get; set; }
 
         public int Height
         {
@@ -58,16 +137,45 @@ namespace WpfSettings
                 _height = value;
             }
         }
+
+        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        {
+            Type type = member.GetValueType();
+            if (type != typeof(string))
+                throw new ArgumentException("SettingTextAttribute must target a string");
+            e = e.Integrate(this);
+            TextSetting element = new TextSetting(parent, member);
+            element.Label = Label ?? InferLabel(member.Name);
+            if (!string.IsNullOrEmpty(Details))
+                element.Details = Details;
+            if (Height > 0)
+                element.Height = Height;
+            element.Position = Position;
+            element.Value = (string) member.GetValue(parent);
+            element.LabelWidth = e.LabelWidth;
+            element.AutoSave = e.AutoSave;
+            return element;
+        }
     }
 
-    public class SettingStringAttribute : SettingAttribute
+    public class SettingBoolAttribute : SettingPageAttribute
     {
-        public string Details { get; set; }
-    }
-
-    public class SettingBoolAttribute : SettingAttribute
-    {
-        public string Details { get; set; }
+        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        {
+            Type type = member.GetValueType();
+            if (type != typeof(bool))
+                throw new ArgumentException("SettingBoolAttribute must target a boolean");
+            e = e.Integrate(this);
+            BoolSetting element = new BoolSetting(parent, member);
+            element.Label = Label ?? InferLabel(member.Name);
+            if (!string.IsNullOrEmpty(Details))
+                element.Details = Details;
+            element.Position = Position;
+            element.Value = (bool) member.GetValue(parent);
+            element.LabelWidth = e.LabelWidth;
+            element.AutoSave = e.AutoSave;
+            return element;
+        }
     }
 
     public enum ChoiceType
@@ -76,11 +184,46 @@ namespace WpfSettings
         RadioButtons
     }
 
-    public class SettingChoiceAttribute : SettingAttribute
+    public class SettingChoiceAttribute : SettingPageAttribute
     {
-        public string Details { get; set; }
         public string GroupName { get; set; }
         public ChoiceType Type { get; set; } = ChoiceType.DropDown;
+
+        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        {
+            Type type = member.GetValueType();
+            if (!type.IsEnum)
+                throw new ArgumentException("SettingChoiceAttribute must target an enum");
+            e = e.Integrate(this);
+            var choices = new ObservableCollection<string>();
+            Array names = Enum.GetNames(type);
+            foreach (string name in names)
+            {
+                string label = GetFieldLabel(type, name);
+                if (!string.IsNullOrEmpty(label))
+                    choices.Add(label);
+            }
+            var element = Type == ChoiceType.DropDown
+                ? (ChoiceSetting) new DropDownSetting(parent, member)
+                : new RadioButtonsSetting(parent, member);
+            element.Choices = choices;
+            element.Label = Label ?? InferLabel(member.Name);
+            if (!string.IsNullOrEmpty(Details))
+                element.Details = Details;
+            element.Position = Position;
+            string enumValue = GetFieldLabel(type, member.GetValue(parent).ToString());
+            element.SelectedValue = enumValue;
+            element.LabelWidth = e.LabelWidth;
+            element.AutoSave = e.AutoSave;
+            return element;
+        }
+
+        private static string GetFieldLabel(Type enumType, string fieldName)
+        {
+            var memberInfos = enumType.GetMember(fieldName);
+            var attr = memberInfos[0].GetCustomAttribute<SettingFieldAttribute>(false);
+            return attr?.Label ?? InferLabel(memberInfos[0].Name);
+        }
     }
 
     [AttributeUsage(AttributeTargets.Field)]
@@ -88,8 +231,23 @@ namespace WpfSettings
     {
     }
 
-    public class SettingButtonAttribute : SettingAttribute
+    public class SettingButtonAttribute : SettingPageAttribute
     {
-        public string Details { get; set; }
+        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        {
+            Type type = member.GetValueType();
+            if (type != typeof(Action))
+                throw new ArgumentException("SettingButtonAttribute must target an Action");
+            e = e.Integrate(this);
+            ButtonSetting element = new ButtonSetting(parent, member);
+            element.Label = Label ?? InferLabel(member.Name);
+            if (!string.IsNullOrEmpty(Details))
+                element.Details = Details;
+            element.Position = Position;
+            element.Action = (Action) member.GetValue(parent);
+            element.LabelWidth = e.LabelWidth;
+            element.AutoSave = e.AutoSave;
+            return element;
+        }
     }
 }
