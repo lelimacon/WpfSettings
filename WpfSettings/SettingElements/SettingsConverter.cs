@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using WpfSettings.Utils;
 using WpfSettings.Utils.Reflection;
 
@@ -53,8 +54,7 @@ namespace WpfSettings.SettingElements
             e = e.NextArgs(attribute);
             section.SubSections = GetSections(value, e);
             section.Elements = GetElements(value, e);
-            if (!string.IsNullOrEmpty(attribute.Label))
-                section.Label = attribute.Label;
+            section.Label = attribute.Label ?? InferLabel(member.Name);
             if (!string.IsNullOrEmpty(attribute.Icon))
             {
                 var stream = ResourceUtils.FromParentAssembly(attribute.Icon);
@@ -96,8 +96,7 @@ namespace WpfSettings.SettingElements
             e = e.NextArgs(attribute);
             var elements = GetElements(value, e);
             SettingGroup element = new SettingGroup(parent, member, elements);
-            if (!string.IsNullOrEmpty(attribute.Label))
-                element.Label = attribute.Label;
+            element.Label = attribute.Label ?? InferLabel(member.Name);
             element.Position = attribute.Position;
             element.AutoSave = e.AutoSave;
             return element;
@@ -111,8 +110,7 @@ namespace WpfSettings.SettingElements
                 throw new ArgumentException("SettingStringAttribute must target a string");
             e = e.Integrate(attribute);
             StringSetting element = new StringSetting(parent, member);
-            if (!string.IsNullOrEmpty(attribute.Label))
-                element.Label = attribute.Label;
+            element.Label = attribute.Label ?? InferLabel(member.Name);
             if (!string.IsNullOrEmpty(attribute.Details))
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
@@ -130,8 +128,7 @@ namespace WpfSettings.SettingElements
                 throw new ArgumentException("SettingTextAttribute must target a string");
             e = e.Integrate(attribute);
             TextSetting element = new TextSetting(parent, member);
-            if (!string.IsNullOrEmpty(attribute.Label))
-                element.Label = attribute.Label;
+            element.Label = attribute.Label ?? InferLabel(member.Name);
             if (!string.IsNullOrEmpty(attribute.Details))
                 element.Details = attribute.Details;
             if (attribute.Height > 0)
@@ -151,8 +148,7 @@ namespace WpfSettings.SettingElements
                 throw new ArgumentException("SettingBoolAttribute must target a boolean");
             e = e.Integrate(attribute);
             BoolSetting element = new BoolSetting(parent, member);
-            if (!string.IsNullOrEmpty(attribute.Label))
-                element.Label = attribute.Label;
+            element.Label = attribute.Label ?? InferLabel(member.Name);
             if (!string.IsNullOrEmpty(attribute.Details))
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
@@ -181,8 +177,7 @@ namespace WpfSettings.SettingElements
                 ? (ChoiceSetting) new DropDownSetting(parent, member)
                 : new RadioButtonsSetting(parent, member);
             element.Choices = choices;
-            if (!string.IsNullOrEmpty(attribute.Label))
-                element.Label = attribute.Label;
+            element.Label = attribute.Label ?? InferLabel(member.Name);
             if (!string.IsNullOrEmpty(attribute.Details))
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
@@ -201,8 +196,7 @@ namespace WpfSettings.SettingElements
                 throw new ArgumentException("SettingButtonAttribute must target an Action");
             e = e.Integrate(attribute);
             ButtonSetting element = new ButtonSetting(parent, member);
-            if (!string.IsNullOrEmpty(attribute.Label))
-                element.Label = attribute.Label;
+            element.Label = attribute.Label ?? InferLabel(member.Name);
             if (!string.IsNullOrEmpty(attribute.Details))
                 element.Details = attribute.Details;
             element.Position = attribute.Position;
@@ -216,7 +210,15 @@ namespace WpfSettings.SettingElements
         {
             var memberInfos = enumType.GetMember(fieldName);
             var attr = memberInfos[0].GetCustomAttribute<SettingFieldAttribute>(false);
-            return attr?.Label;
+            return attr?.Label ?? InferLabel(memberInfos[0].Name);
+        }
+
+        private static string InferLabel(string memberName)
+        {
+            string label = Regex.Replace(memberName.Substring(1), @"[A-Z]",
+                match => " " + char.ToLower(match.Value[0]));
+            string inferedLabel = char.ToUpper(memberName[0]) + label;
+            return inferedLabel;
         }
     }
 }

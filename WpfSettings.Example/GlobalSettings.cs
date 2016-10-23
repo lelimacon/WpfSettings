@@ -8,8 +8,7 @@ namespace WpfSettings.Example
     {
         private readonly GlobalSettings _settings;
 
-        [SettingChoice("Gender",
-             LabelWidth = 80,
+        [SettingChoice(LabelWidth = 80,
              Details = "This will change the background to match your color preferences! No questions.")]
         public UserSettings.EGender Gender
         {
@@ -17,7 +16,7 @@ namespace WpfSettings.Example
             set { _settings.User.Gender = value; }
         }
 
-        [SettingString("Name", LabelWidth = 80)]
+        [SettingString(LabelWidth = 80)]
         public string Name
         {
             get { return _settings.User.Name; }
@@ -33,17 +32,17 @@ namespace WpfSettings.Example
 
     public class GlobalSettings
     {
-        [SettingSection("General",
+        [SettingSection(
              LabelWidth = 100,
              Icon = "Resources.icon-bulb.png")]
         public GeneralSettings General { get; }
 
-        [SettingSection("Profile",
+        [SettingSection(
              LabelWidth = 100,
              Icon = "Resources.icon-skull.png")]
         public UserSettings User { get; }
 
-        [SettingSection("Interface",
+        [SettingSection(
              LabelWidth = 100,
              Expansion = SectionExpansion.Expanded,
              Icon = "Resources.icon-window-system.png")]
@@ -61,7 +60,7 @@ namespace WpfSettings.Example
     public class GeneralSettings
     {
         [SettingBool("Launch this program with Windows start-up",
-             Details = "This options doesn't actually have any effect, don't worry.")]
+             Details = "This option doesn't actually have any effect, don't worry.")]
         public bool StartReboot { get; set; }
     }
 
@@ -70,32 +69,30 @@ namespace WpfSettings.Example
     {
         public enum EGender
         {
-            [SettingField("Male")] Male,
-            [SettingField("Female")] Female,
-            [SettingField("Other")] Other
+            [SettingField] Male,
+            [SettingField] Female,
+            [SettingField] Other
         }
 
-        [SettingChoice("Gender",
+        [SettingChoice(
              Details = "This will change the background to match your color preferences! No questions.")]
         public EGender Gender { get; set; } = EGender.Other;
 
-        [SettingString("Name")]
+        [SettingString]
         public string Name { get; set; } = "Bob";
 
         // TODO: int selection
-        [SettingString("Age")]
+        [SettingString]
         public string Age { get; set; }
     }
 
     [ImplementPropertyChanged]
     public class InterfaceSettings
     {
-        [SettingSection("Style",
-             Icon = "Resources.icon-flask.png")]
+        [SettingSection(Icon = "Resources.icon-flask.png")]
         public StyleSettings Style { get; set; }
 
-        [SettingSection("Content",
-             Icon = "Resources.icon-gift.png")]
+        [SettingSection(Icon = "Resources.icon-gift.png")]
         public ContentSettings Content { get; set; }
 
         public InterfaceSettings()
@@ -111,7 +108,7 @@ namespace WpfSettings.Example
         public enum TextStyle
         {
             [SettingField("Passive")] Normal,
-            [SettingField("Agressive")] Bold,
+            [SettingField("Aggressive")] Bold,
             [SettingField("Discrete")] Italic
         }
 
@@ -126,13 +123,11 @@ namespace WpfSettings.Example
     [ImplementPropertyChanged]
     public class StyleSettings
     {
-        [SettingGroup(1, "Title Style",
-             LabelWidth = 70)]
-        public BoxStyle TitleStyle { get; }
-
-        [SettingGroup(2, "Content Style",
-             LabelWidth = 70)]
+        [SettingGroup(2, "Content style", LabelWidth = 70)]
         public BoxStyle ContentStyle { get; }
+
+        [SettingGroup(1, "Title style", LabelWidth = 70)]
+        public BoxStyle TitleStyle { get; }
 
         public StyleSettings()
         {
@@ -158,10 +153,10 @@ namespace WpfSettings.Example
             "Let's make purple together."
         };
 
-        [SettingString("Title")]
+        [SettingString]
         public string Title { get; set; } = "My Poetry";
 
-        [SettingText("Page content", Height = 80)]
+        [SettingText(Height = 80)]
         public string PageContent { get; set; }
 
         [SettingButton("Randomize content")]
