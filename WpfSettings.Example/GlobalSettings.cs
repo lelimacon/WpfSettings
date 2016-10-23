@@ -59,7 +59,7 @@ namespace WpfSettings.Example
     [ImplementPropertyChanged]
     public class GeneralSettings
     {
-        [SettingBool("Launch this program with Windows start-up",
+        [SettingBool(Label = "Launch this program with Windows start-up",
              Details = "This option doesn't actually have any effect, don't worry.")]
         public bool StartReboot { get; set; }
     }
@@ -107,26 +107,26 @@ namespace WpfSettings.Example
     {
         public enum TextStyle
         {
-            [SettingField("Passive")] Normal,
-            [SettingField("Aggressive")] Bold,
-            [SettingField("Discrete")] Italic
+            [SettingField(Label = "Passive")] Normal,
+            [SettingField(Label = "Aggressive")] Bold,
+            [SettingField(Label = "Discrete")] Italic
         }
 
         // TODO: color picker
-        [SettingString(0, "Color")]
+        [SettingString(Position = 0)]
         public string Color { get; set; }
 
-        [SettingChoice(1, "Style", Type = ChoiceType.RadioButtons)]
+        [SettingChoice(Position = 1, Type = ChoiceType.RadioButtons)]
         public TextStyle Style { get; set; } = TextStyle.Bold;
     }
 
     [ImplementPropertyChanged]
     public class StyleSettings
     {
-        [SettingGroup(2, "Content style", LabelWidth = 70)]
+        [SettingGroup(Position = 2, LabelWidth = 70)]
         public BoxStyle ContentStyle { get; }
 
-        [SettingGroup(1, "Title style", LabelWidth = 70)]
+        [SettingGroup(Position = 1, LabelWidth = 70)]
         public BoxStyle TitleStyle { get; }
 
         public StyleSettings()
@@ -159,7 +159,7 @@ namespace WpfSettings.Example
         [SettingText(Height = 80)]
         public string PageContent { get; set; }
 
-        [SettingButton("Randomize content")]
+        [SettingButton(Label = "Randomize content")]
         public Action Randomize { get; set; }
 
         public ContentSettings()
