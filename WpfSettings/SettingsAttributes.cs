@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using WpfSettings.SettingElements;
 using WpfSettings.Utils;
 using WpfSettings.Utils.Reflection;
@@ -26,14 +25,6 @@ namespace WpfSettings
                     throw new ArgumentException("LabelWidth must be > 0");
                 _labelWidth = value;
             }
-        }
-
-        protected static string InferLabel(string memberName)
-        {
-            string label = Regex.Replace(memberName.Substring(1), @"[A-Z]",
-                match => " " + char.ToLower(match.Value[0]));
-            string inferedLabel = char.ToUpper(memberName[0]) + label;
-            return inferedLabel;
         }
     }
 
@@ -65,7 +56,7 @@ namespace WpfSettings
             e = e.NextArgs(this);
             section.SubSections = SettingsConverter.GetSections(value, e);
             section.Elements = SettingsConverter.GetElements(value, e);
-            section.Label = Label ?? InferLabel(member.Name);
+            section.Label = Label ?? SettingsConverter.InferLabel(member.Name);
             if (!string.IsNullOrEmpty(Icon))
             {
                 var stream = ResourceUtils.FromParentAssembly(Icon);
@@ -82,6 +73,16 @@ namespace WpfSettings
         public string Details { get; set; }
 
         internal abstract SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e);
+
+        internal void Fill(SettingPageElement element, MemberInfo member, ConverterArgs e)
+        {
+            element.Label = Label ?? SettingsConverter.InferLabel(member.Name);
+            element.LabelWidth = e.LabelWidth;
+            if (Details != null)
+                element.Details = Details;
+            element.Position = Position;
+            element.AutoSave = e.AutoSave;
+        }
     }
 
     public class SettingGroupAttribute : SettingPageAttribute
@@ -96,9 +97,7 @@ namespace WpfSettings
             e = e.NextArgs(this);
             var elements = SettingsConverter.GetElements(value, e);
             SettingGroup element = new SettingGroup(parent, member, elements);
-            element.Label = Label ?? InferLabel(member.Name);
-            element.Position = Position;
-            element.AutoSave = e.AutoSave;
+            Fill(element, member, e);
             return element;
         }
     }
@@ -112,13 +111,8 @@ namespace WpfSettings
                 throw new ArgumentException("SettingStringAttribute must target a string");
             e = e.Integrate(this);
             StringSetting element = new StringSetting(parent, member);
-            element.Label = Label ?? InferLabel(member.Name);
-            if (!string.IsNullOrEmpty(Details))
-                element.Details = Details;
-            element.Position = Position;
+            Fill(element, member, e);
             element.Value = (string) member.GetValue(parent);
-            element.LabelWidth = e.LabelWidth;
-            element.AutoSave = e.AutoSave;
             return element;
         }
     }
@@ -145,15 +139,10 @@ namespace WpfSettings
                 throw new ArgumentException("SettingTextAttribute must target a string");
             e = e.Integrate(this);
             TextSetting element = new TextSetting(parent, member);
-            element.Label = Label ?? InferLabel(member.Name);
-            if (!string.IsNullOrEmpty(Details))
-                element.Details = Details;
+            Fill(element, member, e);
+            element.Value = (string) member.GetValue(parent);
             if (Height > 0)
                 element.Height = Height;
-            element.Position = Position;
-            element.Value = (string) member.GetValue(parent);
-            element.LabelWidth = e.LabelWidth;
-            element.AutoSave = e.AutoSave;
             return element;
         }
     }
@@ -167,13 +156,8 @@ namespace WpfSettings
                 throw new ArgumentException("SettingBoolAttribute must target a boolean");
             e = e.Integrate(this);
             BoolSetting element = new BoolSetting(parent, member);
-            element.Label = Label ?? InferLabel(member.Name);
-            if (!string.IsNullOrEmpty(Details))
-                element.Details = Details;
-            element.Position = Position;
+            Fill(element, member, e);
             element.Value = (bool) member.GetValue(parent);
-            element.LabelWidth = e.LabelWidth;
-            element.AutoSave = e.AutoSave;
             return element;
         }
     }
@@ -206,15 +190,10 @@ namespace WpfSettings
             var element = Type == ChoiceType.DropDown
                 ? (ChoiceSetting) new DropDownSetting(parent, member)
                 : new RadioButtonsSetting(parent, member);
+            Fill(element, member, e);
             element.Choices = choices;
-            element.Label = Label ?? InferLabel(member.Name);
-            if (!string.IsNullOrEmpty(Details))
-                element.Details = Details;
-            element.Position = Position;
             string enumValue = GetFieldLabel(type, member.GetValue(parent).ToString());
             element.SelectedValue = enumValue;
-            element.LabelWidth = e.LabelWidth;
-            element.AutoSave = e.AutoSave;
             return element;
         }
 
@@ -222,7 +201,7 @@ namespace WpfSettings
         {
             var memberInfos = enumType.GetMember(fieldName);
             var attr = memberInfos[0].GetCustomAttribute<SettingFieldAttribute>(false);
-            return attr?.Label ?? InferLabel(memberInfos[0].Name);
+            return attr?.Label ?? SettingsConverter.InferLabel(memberInfos[0].Name);
         }
     }
 
@@ -240,13 +219,8 @@ namespace WpfSettings
                 throw new ArgumentException("SettingButtonAttribute must target an Action");
             e = e.Integrate(this);
             ButtonSetting element = new ButtonSetting(parent, member);
-            element.Label = Label ?? InferLabel(member.Name);
-            if (!string.IsNullOrEmpty(Details))
-                element.Details = Details;
-            element.Position = Position;
+            Fill(element, member, e);
             element.Action = (Action) member.GetValue(parent);
-            element.LabelWidth = e.LabelWidth;
-            element.AutoSave = e.AutoSave;
             return element;
         }
     }

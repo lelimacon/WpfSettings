@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace WpfSettings.SettingElements
 {
@@ -38,6 +39,14 @@ namespace WpfSettings.SettingElements
         {
             var attribute = member.GetCustomAttribute<SettingPageAttribute>(false);
             return attribute?.GetElement(parent, member, e);
+        }
+
+        internal static string InferLabel(string memberName)
+        {
+            string label = Regex.Replace(memberName.Substring(1), @"[A-Z]",
+                match => " " + char.ToLower(match.Value[0]));
+            string inferedLabel = char.ToUpper(memberName[0]) + label;
+            return inferedLabel;
         }
     }
 }

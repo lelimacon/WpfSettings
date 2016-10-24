@@ -151,6 +151,7 @@ namespace WpfSettings.SettingElements
     public abstract class SettingPageElement : SettingElement
     {
         private bool _autoSave;
+        private string _details;
 
         public bool AutoSave
         {
@@ -159,6 +160,17 @@ namespace WpfSettings.SettingElements
             {
                 if (value == _autoSave) return;
                 _autoSave = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Details
+        {
+            get { return _details; }
+            set
+            {
+                if (value == _details) return;
+                _details = value;
                 OnPropertyChanged();
             }
         }
@@ -204,7 +216,6 @@ namespace WpfSettings.SettingElements
     internal class StringSetting : SettingPageElement
     {
         private string _value;
-        private string _details;
 
         public string Value
         {
@@ -215,17 +226,6 @@ namespace WpfSettings.SettingElements
                 _value = value;
                 OnPropertyChanged();
                 if (AutoSave) Save();
-            }
-        }
-
-        public string Details
-        {
-            get { return _details; }
-            set
-            {
-                if (value == _details) return;
-                _details = value;
-                OnPropertyChanged();
             }
         }
 
@@ -249,7 +249,6 @@ namespace WpfSettings.SettingElements
     internal class TextSetting : SettingPageElement
     {
         private string _value;
-        private string _details;
         private int _height;
 
         public string Value
@@ -261,17 +260,6 @@ namespace WpfSettings.SettingElements
                 _value = value;
                 OnPropertyChanged();
                 if (AutoSave) Save();
-            }
-        }
-
-        public string Details
-        {
-            get { return _details; }
-            set
-            {
-                if (value == _details) return;
-                _details = value;
-                OnPropertyChanged();
             }
         }
 
@@ -307,7 +295,6 @@ namespace WpfSettings.SettingElements
     internal class BoolSetting : SettingPageElement
     {
         private bool _value;
-        private string _details;
 
         public bool Value
         {
@@ -318,17 +305,6 @@ namespace WpfSettings.SettingElements
                 _value = value;
                 OnPropertyChanged();
                 if (AutoSave) Save();
-            }
-        }
-
-        public string Details
-        {
-            get { return _details; }
-            set
-            {
-                if (value == _details) return;
-                _details = value;
-                OnPropertyChanged();
             }
         }
 
@@ -353,7 +329,6 @@ namespace WpfSettings.SettingElements
     {
         private ObservableCollection<string> _choices;
         private string _selectedValue;
-        private string _details;
 
         public ObservableCollection<string> Choices
         {
@@ -378,16 +353,6 @@ namespace WpfSettings.SettingElements
             }
         }
 
-        public string Details
-        {
-            get { return _details; }
-            set
-            {
-                if (value == _details) return;
-                _details = value;
-                OnPropertyChanged();
-            }
-        }
 
         public ChoiceSetting(object parent, MemberInfo member)
             : base(parent, member)
@@ -397,17 +362,20 @@ namespace WpfSettings.SettingElements
         public override void Save()
         {
             string value = SelectedValue;
+            if (value == null)
+                return;
             Type type = Member.GetValueType();
-            string name = Enum.GetNames(type).First(n => FieldLabel(type, n) == value);
+            string[] names = Enum.GetNames(type);
+            string name = names.First(n => FieldLabel(type, n) == value);
             var entry = Enum.Parse(type, name);
             Member.SetValue(Parent, entry);
         }
 
-        private static string FieldLabel(Type type, string n)
+        private static string FieldLabel(Type type, string name)
         {
-            MemberInfo info = type.GetMember(n)[0];
+            MemberInfo info = type.GetMember(name)[0];
             var attribute = info.GetCustomAttribute<SettingFieldAttribute>(false);
-            return attribute?.Label;
+            return attribute?.Label ?? SettingsConverter.InferLabel(name);
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -457,22 +425,9 @@ namespace WpfSettings.SettingElements
 
     internal class ButtonSetting : SettingPageElement
     {
-        private string _details;
-
         public Action Action { get; set; }
         public string GetAction { get; set; }
         public ICommand PressedCommand { get; set; }
-
-        public string Details
-        {
-            get { return _details; }
-            set
-            {
-                if (value == _details) return;
-                _details = value;
-                OnPropertyChanged();
-            }
-        }
 
         public ButtonSetting(object parent, MemberInfo member)
             : base(parent, member)
