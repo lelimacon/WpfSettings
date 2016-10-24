@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Reflection;
+using System.Windows;
 using WpfSettings.SettingElements;
 using WpfSettings.Utils;
 using WpfSettings.Utils.Reflection;
@@ -212,6 +213,8 @@ namespace WpfSettings
 
     public class SettingButtonAttribute : SettingPageAttribute
     {
+        public HorizontalAlignment Alignment { get; set; }
+
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
@@ -221,6 +224,7 @@ namespace WpfSettings
             ButtonSetting element = new ButtonSetting(parent, member);
             Fill(element, member, e);
             element.Action = (Action) member.GetValue(parent);
+            element.Alignment = Alignment;
             return element;
         }
     }

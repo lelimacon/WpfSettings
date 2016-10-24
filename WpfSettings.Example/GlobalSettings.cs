@@ -1,5 +1,6 @@
 ﻿using PropertyChanged;
 using System;
+using System.Windows;
 
 namespace WpfSettings.Example
 {
@@ -159,7 +160,7 @@ namespace WpfSettings.Example
         [SettingText(Height = 80)]
         public string PageContent { get; set; }
 
-        [SettingButton(Label = "Randomize content")]
+        [SettingButton(Label = "Randomize content", Alignment = HorizontalAlignment.Right)]
         public Action Randomize { get; set; }
 
         public ContentSettings()

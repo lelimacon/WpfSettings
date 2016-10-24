@@ -5,11 +5,9 @@
 
     <!-- Group -->
     <DataTemplate DataType="{x:Type settingElements:SettingGroup}">
-        <StackPanel Orientation="Vertical" Margin="6,2,0,2">
-            <GroupBox Header="{Binding Label}">
-                <ItemsControl ItemsSource="{Binding Elements}" />
-            </GroupBox>
-        </StackPanel>
+        <GroupBox Header="{Binding Label}" Margin="6,2,0,2">
+            <ItemsControl ItemsSource="{Binding Elements}" />
+        </GroupBox>
     </DataTemplate>
 
     <!-- String -->
@@ -140,8 +138,10 @@
     <!-- Button -->
     <DataTemplate DataType="{x:Type settingElements:ButtonSetting}">
         <StackPanel Orientation="Vertical" Margin="6,2,0,2">
-            <Button Height="26"
-                    Content="{Binding Label}" Command="{Binding PressedCommand}" />
+            <Button Height="26" HorizontalAlignment="{Binding Alignment}"
+                    Command="{Binding PressedCommand}">
+                <TextBlock Text="{Binding Label}" Margin="6,0,6,0" />
+            </Button>
             <wpf:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
                               TextWrapping="Wrap" Margin="18,2,0,4" />
         </StackPanel>

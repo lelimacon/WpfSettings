@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using WpfSettings.Annotations;
@@ -428,11 +429,13 @@ namespace WpfSettings.SettingElements
         public Action Action { get; set; }
         public string GetAction { get; set; }
         public ICommand PressedCommand { get; set; }
+        public HorizontalAlignment Alignment { get; set; }
 
         public ButtonSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
             PressedCommand = new RelayCommand(() => { Action(); });
+            Alignment = HorizontalAlignment.Left;
         }
 
         public override void Save()
