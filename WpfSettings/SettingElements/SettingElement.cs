@@ -25,34 +25,19 @@ namespace WpfSettings.SettingElements
         public int Position
         {
             get { return _position; }
-            set
-            {
-                if (value == _position) return;
-                _position = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _position, value); }
         }
 
         public string Label
         {
             get { return _label; }
-            set
-            {
-                if (value == _label) return;
-                _label = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _label, value); }
         }
 
         public int LabelWidth
         {
             get { return _labelWidth; }
-            set
-            {
-                if (value == _labelWidth) return;
-                _labelWidth = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _labelWidth, value); }
         }
 
         protected SettingElement(object parent, MemberInfo member)
@@ -65,8 +50,13 @@ namespace WpfSettings.SettingElements
                 propertyChanged.PropertyChanged += OuterPropertyChanged;
         }
 
-        public virtual void Save()
+        protected void Set<T>(ref T variable, T value,
+            [CallerMemberName] string propertyName = null)
         {
+            if (Equals(value, variable))
+                return;
+            variable = value;
+            OnPropertyChanged(propertyName);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -77,6 +67,7 @@ namespace WpfSettings.SettingElements
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public abstract void Save();
         protected abstract void OuterPropertyChanged(object sender, PropertyChangedEventArgs e);
     }
 
@@ -90,45 +81,25 @@ namespace WpfSettings.SettingElements
         public BitmapSource Icon
         {
             get { return _icon; }
-            set
-            {
-                if (Equals(value, _icon)) return;
-                _icon = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _icon, value); }
         }
 
         public ObservableCollection<SettingSection> SubSections
         {
             get { return _subSections; }
-            set
-            {
-                if (Equals(value, _subSections)) return;
-                _subSections = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _subSections, value); }
         }
 
         public ObservableCollection<SettingPageElement> Elements
         {
             get { return _elements; }
-            set
-            {
-                if (Equals(value, _elements)) return;
-                _elements = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _elements, value); }
         }
 
         public bool IsExpanded
         {
             get { return _isExpanded; }
-            set
-            {
-                if (value == _isExpanded) return;
-                _isExpanded = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _isExpanded, value); }
         }
 
         public SettingSection(object parent, MemberInfo member)
@@ -157,28 +128,27 @@ namespace WpfSettings.SettingElements
         public bool AutoSave
         {
             get { return _autoSave; }
-            set
-            {
-                if (value == _autoSave) return;
-                _autoSave = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _autoSave, value); }
         }
 
         public string Details
         {
             get { return _details; }
-            set
-            {
-                if (value == _details) return;
-                _details = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _details, value); }
         }
 
         protected SettingPageElement(object parent, MemberInfo member)
             : base(parent, member)
         {
+        }
+
+        protected void SetAndSave<T>(ref T variable, T value,
+            [CallerMemberName] string propertyName = null)
+        {
+            // ReSharper disable once ExplicitCallerInfoArgument
+            Set(ref variable, value, propertyName);
+            if (AutoSave)
+                Save();
         }
     }
 
@@ -189,12 +159,7 @@ namespace WpfSettings.SettingElements
         public IEnumerable<SettingPageElement> Elements
         {
             get { return _elements; }
-            set
-            {
-                if (Equals(value, _elements)) return;
-                _elements = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _elements, value); }
         }
 
         public SettingGroup(object parent, MemberInfo member, IEnumerable<SettingPageElement> elements)
@@ -221,13 +186,7 @@ namespace WpfSettings.SettingElements
         public string Value
         {
             get { return _value; }
-            set
-            {
-                if (value == _value) return;
-                _value = value;
-                OnPropertyChanged();
-                if (AutoSave) Save();
-            }
+            set { SetAndSave(ref _value, value); }
         }
 
         public StringSetting(object parent, MemberInfo member)
@@ -255,24 +214,13 @@ namespace WpfSettings.SettingElements
         public string Value
         {
             get { return _value; }
-            set
-            {
-                if (value == _value) return;
-                _value = value;
-                OnPropertyChanged();
-                if (AutoSave) Save();
-            }
+            set { SetAndSave(ref _value, value); }
         }
 
         public int Height
         {
             get { return _height; }
-            set
-            {
-                if (value == _height) return;
-                _height = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _height, value); }
         }
 
         public TextSetting(object parent, MemberInfo member)
@@ -300,13 +248,7 @@ namespace WpfSettings.SettingElements
         public bool Value
         {
             get { return _value; }
-            set
-            {
-                if (value == _value) return;
-                _value = value;
-                OnPropertyChanged();
-                if (AutoSave) Save();
-            }
+            set { SetAndSave(ref _value, value); }
         }
 
         public BoolSetting(object parent, MemberInfo member)
@@ -334,24 +276,13 @@ namespace WpfSettings.SettingElements
         public ObservableCollection<string> Choices
         {
             get { return _choices; }
-            set
-            {
-                if (Equals(value, _choices)) return;
-                _choices = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _choices, value); }
         }
 
         public string SelectedValue
         {
             get { return _selectedValue; }
-            set
-            {
-                if (value == _selectedValue) return;
-                _selectedValue = value;
-                OnPropertyChanged();
-                if (AutoSave) Save();
-            }
+            set { SetAndSave(ref _selectedValue, value); }
         }
 
 

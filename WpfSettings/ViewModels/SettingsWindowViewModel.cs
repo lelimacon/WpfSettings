@@ -21,45 +21,25 @@ namespace WpfSettings.ViewModels
         public ObservableCollection<SettingSection> InternalConfig
         {
             get { return _internalConfig; }
-            set
-            {
-                if (value == _internalConfig) return;
-                _internalConfig = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _internalConfig, value); }
         }
 
         public ObservableCollection<SettingPageElement> CurrentPageConfig
         {
             get { return _currentPageConfig; }
-            set
-            {
-                if (value == _currentPageConfig) return;
-                _currentPageConfig = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _currentPageConfig, value); }
         }
 
         public string CategoryTitle
         {
             get { return _categoryTitle; }
-            set
-            {
-                if (value == _categoryTitle) return;
-                _categoryTitle = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _categoryTitle, value); }
         }
 
         public int ExplorerWidth
         {
             get { return _explorerWidth; }
-            set
-            {
-                if (value == _explorerWidth) return;
-                _explorerWidth = value;
-                OnPropertyChanged();
-            }
+            set { Set(ref _explorerWidth, value); }
         }
 
         public Action<SettingSection> ChangeSectionAction { get; set; }
@@ -67,6 +47,16 @@ namespace WpfSettings.ViewModels
         public ICommand ApplyCommand => new RelayCommand<SettingsWindow>(Apply);
         public ICommand OkCommand => new RelayCommand<SettingsWindow>(Ok);
         public ICommand CancelCommand => new RelayCommand<SettingsWindow>(Cancel);
+
+
+        protected void Set<T>(ref T variable, T value,
+            [CallerMemberName] string propertyName = null)
+        {
+            if (Equals(value, variable))
+                return;
+            variable = value;
+            OnPropertyChanged(propertyName);
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
