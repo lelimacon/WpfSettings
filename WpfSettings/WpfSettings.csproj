@@ -56,9 +56,11 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -79,6 +81,7 @@
     <Compile Include="Utils\Wpf\IndexToCheckedConverter.cs" />
     <Compile Include="Utils\BitmapUtils.cs" />
     <Compile Include="Utils\Wpf\LeftMarginMultiplierConverter.cs" />
+    <Compile Include="Utils\Wpf\ValidationTextBox.cs" />
     <Compile Include="Utils\Wpf\PlaceHolderTextBox.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utils\Reflection\MemberInfoUtils.cs" />

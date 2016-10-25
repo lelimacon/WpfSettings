@@ -118,6 +118,21 @@ namespace WpfSettings
         }
     }
 
+    public class SettingNumberAttribute : SettingPageAttribute
+    {
+        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        {
+            Type type = member.GetValueType();
+            if (type != typeof(string))
+                throw new ArgumentException("SettingStringAttribute must target a string");
+            e = e.Integrate(this);
+            NumberSetting element = new NumberSetting(parent, member);
+            Fill(element, member, e);
+            element.Value = (string) member.GetValue(parent);
+            return element;
+        }
+    }
+
     public class SettingTextAttribute : SettingPageAttribute
     {
         private int _height;

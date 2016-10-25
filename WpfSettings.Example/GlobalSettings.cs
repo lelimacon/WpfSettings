@@ -83,7 +83,7 @@ namespace WpfSettings.Example
         public string Name { get; set; } = "Bob";
 
         // TODO: int selection
-        [SettingString]
+        [SettingNumber]
         public string Age { get; set; }
     }
 

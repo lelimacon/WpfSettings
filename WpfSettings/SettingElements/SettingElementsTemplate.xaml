@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:settingElements="clr-namespace:WpfSettings.SettingElements"
-                    xmlns:wpf="clr-namespace:WpfSettings.Utils.Wpf">
+                    xmlns:wpf="clr-namespace:WpfSettings.Utils.Wpf"
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
     <!-- Group -->
     <DataTemplate DataType="{x:Type settingElements:SettingGroup}">
@@ -28,6 +29,31 @@
             <TextBox Grid.Row="0" Grid.Column="1"
                      Height="24" Text="{Binding Value}"
                      VerticalContentAlignment="Center" />
+            <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
+                              Text="{Binding Details}"
+                              TextWrapping="Wrap" FontStyle="Italic" />
+        </Grid>
+    </DataTemplate>
+
+    <!-- Number -->
+    <DataTemplate DataType="{x:Type settingElements:NumberSetting}">
+        <Grid Margin="6,2,0,2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding LabelWidth}" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Grid.Column="0" Height="24">
+                <TextBlock Text="{Binding Label}"
+                           VerticalAlignment="Center" />
+            </Border>
+            <wpf:ValidationTextBox Grid.Row="0" Grid.Column="1"
+                                   Height="24" Text="{Binding Value}"
+                                   VerticalContentAlignment="Center"
+                                   ValidateInput="{Binding ValidateInput}" />
             <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
                               Text="{Binding Details}"
                               TextWrapping="Wrap" FontStyle="Italic" />

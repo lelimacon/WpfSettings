@@ -206,6 +206,43 @@ namespace WpfSettings.SettingElements
         }
     }
 
+    internal class NumberSetting : SettingPageElement
+    {
+        private object _value;
+
+        public object Value
+        {
+            get { return _value; }
+            set { SetAndSave(ref _value, value); }
+        }
+
+        public Func<string, bool> ValidateInput { get; }
+
+        public NumberSetting(object parent, MemberInfo member)
+            : base(parent, member)
+        {
+            ValidateInput = IsInputValid;
+        }
+
+        private bool IsInputValid(string input)
+        {
+            int number;
+            bool parsed = int.TryParse(input, out number);
+            return !parsed;
+        }
+
+        public override void Save()
+        {
+            Member.SetValue(Parent, Value);
+        }
+
+        protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == Member.Name)
+                Value = Member.GetValue(Parent);
+        }
+    }
+
     internal class TextSetting : SettingPageElement
     {
         private string _value;
