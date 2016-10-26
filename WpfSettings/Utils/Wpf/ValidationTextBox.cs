@@ -38,14 +38,14 @@ namespace WpfSettings.Utils.Wpf
                 e.CancelCommand();
         }
 
+        private void OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !ValidText(e.Text);
+        }
+
         private bool ValidText(string text)
         {
             return ValidateInput?.Invoke(text) == true;
-        }
-
-        private void OnPreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = ValidText(e.Text);
         }
     }
 }

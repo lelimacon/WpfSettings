@@ -228,7 +228,7 @@ namespace WpfSettings.SettingElements
         {
             int number;
             bool parsed = int.TryParse(input, out number);
-            return !parsed;
+            return parsed;
         }
 
         public override void Save()
