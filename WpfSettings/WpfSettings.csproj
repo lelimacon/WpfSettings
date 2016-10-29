@@ -75,6 +75,9 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\NumberBox.xaml.cs">
+      <DependentUpon>NumberBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SettingElements\SettingElement.cs" />
     <Compile Include="SettingElements\ConverterArgs.cs" />
     <Compile Include="SettingElements\SettingsConverter.cs" />
@@ -98,6 +101,10 @@
     <Compile Include="Utils\Wpf\ShyTextBlock.cs" />
     <Compile Include="Utils\Wpf\TreeViewItemExtensions.cs" />
     <Compile Include="Utils\Wpf\MvvmUtils.cs" />
+    <Page Include="Controls\NumberBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SettingElements\SettingElementsTemplate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

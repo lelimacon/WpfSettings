@@ -123,12 +123,12 @@ namespace WpfSettings
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
-            if (type != typeof(string))
-                throw new ArgumentException("SettingStringAttribute must target a string");
+            if (type != typeof(int))
+                throw new ArgumentException("SettingNumberAttribute must target an integer");
             e = e.Integrate(this);
             NumberSetting element = new NumberSetting(parent, member);
             Fill(element, member, e);
-            element.Value = (string) member.GetValue(parent);
+            element.Value = (int) member.GetValue(parent);
             return element;
         }
     }

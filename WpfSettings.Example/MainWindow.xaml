@@ -46,8 +46,8 @@
                     Command="{Binding ShowSettingsCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
             <wpfSettings:SettingsPage Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
-                                   x:Name="QuickSettings" Margin="3"
-                                   Settings="{Binding QuickSettings, Mode=TwoWay}" />
+                                      x:Name="QuickSettings" Margin="3"
+                                      Settings="{Binding QuickSettings, Mode=TwoWay}" />
         </Grid>
     </Border>
 </Window>

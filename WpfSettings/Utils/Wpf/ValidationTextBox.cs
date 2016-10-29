@@ -11,7 +11,7 @@ namespace WpfSettings.Utils.Wpf
             = MvvmUtils.RegisterDp<ValidationTextBox>();
 
         /// <summary>
-        ///     Indicates if the input is valid or not.
+        ///     Indicates if the new input is valid or not.
         /// </summary>
         public Func<string, bool> ValidateInput
         {

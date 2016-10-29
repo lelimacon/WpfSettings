@@ -11,6 +11,6 @@
     </UserControl.Resources>
 
     <ItemsControl DataContext="{Binding ElementName=Root}"
-                  ItemsSource="{Binding ConfigElements}" />
+                  ItemsSource="{Binding ConfigElements}" IsTabStop="False" />
 
 </UserControl>
