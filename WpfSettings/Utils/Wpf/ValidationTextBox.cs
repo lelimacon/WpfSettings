@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace WpfSettings.Utils.Wpf
 {
     internal class ValidationTextBox : TextBox
     {
+        private string _lastText;
+        private int _lastPosition;
+
         public static readonly DependencyProperty ValidateInputProperty
             = MvvmUtils.RegisterDp<ValidationTextBox>();
 
@@ -21,26 +23,23 @@ namespace WpfSettings.Utils.Wpf
 
         public ValidationTextBox()
         {
-            PreviewTextInput += OnPreviewTextInput;
-            DataObject.AddPastingHandler(this, Handler);
+            TextChanged += OnTextChanged;
         }
 
-        private void Handler(object sender, DataObjectPastingEventArgs e)
+        private void OnTextChanged(object sender, TextChangedEventArgs textChangedEventArgs)
         {
-            if (!e.DataObject.GetDataPresent(typeof(string)))
+            if (!ValidText(Text))
             {
-                e.CancelCommand();
-                return;
+                Text = _lastText;
+                CaretIndex = _lastPosition;
             }
-
-            string text = e.DataObject.GetData(typeof(string)) as string;
-            if (!ValidText(text))
-                e.CancelCommand();
+            SaveState();
         }
 
-        private void OnPreviewTextInput(object sender, TextCompositionEventArgs e)
+        private void SaveState()
         {
-            e.Handled = !ValidText(e.Text);
+            _lastText = Text;
+            _lastPosition = CaretIndex;
         }
 
         private bool ValidText(string text)
