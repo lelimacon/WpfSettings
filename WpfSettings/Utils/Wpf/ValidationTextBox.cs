@@ -44,7 +44,9 @@ namespace WpfSettings.Utils.Wpf
 
         private bool ValidText(string text)
         {
-            return ValidateInput?.Invoke(text) == true;
+            if (ValidateInput == null)
+                return true;
+            return ValidateInput.Invoke(text);
         }
     }
 }

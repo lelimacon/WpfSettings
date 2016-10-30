@@ -8,20 +8,17 @@ namespace WpfSettings.Controls
 {
     public partial class NumberBox : UserControl
     {
-        public static readonly DependencyProperty StepProperty
-            = MvvmUtils.RegisterDp<NumberBox>();
-
         public static readonly DependencyProperty ValueProperty
-            = MvvmUtils.RegisterDp<NumberBox>();
+            = MvvmUtils.RegisterDp<NumberBox>(0);
 
-        /// <summary>
-        ///     Indicates the delta to apply to the value.
-        /// </summary>
-        public int Step
-        {
-            get { return (int) GetValue(StepProperty); }
-            set { SetValue(StepProperty, value); }
-        }
+        public static readonly DependencyProperty StepProperty
+            = MvvmUtils.RegisterDp<NumberBox>(1);
+
+        public static readonly DependencyProperty MinValueProperty
+            = MvvmUtils.RegisterDp<NumberBox>(int.MinValue);
+
+        public static readonly DependencyProperty MaxValueProperty
+            = MvvmUtils.RegisterDp<NumberBox>(int.MaxValue);
 
         /// <summary>
         ///     Gets or sets the value of the number.
@@ -32,10 +29,34 @@ namespace WpfSettings.Controls
             set { SetValue(ValueProperty, value); }
         }
 
-        public string Text
+        /// <summary>
+        ///     Gets or sets the delta to apply to the value.
+        ///     Defaults to 1.
+        /// </summary>
+        public int Step
         {
-            get { return Value.ToString(); }
-            set { Value = int.Parse(value); }
+            get { return (int) GetValue(StepProperty); }
+            set { SetValue(StepProperty, value); }
+        }
+
+        /// <summary>
+        ///     Gets or sets the minimum value (inclusive) of the number.
+        ///     Defaults to min int.
+        /// </summary>
+        public int MinValue
+        {
+            get { return (int) GetValue(MinValueProperty); }
+            set { SetValue(MinValueProperty, value); }
+        }
+
+        /// <summary>
+        ///     Gets or sets the maximum value (inclusive) of the number.
+        ///     Defaults to max int.
+        /// </summary>
+        public int MaxValue
+        {
+            get { return (int) GetValue(MaxValueProperty); }
+            set { SetValue(MaxValueProperty, value); }
         }
 
         public Func<string, bool> ValidateInput { get; }
@@ -47,7 +68,6 @@ namespace WpfSettings.Controls
             ValidateInput = IsInputValid;
             IncrementCommand = new RelayCommand(Increment);
             DecrementCommand = new RelayCommand(Decrement);
-            Step = 1;
             InitializeComponent();
             PreviewKeyDown += OnKeyDown;
         }
@@ -62,6 +82,8 @@ namespace WpfSettings.Controls
 
         private void Increment()
         {
+            if (string.IsNullOrEmpty(NumberTextBox.Text))
+                Value = 0;
             // TODO: fix binding (Value is not updated on input)
             string text = NumberTextBox.Text;
             var number = int.Parse(text);
@@ -70,6 +92,8 @@ namespace WpfSettings.Controls
 
         private void Decrement()
         {
+            if (string.IsNullOrEmpty(NumberTextBox.Text))
+                Value = 0;
             string text = NumberTextBox.Text;
             var number = int.Parse(text);
             Value = number - Step;
@@ -77,9 +101,11 @@ namespace WpfSettings.Controls
 
         private bool IsInputValid(string input)
         {
-            int number;
-            bool parsed = int.TryParse(input, out number);
-            return parsed;
+            if (string.IsNullOrEmpty(input))
+                return true;
+            int value;
+            bool parsed = int.TryParse(input, out value);
+            return parsed && value >= MinValue && value <= MaxValue;
         }
     }
 }

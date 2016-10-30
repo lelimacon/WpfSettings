@@ -41,7 +41,7 @@ namespace WpfSettings.Utils.Wpf
         }
         */
 
-        internal static DependencyProperty RegisterDp(object parent,
+        internal static DependencyProperty RegisterDp(object parent, object defaultValue = null,
             [CallerMemberName] string prop = null)
         {
             if (prop == null)
@@ -51,10 +51,10 @@ namespace WpfSettings.Utils.Wpf
             if (!prop.EndsWith(ending))
                 throw new ArgumentException($"Property name must end with {ending}: {prop}");
             prop = prop.Remove(prop.Length - ending.Length);
-            return RegisterDp(parentType, prop);
+            return RegisterDp(parentType, prop, defaultValue);
         }
 
-        internal static DependencyProperty RegisterDp<T>(
+        internal static DependencyProperty RegisterDp<T>(object defaultValue = null,
             [CallerMemberName] string prop = null)
         {
             if (prop == null)
@@ -63,14 +63,14 @@ namespace WpfSettings.Utils.Wpf
             if (!prop.EndsWith(ending))
                 throw new ArgumentException($"Property name must end with {ending}: {prop}");
             prop = prop.Remove(prop.Length - ending.Length);
-            return RegisterDp(typeof(T), prop);
+            return RegisterDp(typeof(T), prop, defaultValue);
         }
 
-        private static DependencyProperty RegisterDp(Type parent, string prop)
+        private static DependencyProperty RegisterDp(Type parent, string prop, object defaultValue = null)
         {
             PropertyInfo propertyInfo = parent.GetProperty(prop);
             Type type = propertyInfo.PropertyType;
-            PropertyMetadata metadata = new PropertyMetadata(null);
+            PropertyMetadata metadata = defaultValue == null ? null : new PropertyMetadata(defaultValue);
             return DependencyProperty.Register(prop, type, parent, metadata);
         }
     }

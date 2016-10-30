@@ -209,6 +209,9 @@ namespace WpfSettings.SettingElements
     internal class NumberSetting : SettingPageElement
     {
         private int _value;
+        private int _step;
+        private int _maxValue;
+        private int _minValue;
 
         public int Value
         {
@@ -216,10 +219,27 @@ namespace WpfSettings.SettingElements
             set { SetAndSave(ref _value, value); }
         }
 
+        public int Step
+        {
+            get { return _step; }
+            set { Set(ref _step, value); }
+        }
+
+        public int MinValue
+        {
+            get { return _minValue; }
+            set { Set(ref _minValue, value); }
+        }
+
+        public int MaxValue
+        {
+            get { return _maxValue; }
+            set { Set(ref _maxValue, value); }
+        }
+
         public NumberSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
-            Value = 0;
         }
 
         public override void Save()

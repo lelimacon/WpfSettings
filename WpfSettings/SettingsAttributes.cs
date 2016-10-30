@@ -120,6 +120,9 @@ namespace WpfSettings
 
     public class SettingNumberAttribute : SettingPageAttribute
     {
+        public string MinValue { get; set; }
+        public string MaxValue { get; set; }
+
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
@@ -129,7 +132,18 @@ namespace WpfSettings
             NumberSetting element = new NumberSetting(parent, member);
             Fill(element, member, e);
             element.Value = (int) member.GetValue(parent);
+            element.MinValue = GetInt(MinValue);
+            element.MaxValue = GetInt(MaxValue);
             return element;
+        }
+
+        private int GetInt(string input)
+        {
+            int value;
+            bool parsed = int.TryParse(input, out value);
+            if (!parsed)
+                throw new ArgumentException("Value must be an integer");
+            return value;
         }
     }
 

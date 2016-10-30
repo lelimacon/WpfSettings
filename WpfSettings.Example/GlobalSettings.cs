@@ -24,6 +24,13 @@ namespace WpfSettings.Example
             set { _settings.User.Name = value; }
         }
 
+        [SettingNumber(LabelWidth = 80, MinValue = "0", MaxValue = "160")]
+        public int Age
+        {
+            get { return _settings.User.Age; }
+            set { _settings.User.Age = value; }
+        }
+
         public QuickSettings(GlobalSettings settings)
         {
             _settings = settings;
@@ -82,8 +89,8 @@ namespace WpfSettings.Example
         [SettingString]
         public string Name { get; set; } = "Bob";
 
-        [SettingNumber]
-        public int Age { get; set; }
+        [SettingNumber(MinValue = "0", MaxValue = "160")]
+        public int Age { get; set; } = 42;
     }
 
     [ImplementPropertyChanged]
