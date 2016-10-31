@@ -316,23 +316,38 @@ namespace WpfSettings.SettingElements
         }
     }
 
+    internal class SettingField
+    {
+        public object Value { get; }
+        public string Name { get; }
+        public string Label { get; }
+        public string Details { get; }
+
+        public SettingField(object value, string name, string label, string details)
+        {
+            Value = value;
+            Name = name;
+            Label = label;
+            Details = details;
+        }
+    }
+
     internal class ChoiceSetting : SettingPageElement
     {
-        private ObservableCollection<string> _choices;
-        private string _selectedValue;
+        private ObservableCollection<SettingField> _choices;
+        private SettingField _selectedValue;
 
-        public ObservableCollection<string> Choices
+        public ObservableCollection<SettingField> Choices
         {
             get { return _choices; }
             set { Set(ref _choices, value); }
         }
 
-        public string SelectedValue
+        public SettingField SelectedValue
         {
             get { return _selectedValue; }
             set { SetAndSave(ref _selectedValue, value); }
         }
-
 
         public ChoiceSetting(object parent, MemberInfo member)
             : base(parent, member)
@@ -341,38 +356,19 @@ namespace WpfSettings.SettingElements
 
         public override void Save()
         {
-            string value = SelectedValue;
-            if (value == null)
+            if (SelectedValue == null)
                 return;
-            Type type = Member.GetValueType();
-            string[] names = Enum.GetNames(type);
-            string name = names.First(n => FieldLabel(type, n) == value);
-            var entry = Enum.Parse(type, name);
-            Member.SetValue(Parent, entry);
-        }
-
-        private static string FieldLabel(Type type, string name)
-        {
-            MemberInfo info = type.GetMember(name)[0];
-            var attribute = info.GetCustomAttribute<SettingFieldAttribute>(false);
-            return attribute?.Label ?? SettingsConverter.InferLabel(name);
+            Member.SetValue(Parent, SelectedValue.Value);
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Member.Name)
             {
-                Type type = Member.GetValueType();
-                string enumValue = GetFieldLabel(type, Member.GetValue(Parent).ToString());
-                SelectedValue = enumValue;
+                object value = Member.GetValue(Parent);
+                SettingField field = Choices.FirstOrDefault(a => a.Value.Equals(value));
+                SelectedValue = field;
             }
-        }
-
-        private static string GetFieldLabel(Type enumType, string fieldName)
-        {
-            var memberInfos = enumType.GetMember(fieldName);
-            var attr = memberInfos[0].GetCustomAttribute<SettingFieldAttribute>(false);
-            return attr?.Label;
         }
     }
 
@@ -393,13 +389,13 @@ namespace WpfSettings.SettingElements
         public RadioButtonsSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
-            OnSelectionCommand = new RelayCommand<string>(ChangeSelection);
+            OnSelectionCommand = new RelayCommand<SettingField>(ChangeSelection);
             GroupName = Member.Name + _id++;
         }
 
-        public void ChangeSelection(string selection)
+        public void ChangeSelection(SettingField field)
         {
-            SelectedValue = selection;
+            SelectedValue = field;
         }
     }
 

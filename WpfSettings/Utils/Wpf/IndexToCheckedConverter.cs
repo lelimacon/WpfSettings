@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using WpfSettings.SettingElements;
 
 namespace WpfSettings.Utils.Wpf
 {
@@ -8,9 +9,9 @@ namespace WpfSettings.Utils.Wpf
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            string selected = (string) values[0];
-            string actual = (string) values[1];
-            bool isChecked = selected == actual;
+            SettingField selected = (SettingField) values[0];
+            SettingField actual = (SettingField) values[1];
+            bool isChecked = selected.Value.Equals(actual.Value);
             return isChecked;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using WpfSettings.SettingElements;
@@ -209,35 +210,40 @@ namespace WpfSettings
             if (!type.IsEnum)
                 throw new ArgumentException("SettingChoiceAttribute must target an enum");
             e = e.Integrate(this);
-            var choices = new ObservableCollection<string>();
+            var choices = new ObservableCollection<SettingField>();
             Array names = Enum.GetNames(type);
             foreach (string name in names)
             {
-                string label = GetFieldLabel(type, name);
-                if (!string.IsNullOrEmpty(label))
-                    choices.Add(label);
+                MemberInfo memberInfo = type.GetMember(name)[0];
+                var attribute = memberInfo.GetCustomAttribute<SettingFieldAttribute>(false);
+                if (attribute == null)
+                    continue;
+                SettingField field = attribute.GetElement(parent, memberInfo);
+                choices.Add(field);
             }
             var element = Type == ChoiceType.DropDown
                 ? (ChoiceSetting) new DropDownSetting(parent, member)
                 : new RadioButtonsSetting(parent, member);
             Fill(element, member, e);
             element.Choices = choices;
-            string enumValue = GetFieldLabel(type, member.GetValue(parent).ToString());
-            element.SelectedValue = enumValue;
+            var value = member.GetValue(parent);
+            element.SelectedValue = choices.FirstOrDefault(a => a.Value.Equals(value));
             return element;
-        }
-
-        private static string GetFieldLabel(Type enumType, string fieldName)
-        {
-            var memberInfos = enumType.GetMember(fieldName);
-            var attr = memberInfos[0].GetCustomAttribute<SettingFieldAttribute>(false);
-            return attr?.Label ?? SettingsConverter.InferLabel(memberInfos[0].Name);
         }
     }
 
     [AttributeUsage(AttributeTargets.Field)]
     public class SettingFieldAttribute : SettingAttribute
     {
+        public string Details { get; set; }
+
+        internal SettingField GetElement(object parent, MemberInfo member)
+        {
+            string label = Label ?? SettingsConverter.InferLabel(member.Name);
+            SettingField field = new SettingField(member.GetValue(parent),
+                member.Name, label, Details);
+            return field;
+        }
     }
 
     public class SettingButtonAttribute : SettingPageAttribute

@@ -77,9 +77,9 @@ namespace WpfSettings.Example
     {
         public enum EGender
         {
-            [SettingField] Male,
-            [SettingField] Female,
-            [SettingField] Other
+            [SettingField(Details = "A male color is blue.")] Male,
+            [SettingField(Details = "A female color is pink.")] Female,
+            [SettingField(Details = "Another color is green.")] Other
         }
 
         [SettingChoice(
@@ -115,16 +115,16 @@ namespace WpfSettings.Example
         public enum TextStyle
         {
             [SettingField(Label = "Passive")] Normal,
-            [SettingField(Label = "Aggressive")] Bold,
+            [SettingField(Label = "Aggressive", Details = "Or bold, as one could say.")] Bold,
             [SettingField(Label = "Discrete")] Italic
         }
+
+        [SettingChoice(Position = 1, Type = ChoiceType.RadioButtons)]
+        public TextStyle Style { get; set; } = TextStyle.Bold;
 
         // TODO: color picker
         [SettingString(Position = 0)]
         public string Color { get; set; }
-
-        [SettingChoice(Position = 1, Type = ChoiceType.RadioButtons)]
-        public TextStyle Style { get; set; } = TextStyle.Bold;
     }
 
     [ImplementPropertyChanged]
