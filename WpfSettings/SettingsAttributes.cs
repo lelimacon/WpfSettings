@@ -15,9 +15,23 @@ namespace WpfSettings
     {
         private int _labelWidth;
 
+        /// <summary>
+        ///     Gets or sets the order to display the settings.
+        ///     Defaults to the declaration position.
+        /// </summary>
         public int Position { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the label on the left-side of the actual setting.
+        ///     This property is inferred if not specified.
+        /// </summary>
         public string Label { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the labels width. Must be greater or equal than 0.
+        ///     This is a recursive parameter.
+        ///     Defaults to 140.
+        /// </summary>
         public int LabelWidth
         {
             get { return _labelWidth; }
@@ -42,7 +56,18 @@ namespace WpfSettings
 
     public class SettingSectionAttribute : SettingAttribute
     {
+        /// <summary>
+        ///     Gets or sets the icon path.
+        ///     The image will be retrieved from the calling assembly.
+        ///     Make sure the target image Build Action is Embedded Resource.
+        /// </summary>
         public string Icon { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the expansion to apply to the section in tree.
+        ///     This is a recursive parameter.
+        ///     Defaults to unset (closed).
+        /// </summary>
         public SectionExpansion Expansion { get; set; } = SectionExpansion.Unset;
 
         internal SettingSection GetElement(object parent, MemberInfo member, ConverterArgs e)
@@ -72,6 +97,9 @@ namespace WpfSettings
 
     public abstract class SettingPageAttribute : SettingAttribute
     {
+        /// <summary>
+        ///     Gets or sets detailed information to display under the setting.
+        /// </summary>
         public string Details { get; set; }
 
         internal abstract SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e);
@@ -106,6 +134,9 @@ namespace WpfSettings
 
     public class SettingStringAttribute : SettingPageAttribute
     {
+        /// <summary>
+        ///     Gets or sets a secondary label to display on the right.
+        /// </summary>
         public string SuffixLabel { get; set; }
 
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
@@ -154,6 +185,9 @@ namespace WpfSettings
         /// </summary>
         public NumberSettingType Type { get; set; }
 
+        /// <summary>
+        ///     Gets or sets a secondary label to display on the right.
+        /// </summary>
         public string SuffixLabel { get; set; }
 
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
@@ -191,6 +225,10 @@ namespace WpfSettings
     {
         private int _height;
 
+        /// <summary>
+        ///     Gets or sets the height of the TextBox.
+        ///     Defaults to 60.
+        /// </summary>
         public int Height
         {
             get { return _height; }
@@ -255,7 +293,10 @@ namespace WpfSettings
 
     public class SettingChoiceAttribute : SettingPageAttribute
     {
-        public string GroupName { get; set; }
+        /// <summary>
+        ///     Gets or sets the type of display of the dropdown.
+        ///     Defaults to the spinner.
+        /// </summary>
         public SettingChoiceType Type { get; set; } = SettingChoiceType.DropDown;
 
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
@@ -289,6 +330,9 @@ namespace WpfSettings
     [AttributeUsage(AttributeTargets.Field)]
     public class SettingFieldAttribute : SettingAttribute
     {
+        /// <summary>
+        ///     Gets or sets detailed information to display under the setting.
+        /// </summary>
         public string Details { get; set; }
 
         internal SettingField GetElement(object parent, MemberInfo member)
@@ -302,6 +346,10 @@ namespace WpfSettings
 
     public class SettingButtonAttribute : SettingPageAttribute
     {
+        /// <summary>
+        ///     Gets or sets the horizontal alignment of the button.
+        ///     Defaults to Left.
+        /// </summary>
         public HorizontalAlignment Alignment { get; set; }
 
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
