@@ -206,23 +206,38 @@ namespace WpfSettings.SettingElements
         }
     }
 
+    public enum NumberSettingType
+    {
+        Spinner,
+        Slider,
+        Both
+    }
+
     internal class NumberSetting : SettingPageElement
     {
+        private NumberSettingType _type;
         private int _value;
-        private int _step;
         private int _maxValue;
         private int _minValue;
+        private int _step;
+        private int _tickFrequency;
+
+        public bool SliderVisible => Type != NumberSettingType.Spinner;
+        public bool SpinnerVisible => Type != NumberSettingType.Slider;
+        public string SliderWidth => SliderVisible ? "3*" : "0";
+        public string SpinnerWidth => SpinnerVisible ? "*" : "0";
+        public bool SnapToTick => Step > 0;
+
+        public NumberSettingType Type
+        {
+            get { return _type; }
+            set { Set(ref _type, value); }
+        }
 
         public int Value
         {
             get { return _value; }
             set { SetAndSave(ref _value, value); }
-        }
-
-        public int Step
-        {
-            get { return _step; }
-            set { Set(ref _step, value); }
         }
 
         public int MinValue
@@ -235,6 +250,18 @@ namespace WpfSettings.SettingElements
         {
             get { return _maxValue; }
             set { Set(ref _maxValue, value); }
+        }
+
+        public int Step
+        {
+            get { return _step; }
+            set { Set(ref _step, value); }
+        }
+
+        public int TickFrequency
+        {
+            get { return _tickFrequency; }
+            set { Set(ref _tickFrequency, value); }
         }
 
         public NumberSetting(object parent, MemberInfo member)
@@ -364,7 +391,7 @@ namespace WpfSettings.SettingElements
         }
     }
 
-    internal class ChoiceSetting : SettingPageElement
+    internal abstract class ChoiceSetting : SettingPageElement
     {
         private ObservableCollection<SettingField> _choices;
         private SettingField _selectedValue;

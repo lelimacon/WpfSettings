@@ -1,6 +1,7 @@
 ﻿using PropertyChanged;
 using System;
 using System.Windows;
+using WpfSettings.SettingElements;
 
 namespace WpfSettings.Example
 {
@@ -70,6 +71,10 @@ namespace WpfSettings.Example
         [SettingBool(Label = "Launch this program with Windows start-up",
              Details = "This option doesn't actually have any effect, don't worry.")]
         public bool StartReboot { get; set; }
+
+        [SettingNumber(Type = NumberSettingType.Slider,
+             MinValue = "0", MaxValue = "3", TickFrequency = "1")]
+        public int ElementsSizes { get; set; }
     }
 
     [ImplementPropertyChanged]
@@ -122,7 +127,7 @@ namespace WpfSettings.Example
             [SettingField(Label = "Discrete")] Italic
         }
 
-        [SettingChoice(Position = 1, Type = ChoiceType.RadioButtons)]
+        [SettingChoice(Position = 1, Type = SettingChoiceType.RadioButtons)]
         public TextStyle Style { get; set; } = TextStyle.Bold;
 
         // TODO: color picker

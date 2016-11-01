@@ -36,10 +36,14 @@
 
     <!-- Number -->
     <DataTemplate DataType="{x:Type settingElements:NumberSetting}">
+        <DataTemplate.Resources>
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+        </DataTemplate.Resources>
         <Grid Margin="6,2,0,2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding LabelWidth}" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="{Binding SliderWidth}" />
+                <ColumnDefinition Width="{Binding SpinnerWidth}" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -48,9 +52,16 @@
             <Border Grid.Row="0" Grid.Column="0" Height="24">
                 <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
             </Border>
-            <controls:NumberBox Grid.Row="0" Grid.Column="1" Height="24"
+            <Slider Grid.Row="0" Grid.Column="1" Height="24" x:Name="SettingSlider"
+                    Minimum="{Binding MinValue}" Maximum="{Binding MaxValue}"
+                    Value="{Binding Value}" Orientation="Horizontal"
+                    TickPlacement="BottomRight" TickFrequency="{Binding TickFrequency}"
+                    IsSnapToTickEnabled="{Binding SnapToTick}"
+                    Visibility="{Binding SliderVisible, Converter={StaticResource BooleanToVisibility}}" />
+            <controls:NumberBox Grid.Row="0" Grid.Column="2" Height="24"
                                 Value="{Binding Value}" Step="{Binding Step}"
-                                MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}" />
+                                MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}"
+                                Visibility="{Binding SpinnerVisible, Converter={StaticResource BooleanToVisibility}}" />
             <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
                               Text="{Binding Details}"
                               TextWrapping="Wrap" FontStyle="Italic" />

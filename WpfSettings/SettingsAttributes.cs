@@ -121,8 +121,35 @@ namespace WpfSettings
 
     public class SettingNumberAttribute : SettingPageAttribute
     {
+        /// <summary>
+        ///     Gets or sets the minimum value.
+        ///     Defaults to min int.
+        /// </summary>
         public string MinValue { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the minimum value.
+        ///     Defaults to max int.
+        /// </summary>
         public string MaxValue { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the ticks frequency on the slider.
+        ///     Defaults to 0 (two ticks, under min and max values).
+        /// </summary>
+        public string TickFrequency { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the step for the spinner.
+        ///     Defaults to 1.
+        /// </summary>
+        public int Step { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the type of display of the number.
+        ///     Defaults to the spinner.
+        /// </summary>
+        public NumberSettingType Type { get; set; }
 
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
@@ -133,8 +160,14 @@ namespace WpfSettings
             NumberSetting element = new NumberSetting(parent, member);
             Fill(element, member, e);
             element.Value = (int) member.GetValue(parent);
-            element.MinValue = GetInt(MinValue);
-            element.MaxValue = GetInt(MaxValue);
+            if (!string.IsNullOrEmpty(MinValue))
+                element.MinValue = GetInt(MinValue);
+            if (!string.IsNullOrEmpty(MaxValue))
+                element.MaxValue = GetInt(MaxValue);
+            if (!string.IsNullOrEmpty(TickFrequency))
+                element.TickFrequency = GetInt(TickFrequency);
+            element.Step = Step;
+            element.Type = Type;
             return element;
         }
 
@@ -208,7 +241,7 @@ namespace WpfSettings
         }
     }
 
-    public enum ChoiceType
+    public enum SettingChoiceType
     {
         DropDown,
         RadioButtons
@@ -217,7 +250,7 @@ namespace WpfSettings
     public class SettingChoiceAttribute : SettingPageAttribute
     {
         public string GroupName { get; set; }
-        public ChoiceType Type { get; set; } = ChoiceType.DropDown;
+        public SettingChoiceType Type { get; set; } = SettingChoiceType.DropDown;
 
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
@@ -236,7 +269,7 @@ namespace WpfSettings
                 SettingField field = attribute.GetElement(parent, memberInfo);
                 choices.Add(field);
             }
-            var element = Type == ChoiceType.DropDown
+            var element = Type == SettingChoiceType.DropDown
                 ? (ChoiceSetting) new DropDownSetting(parent, member)
                 : new RadioButtonsSetting(parent, member);
             Fill(element, member, e);
