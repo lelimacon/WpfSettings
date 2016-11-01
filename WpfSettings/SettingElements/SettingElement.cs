@@ -330,6 +330,11 @@ namespace WpfSettings.SettingElements
             Label = label;
             Details = details;
         }
+
+        public override string ToString()
+        {
+            return Label;
+        }
     }
 
     internal class ChoiceSetting : SettingPageElement
