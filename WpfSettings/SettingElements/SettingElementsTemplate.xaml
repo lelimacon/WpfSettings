@@ -30,7 +30,7 @@
                      Height="24" Text="{Binding Value}"
                      VerticalContentAlignment="Center" />
             <Border Grid.Row="0" Grid.Column="2" Height="24">
-                <wpf:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="2,0,0,0" />
+                <wpf:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3,0,0,0" />
             </Border>
             <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
                               Text="{Binding Details}"
@@ -67,8 +67,12 @@
                                 Value="{Binding Value}" Step="{Binding Step}"
                                 MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}"
                                 Visibility="{Binding SpinnerVisible, Converter={StaticResource BooleanToVisibility}}" />
+            <Border Grid.Row="0" Grid.Column="2" Height="24" Margin="3,0,0,0"
+                    Visibility="{Binding LabelVisible, Converter={StaticResource BooleanToVisibility}}">
+                <TextBlock Text="{Binding Value}" VerticalAlignment="Center" />
+            </Border>
             <Border Grid.Row="0" Grid.Column="3" Height="24">
-                <wpf:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="2,0,0,0" />
+                <wpf:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3,0,0,0" />
             </Border>
             <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
                               Text="{Binding Details}"

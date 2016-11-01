@@ -72,10 +72,10 @@ namespace WpfSettings.Example
              Details = "This option doesn't actually have any effect, don't worry.")]
         public bool StartReboot { get; set; }
 
-        [SettingNumber(Type = NumberSettingType.Slider,
+        [SettingNumber(Type = NumberSettingType.SliderAndValue,
              MinValue = "100", MaxValue = "250", TickFrequency = "50",
              SuffixLabel = "%")]
-        public int ElementsSizes { get; set; }
+        public int ElementsSizes { get; set; } = 100;
     }
 
     [ImplementPropertyChanged]

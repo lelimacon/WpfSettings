@@ -217,7 +217,8 @@ namespace WpfSettings.SettingElements
     {
         Spinner,
         Slider,
-        Both
+        SliderAndSpinner,
+        SliderAndValue
     }
 
     internal class NumberSetting : SettingPageElement
@@ -230,10 +231,11 @@ namespace WpfSettings.SettingElements
         private int _tickFrequency;
 
         public bool SliderVisible => Type != NumberSettingType.Spinner;
-        public bool SpinnerVisible => Type != NumberSettingType.Slider;
+        public bool SpinnerVisible => Type == NumberSettingType.Spinner || Type == NumberSettingType.SliderAndSpinner;
+        public bool LabelVisible => Type == NumberSettingType.SliderAndValue;
         public string SliderWidth => SliderVisible ? "3*" : "0";
-        public string SpinnerWidth => SpinnerVisible ? "*" : "0";
-        public bool SnapToTick => Step > 0;
+        public string SpinnerWidth => SpinnerVisible ? "*" : LabelVisible ? "Auto" : "0";
+        public bool SnapToTick => TickFrequency > 0;
 
         public NumberSettingType Type
         {
