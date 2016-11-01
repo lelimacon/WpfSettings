@@ -73,7 +73,8 @@ namespace WpfSettings.Example
         public bool StartReboot { get; set; }
 
         [SettingNumber(Type = NumberSettingType.Slider,
-             MinValue = "0", MaxValue = "3", TickFrequency = "1")]
+             MinValue = "100", MaxValue = "250", TickFrequency = "50",
+             SuffixLabel = "%")]
         public int ElementsSizes { get; set; }
     }
 

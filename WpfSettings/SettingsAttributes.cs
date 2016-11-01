@@ -106,6 +106,8 @@ namespace WpfSettings
 
     public class SettingStringAttribute : SettingPageAttribute
     {
+        public string SuffixLabel { get; set; }
+
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
@@ -115,6 +117,7 @@ namespace WpfSettings
             StringSetting element = new StringSetting(parent, member);
             Fill(element, member, e);
             element.Value = (string) member.GetValue(parent);
+            element.SuffixLabel = SuffixLabel;
             return element;
         }
     }
@@ -151,6 +154,8 @@ namespace WpfSettings
         /// </summary>
         public NumberSettingType Type { get; set; }
 
+        public string SuffixLabel { get; set; }
+
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
@@ -160,6 +165,7 @@ namespace WpfSettings
             NumberSetting element = new NumberSetting(parent, member);
             Fill(element, member, e);
             element.Value = (int) member.GetValue(parent);
+            element.SuffixLabel = SuffixLabel;
             if (!string.IsNullOrEmpty(MinValue))
                 element.MinValue = GetInt(MinValue);
             if (!string.IsNullOrEmpty(MaxValue))

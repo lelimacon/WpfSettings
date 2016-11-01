@@ -124,6 +124,7 @@ namespace WpfSettings.SettingElements
     {
         private bool _autoSave;
         private string _details;
+        private string _suffixLabel;
 
         public bool AutoSave
         {
@@ -135,6 +136,12 @@ namespace WpfSettings.SettingElements
         {
             get { return _details; }
             set { Set(ref _details, value); }
+        }
+
+        public string SuffixLabel
+        {
+            get { return _suffixLabel; }
+            set { Set(ref _suffixLabel, value); }
         }
 
         protected SettingPageElement(object parent, MemberInfo member)
