@@ -193,6 +193,21 @@ namespace WpfSettings
         }
     }
 
+    public class SettingDateAttribute : SettingPageAttribute
+    {
+        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        {
+            Type type = member.GetValueType();
+            if (type != typeof(DateTime))
+                throw new ArgumentException("SettingStringAttribute must target a DateTime");
+            e = e.Integrate(this);
+            DateSetting element = new DateSetting(parent, member);
+            Fill(element, member, e);
+            element.Value = (DateTime) member.GetValue(parent);
+            return element;
+        }
+    }
+
     public enum ChoiceType
     {
         DropDown,

@@ -316,6 +316,33 @@ namespace WpfSettings.SettingElements
         }
     }
 
+    internal class DateSetting : SettingPageElement
+    {
+        private DateTime _value;
+
+        public DateTime Value
+        {
+            get { return _value; }
+            set { SetAndSave(ref _value, value); }
+        }
+
+        public DateSetting(object parent, MemberInfo member)
+            : base(parent, member)
+        {
+        }
+
+        public override void Save()
+        {
+            Member.SetValue(Parent, Value);
+        }
+
+        protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == Member.Name)
+                Value = (DateTime) Member.GetValue(Parent);
+        }
+    }
+
     internal class SettingField
     {
         public object Value { get; }

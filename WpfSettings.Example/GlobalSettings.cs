@@ -91,6 +91,9 @@ namespace WpfSettings.Example
 
         [SettingNumber(MinValue = "0", MaxValue = "160")]
         public int Age { get; set; } = 42;
+
+        [SettingDate]
+        public DateTime Birthday { get; set; }
     }
 
     [ImplementPropertyChanged]

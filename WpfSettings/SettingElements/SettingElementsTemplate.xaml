@@ -23,8 +23,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Grid.Column="0" Height="24">
-                <TextBlock Text="{Binding Label}"
-                           VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
             </Border>
             <TextBox Grid.Row="0" Grid.Column="1"
                      Height="24" Text="{Binding Value}"
@@ -47,8 +46,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Grid.Column="0" Height="24">
-                <TextBlock Text="{Binding Label}"
-                           VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
             </Border>
             <controls:NumberBox Grid.Row="0" Grid.Column="1" Height="24"
                                 Value="{Binding Value}" Step="{Binding Step}"
@@ -90,6 +88,28 @@
             <wpf:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
                               TextWrapping="Wrap" Margin="18,2,0,4" />
         </StackPanel>
+    </DataTemplate>
+
+    <!-- Date -->
+    <DataTemplate DataType="{x:Type settingElements:DateSetting}">
+        <Grid Margin="6,2,0,2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding LabelWidth}" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Grid.Column="0" Height="24">
+                <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
+            </Border>
+            <DatePicker Grid.Row="0" Grid.Column="1"
+                        Height="24" SelectedDate="{Binding Value}" />
+            <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
+                              Text="{Binding Details}"
+                              TextWrapping="Wrap" FontStyle="Italic" />
+        </Grid>
     </DataTemplate>
 
     <!-- Choice: DropDown -->
