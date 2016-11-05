@@ -57,11 +57,18 @@ namespace WpfSettings.Example
              Icon = "Resources.icon-window-system.png")]
         public InterfaceSettings Interface { get; }
 
+        [SettingSection(
+             LabelWidth = 100,
+             Expansion = SectionExpansion.Expanded,
+             Icon = "Resources.icon-globe.png")]
+        public CulturalSettings Culture { get; }
+
         public GlobalSettings()
         {
             General = new GeneralSettings();
             User = new UserSettings();
             Interface = new InterfaceSettings();
+            Culture = new CulturalSettings();
         }
     }
 
@@ -193,5 +200,70 @@ namespace WpfSettings.Example
         {
             return array[Rand.Next(array.Length)];
         }
+    }
+
+    [ImplementPropertyChanged]
+    public class CulturalSettings
+    {
+        [SettingSection(Icon = "Resources.icon-bubble.png")]
+        public LanguageSettings Language { get; }
+
+        [SettingSection(Icon = "Resources.icon-compass.png")]
+        public LocalizationSettings Localization { get; }
+
+        public CulturalSettings()
+        {
+            Language = new LanguageSettings();
+            Localization = new LocalizationSettings();
+        }
+    }
+
+    public enum Language
+    {
+        En,
+        Fr,
+        Es
+    }
+
+    [ImplementPropertyChanged]
+    public class LanguageSettings
+    {
+        [SettingBool]
+        public bool UseSystemLanguage { get; set; } = true;
+
+        [SettingChoice]
+        public Language DisplayLanguage { get; set; } = Language.En;
+    }
+
+    public enum Currency
+    {
+        Euro,
+        Dollar
+    }
+
+    public enum TemperatureUnit
+    {
+        Celsius,
+        Fahrenheit,
+        Kelvin,
+        Rankine,
+        Delisle,
+        Newton,
+        Réaumur,
+        Rømer
+    }
+
+
+    [ImplementPropertyChanged]
+    public class LocalizationSettings
+    {
+        [SettingString]
+        public string TimeFormat { get; set; } = "yyyy-MM-dd";
+
+        [SettingChoice]
+        public Currency Currency { get; set; } = Currency.Euro;
+
+        [SettingChoice]
+        public TemperatureUnit TemperatureUnit { get; set; } = TemperatureUnit.Celsius;
     }
 }

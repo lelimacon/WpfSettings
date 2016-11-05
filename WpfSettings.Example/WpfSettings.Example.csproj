@@ -135,6 +135,14 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\icon-cog.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\icon-bubbles.png" />
+    <EmbeddedResource Include="Resources\icon-compass.png" />
+    <EmbeddedResource Include="Resources\icon-globe.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\icon-bubble.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.1.29.2\build\dotnet\Fody.targets" Condition="Exists('..\packages\Fody.1.29.2\build\dotnet\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
