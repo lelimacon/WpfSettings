@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
@@ -293,17 +294,42 @@ namespace WpfSettings
     public class SettingChoiceAttribute : SettingPageAttribute
     {
         /// <summary>
+        ///     Gets or sets the enumerable name that holds the choices.
+        ///     Ignored if type is enum.
+        /// </summary>
+        public string ItemsSource { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the path of the label for the choices.
+        ///     Ignored if type is enum or if choice type is primitive string type.
+        /// </summary>
+        public string ItemsLabelPath { get; set; }
+
+        /// <summary>
         ///     Gets or sets the type of display of the dropdown.
-        ///     Defaults to the spinner.
+        ///     Defaults to the DropDown.
         /// </summary>
         public SettingChoiceType Type { get; set; } = SettingChoiceType.DropDown;
 
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
-            if (!type.IsEnum)
-                throw new ArgumentException("SettingChoiceAttribute must target an enum");
+            if (!type.IsEnum && ItemsSource == null)
+                throw new ArgumentException("SettingChoiceAttribute must target an enum or declare an item source");
             e = new ConverterArgs(e, this);
+            var choices = type.IsEnum ? GetEnumChoices(parent, type) : GetListChoices(parent);
+            var element = Type == SettingChoiceType.DropDown
+                ? (ChoiceSetting) new DropDownSetting(parent, member)
+                : new RadioButtonsSetting(parent, member);
+            Fill(element, member, e);
+            element.Choices = choices;
+            var value = member.GetValue(parent);
+            element.SelectedValue = choices.FirstOrDefault(a => a.Value.Equals(value));
+            return element;
+        }
+
+        private static ObservableCollection<SettingField> GetEnumChoices(object parent, Type type)
+        {
             var choices = new ObservableCollection<SettingField>();
             Array names = Enum.GetNames(type);
             foreach (string name in names)
@@ -315,14 +341,42 @@ namespace WpfSettings
                 SettingField field = attribute.GetElement(parent, memberInfo);
                 choices.Add(field);
             }
-            var element = Type == SettingChoiceType.DropDown
-                ? (ChoiceSetting) new DropDownSetting(parent, member)
-                : new RadioButtonsSetting(parent, member);
-            Fill(element, member, e);
-            element.Choices = choices;
-            var value = member.GetValue(parent);
-            element.SelectedValue = choices.FirstOrDefault(a => a.Value.Equals(value));
-            return element;
+            return choices;
+        }
+
+        private ObservableCollection<SettingField> GetListChoices(object parent)
+        {
+            var choices = new ObservableCollection<SettingField>();
+            PropertyInfo member = parent.GetType().GetProperty(ItemsSource);
+            var list = member.GetValue(parent) as IEnumerable;
+            if (list == null)
+                throw new ArgumentException("ItemsSource must target an implementation of IEnumerable");
+            foreach (var e in list)
+            {
+                if (!(e is string) && ItemsLabelPath == null)
+                    throw new ArgumentException("ItemsSource elements must be strings unless ItemsLabelPath is declared");
+                var field = e is string ? GetStringField(e) : GetField(e);
+                choices.Add(field);
+            }
+            return choices;
+        }
+
+        private static SettingField GetStringField(object choice)
+        {
+            string name = choice as string;
+            SettingField field = new SettingField(choice, name, name, null);
+            return field;
+        }
+
+        private SettingField GetField(object choice)
+        {
+            Type type = choice.GetType();
+            PropertyInfo member = type.GetProperty(ItemsLabelPath);
+            string label = member.GetValue(choice) as string;
+            if (label == null)
+                throw new ArgumentException("ItemsLabelPath must target a string");
+            SettingField field = new SettingField(choice, label, label, null);
+            return field;
         }
     }
 

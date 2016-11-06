@@ -1,5 +1,6 @@
 ﻿using PropertyChanged;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using WpfSettings.SettingElements;
 
@@ -218,39 +219,51 @@ namespace WpfSettings.Example
         }
     }
 
-    public enum Language
-    {
-        En,
-        Fr,
-        Es
-    }
-
     [ImplementPropertyChanged]
     public class LanguageSettings
     {
         [SettingBool]
         public bool UseSystemLanguage { get; set; } = true;
 
-        [SettingChoice]
-        public Language DisplayLanguage { get; set; } = Language.En;
+        [SettingChoice(ItemsSource = "Languages")]
+        public string DisplayLanguage { get; set; } = "En";
+
+        public List<string> Languages { get; } = new List<string>
+        {
+            "En",
+            "Fr",
+            "Es"
+        };
     }
 
-    public enum Currency
+    public class Currency
     {
-        Euro,
-        Dollar
+        /// <summary>
+        ///     ISO 4217 code.
+        /// </summary>
+        public string Code { get; }
+
+        public string Symbol { get; }
+        public string Name { get; }
+
+        public Currency(string code, string symbol, string name)
+        {
+            Code = code;
+            Symbol = symbol;
+            Name = name;
+        }
     }
 
     public enum TemperatureUnit
     {
-        Celsius,
-        Fahrenheit,
-        Kelvin,
-        Rankine,
-        Delisle,
-        Newton,
-        Réaumur,
-        Rømer
+        [SettingField] Celsius,
+        [SettingField] Fahrenheit,
+        [SettingField] Kelvin,
+        [SettingField] Rankine,
+        [SettingField] Delisle,
+        [SettingField] Newton,
+        [SettingField] Réaumur,
+        [SettingField] Rømer
     }
 
 
@@ -260,10 +273,23 @@ namespace WpfSettings.Example
         [SettingString]
         public string TimeFormat { get; set; } = "yyyy-MM-dd";
 
-        [SettingChoice]
-        public Currency Currency { get; set; } = Currency.Euro;
+        [SettingChoice(ItemsSource = "Currencies", ItemsLabelPath = "Name")]
+        public Currency Currency { get; set; }
 
         [SettingChoice]
         public TemperatureUnit TemperatureUnit { get; set; } = TemperatureUnit.Celsius;
+
+        public List<Currency> Currencies { get; } = new List<Currency>
+        {
+            new Currency("USD", "$", "United States dollar"),
+            new Currency("EUR", "€", "Euro"),
+            new Currency("JPY", "¥", "Japanese Yen"),
+            new Currency("GBP", "£", "Pound sterling")
+        };
+
+        public LocalizationSettings()
+        {
+            Currency = Currencies[1];
+        }
     }
 }
