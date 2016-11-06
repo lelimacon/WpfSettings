@@ -20,40 +20,38 @@
             Expansion = other.Expansion;
         }
 
-        public ConverterArgs Integrate(SettingAttribute attribute)
+        public ConverterArgs(ConverterArgs other, SettingAttribute attribute)
+        {
+            AutoSave = other.AutoSave;
+            LabelWidth = attribute.LabelWidth > 0 ? attribute.LabelWidth : other.LabelWidth;
+            Expansion = other.Expansion;
+        }
+
+        public ConverterArgs(ConverterArgs other, SettingSectionAttribute attribute)
+        {
+            AutoSave = other.AutoSave;
+            LabelWidth = attribute.LabelWidth > 0 ? attribute.LabelWidth : other.LabelWidth;
+            Expansion = attribute.Expansion != SectionExpansion.Unset
+                ? attribute.Expansion
+                : other.Expansion;
+        }
+
+        public ConverterArgs ChildrenArgs(SettingSectionAttribute attribute)
         {
             var e = new ConverterArgs(this);
             if (attribute.LabelWidth > 0)
                 e.LabelWidth = attribute.LabelWidth;
+            e.Expansion = attribute.Expansion != SectionExpansion.Unset
+                ? attribute.Expansion
+                : NextExpansion();
             return e;
         }
 
-        public ConverterArgs Integrate(SettingSectionAttribute attribute)
+        public ConverterArgs ChildrenArgs(SettingGroupAttribute attribute)
         {
             var e = new ConverterArgs(this);
             if (attribute.LabelWidth > 0)
                 e.LabelWidth = attribute.LabelWidth;
-            if (attribute.Expansion != SectionExpansion.Unset)
-                e.Expansion = attribute.Expansion;
-            return e;
-        }
-
-        public ConverterArgs NextArgs(SettingSectionAttribute attribute)
-        {
-            var e = new ConverterArgs(this)
-            {
-                LabelWidth = attribute.LabelWidth,
-                Expansion = NextExpansion()
-            };
-            return e;
-        }
-
-        public ConverterArgs NextArgs(SettingGroupAttribute attribute)
-        {
-            var e = new ConverterArgs(this)
-            {
-                LabelWidth = attribute.LabelWidth
-            };
             return e;
         }
 

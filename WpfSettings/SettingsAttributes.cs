@@ -72,15 +72,14 @@ namespace WpfSettings
 
         internal SettingSection GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
+            e = new ConverterArgs(e, this);
             object value = member.GetValue(parent);
-
-            e = e.Integrate(this);
             SettingSection section = new SettingSection(parent, member)
             {
                 IsExpanded = e.Expansion == SectionExpansion.Expanded ||
                              e.Expansion == SectionExpansion.ExpandedRecursive
             };
-            e = e.NextArgs(this);
+            e = e.ChildrenArgs(this);
             section.SubSections = SettingsConverter.GetSections(value, e);
             section.Elements = SettingsConverter.GetElements(value, e);
             section.Label = Label ?? SettingsConverter.InferLabel(member.Name);
@@ -122,9 +121,9 @@ namespace WpfSettings
             Type type = member.GetValueType();
             if (!type.IsClass)
                 throw new ArgumentException("SettingGroupAttribute must target a class (not a value type or interface)");
+            e = new ConverterArgs(e, this);
             object value = member.GetValue(parent);
-            e = e.Integrate(this);
-            e = e.NextArgs(this);
+            e = e.ChildrenArgs(this);
             var elements = SettingsConverter.GetElements(value, e);
             SettingGroup element = new SettingGroup(parent, member, elements);
             Fill(element, member, e);
@@ -144,7 +143,7 @@ namespace WpfSettings
             Type type = member.GetValueType();
             if (type != typeof(string))
                 throw new ArgumentException("SettingStringAttribute must target a string");
-            e = e.Integrate(this);
+            e = new ConverterArgs(e, this);
             StringSetting element = new StringSetting(parent, member);
             Fill(element, member, e);
             element.Value = (string) member.GetValue(parent);
@@ -195,7 +194,7 @@ namespace WpfSettings
             Type type = member.GetValueType();
             if (type != typeof(int))
                 throw new ArgumentException("SettingNumberAttribute must target an integer");
-            e = e.Integrate(this);
+            e = new ConverterArgs(e, this);
             NumberSetting element = new NumberSetting(parent, member);
             Fill(element, member, e);
             element.Value = (int) member.GetValue(parent);
@@ -245,7 +244,7 @@ namespace WpfSettings
             Type type = member.GetValueType();
             if (type != typeof(string))
                 throw new ArgumentException("SettingTextAttribute must target a string");
-            e = e.Integrate(this);
+            e = new ConverterArgs(e, this);
             TextSetting element = new TextSetting(parent, member);
             Fill(element, member, e);
             element.Value = (string) member.GetValue(parent);
@@ -262,7 +261,7 @@ namespace WpfSettings
             Type type = member.GetValueType();
             if (type != typeof(bool))
                 throw new ArgumentException("SettingBoolAttribute must target a boolean");
-            e = e.Integrate(this);
+            e = new ConverterArgs(e, this);
             BoolSetting element = new BoolSetting(parent, member);
             Fill(element, member, e);
             element.Value = (bool) member.GetValue(parent);
@@ -277,7 +276,7 @@ namespace WpfSettings
             Type type = member.GetValueType();
             if (type != typeof(DateTime))
                 throw new ArgumentException("SettingStringAttribute must target a DateTime");
-            e = e.Integrate(this);
+            e = new ConverterArgs(e, this);
             DateSetting element = new DateSetting(parent, member);
             Fill(element, member, e);
             element.Value = (DateTime) member.GetValue(parent);
@@ -304,7 +303,7 @@ namespace WpfSettings
             Type type = member.GetValueType();
             if (!type.IsEnum)
                 throw new ArgumentException("SettingChoiceAttribute must target an enum");
-            e = e.Integrate(this);
+            e = new ConverterArgs(e, this);
             var choices = new ObservableCollection<SettingField>();
             Array names = Enum.GetNames(type);
             foreach (string name in names)
@@ -357,7 +356,7 @@ namespace WpfSettings
             Type type = member.GetValueType();
             if (type != typeof(Action))
                 throw new ArgumentException("SettingButtonAttribute must target an Action");
-            e = e.Integrate(this);
+            e = new ConverterArgs(e, this);
             ButtonSetting element = new ButtonSetting(parent, member);
             Fill(element, member, e);
             element.Action = (Action) member.GetValue(parent);
