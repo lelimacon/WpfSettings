@@ -55,6 +55,8 @@ namespace WpfSettings
         public SettingsPage()
         {
             InitializeComponent();
+            if (DesignerProperties.GetIsInDesignMode(this))
+                PreviewBlock.Visibility = Visibility.Visible;
             AutoSave = true;
         }
     }
