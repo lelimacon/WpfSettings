@@ -219,20 +219,42 @@ namespace WpfSettings.Example
         }
     }
 
+    public class Language
+    {
+        /// <summary>
+        ///     ISO 639-1 code.
+        /// </summary>
+        public string Code { get; }
+
+        public string Name { get; }
+
+        public Language(string code, string name)
+        {
+            Code = code;
+            Name = name;
+        }
+    }
+
     [ImplementPropertyChanged]
     public class LanguageSettings
     {
         [SettingBool]
         public bool UseSystemLanguage { get; set; } = true;
 
-        [SettingChoice(ItemsSource = "Languages")]
+        [SettingChoice(ItemsSource = nameof(Languages), Height = 100,
+             Type = SettingChoiceType.ListView,
+             ItemsLabelPath = "Name")]
         public string DisplayLanguage { get; set; } = "En";
 
-        public List<string> Languages { get; } = new List<string>
+        public List<Language> Languages { get; } = new List<Language>
         {
-            "En",
-            "Fr",
-            "Es"
+            new Language("de", "German"),
+            new Language("en", "English"),
+            new Language("es", "Spanish"),
+            new Language("fr", "French"),
+            new Language("it", "Italian"),
+            new Language("ja", "Japanese"),
+            new Language("ko", "Korean")
         };
     }
 
@@ -273,7 +295,7 @@ namespace WpfSettings.Example
         [SettingString]
         public string TimeFormat { get; set; } = "yyyy-MM-dd";
 
-        [SettingChoice(ItemsSource = "Currencies", ItemsLabelPath = "Name")]
+        [SettingChoice(ItemsSource = nameof(Currencies), ItemsLabelPath = "Name")]
         public Currency Currency { get; set; }
 
         [SettingChoice]

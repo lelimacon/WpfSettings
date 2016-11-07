@@ -404,6 +404,7 @@ namespace WpfSettings.SettingElements
     {
         private ObservableCollection<SettingField> _choices;
         private SettingField _selectedValue;
+        private int _height;
 
         public ObservableCollection<SettingField> Choices
         {
@@ -417,7 +418,13 @@ namespace WpfSettings.SettingElements
             set { SetAndSave(ref _selectedValue, value); }
         }
 
-        public ChoiceSetting(object parent, MemberInfo member)
+        public int Height
+        {
+            get { return _height; }
+            set { Set(ref _height, value); }
+        }
+
+        protected ChoiceSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
         }
@@ -464,6 +471,18 @@ namespace WpfSettings.SettingElements
         public void ChangeSelection(SettingField field)
         {
             SelectedValue = field;
+        }
+    }
+
+    internal class ListViewSetting : ChoiceSetting
+    {
+        public bool SearchBox { get; set; }
+
+        public string SearchBoxHeight => SearchBox ? "24" : "0";
+
+        public ListViewSetting(object parent, MemberInfo member)
+            : base(parent, member)
+        {
         }
     }
 

@@ -288,11 +288,14 @@ namespace WpfSettings
     public enum SettingChoiceType
     {
         DropDown,
-        RadioButtons
+        RadioButtons,
+        ListView
     }
 
     public class SettingChoiceAttribute : SettingPageAttribute
     {
+        private int _height = 160;
+
         /// <summary>
         ///     Gets or sets the enumerable name that holds the choices.
         ///     Ignored if type is enum.
@@ -301,7 +304,7 @@ namespace WpfSettings
 
         /// <summary>
         ///     Gets or sets the path of the label for the choices.
-        ///     Ignored if type is enum or if choice type is primitive string type.
+        ///     Ignored if target type is enum or if items type is primitive string type.
         /// </summary>
         public string ItemsLabelPath { get; set; }
 
@@ -311,6 +314,23 @@ namespace WpfSettings
         /// </summary>
         public SettingChoiceType Type { get; set; } = SettingChoiceType.DropDown;
 
+        /// <summary>
+        ///     Gets or sets the height of the listview if choice type is listview.
+        ///     Sets the dropdown max height if choice type is dropdown.
+        ///     Ignored if choice type is radio buttons.
+        ///     Defaults to 160.
+        /// </summary>
+        public int Height
+        {
+            get { return _height; }
+            set
+            {
+                if (value <= 0)
+                    throw new ArgumentException("Height must be > 0");
+                _height = value;
+            }
+        }
+
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
@@ -318,14 +338,28 @@ namespace WpfSettings
                 throw new ArgumentException("SettingChoiceAttribute must target an enum or declare an item source");
             e = new ConverterArgs(e, this);
             var choices = type.IsEnum ? GetEnumChoices(parent, type) : GetListChoices(parent);
-            var element = Type == SettingChoiceType.DropDown
-                ? (ChoiceSetting) new DropDownSetting(parent, member)
-                : new RadioButtonsSetting(parent, member);
+            ChoiceSetting element = GetSetting(parent, member);
             Fill(element, member, e);
+            element.Height = Height;
             element.Choices = choices;
             var value = member.GetValue(parent);
             element.SelectedValue = choices.FirstOrDefault(a => a.Value.Equals(value));
             return element;
+        }
+
+        private ChoiceSetting GetSetting(object parent, MemberInfo member)
+        {
+            switch (Type)
+            {
+                case SettingChoiceType.DropDown:
+                    return new DropDownSetting(parent, member);
+                case SettingChoiceType.RadioButtons:
+                    return new RadioButtonsSetting(parent, member);
+                case SettingChoiceType.ListView:
+                    return new ListViewSetting(parent, member);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         private static ObservableCollection<SettingField> GetEnumChoices(object parent, Type type)
