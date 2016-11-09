@@ -26,7 +26,10 @@ namespace WpfSettings.SettingElements
                 .Where(s => s != null)
                 .OrderBy(s => s.Position)
                 .ThenBy(s => s.Member.MetadataToken);
-            return new ObservableCollection<SettingPageElement>(elements);
+            var pageElements = new ObservableCollection<SettingPageElement>(elements);
+            for (var i = 0; i < pageElements.Count; i++)
+                pageElements[i].Position = i;
+            return pageElements;
         }
 
         private static SettingSection GetSection(object parent, MemberInfo member, ConverterArgs e)

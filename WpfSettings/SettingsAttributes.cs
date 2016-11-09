@@ -98,6 +98,13 @@ namespace WpfSettings
     public abstract class SettingPageAttribute : SettingAttribute
     {
         /// <summary>
+        ///     Gets or sets the height of the setting row.
+        ///     Supports 'Auto', star or absolute values.
+        ///     Defaults to Auto.
+        /// </summary>
+        protected string Height { get; set; }
+
+        /// <summary>
         ///     Gets or sets detailed information to display under the setting.
         /// </summary>
         public string Details { get; set; }
@@ -223,21 +230,15 @@ namespace WpfSettings
 
     public class SettingTextAttribute : SettingPageAttribute
     {
-        private int _height;
-
         /// <summary>
-        ///     Gets or sets the height of the TextBox.
+        ///     Gets or sets the height of the setting row.
+        ///     Supports 'Auto', star or absolute values.
         ///     Defaults to 60.
         /// </summary>
-        public int Height
+        public new string Height
         {
-            get { return _height; }
-            set
-            {
-                if (value <= 0)
-                    throw new ArgumentException("Height must be > 0");
-                _height = value;
-            }
+            get { return base.Height; }
+            set { base.Height = value; }
         }
 
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
@@ -249,8 +250,7 @@ namespace WpfSettings
             TextSetting element = new TextSetting(parent, member);
             Fill(element, member, e);
             element.Value = (string) member.GetValue(parent);
-            if (Height > 0)
-                element.Height = Height;
+            element.Height = Height ?? "60";
             return element;
         }
     }
@@ -294,8 +294,6 @@ namespace WpfSettings
 
     public class SettingChoiceAttribute : SettingPageAttribute
     {
-        private int _height = 160;
-
         /// <summary>
         ///     Gets or sets the enumerable name that holds the choices.
         ///     Ignored if type is enum.
@@ -316,19 +314,14 @@ namespace WpfSettings
 
         /// <summary>
         ///     Gets or sets the height of the listview if choice type is listview.
-        ///     Sets the dropdown max height if choice type is dropdown.
-        ///     Ignored if choice type is radio buttons.
+        ///     Ignored if choice type is not ListView.
+        ///     Supports 'Auto', star or absolute values.
         ///     Defaults to 160.
         /// </summary>
-        public int Height
+        public new string Height
         {
-            get { return _height; }
-            set
-            {
-                if (value <= 0)
-                    throw new ArgumentException("Height must be > 0");
-                _height = value;
-            }
+            get { return base.Height; }
+            set { base.Height = value; }
         }
 
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
@@ -340,7 +333,7 @@ namespace WpfSettings
             var choices = type.IsEnum ? GetEnumChoices(parent, type) : GetListChoices(parent);
             ChoiceSetting element = GetSetting(parent, member);
             Fill(element, member, e);
-            element.Height = Height;
+            element.Height = Type == SettingChoiceType.ListView ? (Height ?? "160") : "Auto";
             element.Choices = choices;
             var value = member.GetValue(parent);
             element.SelectedValue = choices.FirstOrDefault(a => a.Value.Equals(value));

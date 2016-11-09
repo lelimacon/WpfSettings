@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:WpfSettings.Controls"
              mc:Ignorable="d"
              x:Name="Root">
 
@@ -10,10 +11,19 @@
         <ResourceDictionary Source="SettingElements/SettingElementsTemplate.xaml" />
     </UserControl.Resources>
 
-    <Grid>
-        <ItemsControl DataContext="{Binding ElementName=Root}"
-                      ItemsSource="{Binding ConfigElements}"
-                      Focusable="False" IsTabStop="False" />
+    <Grid DataContext="{Binding ElementName=Root}">
+        <ItemsControl ItemsSource="{Binding ConfigElements}" IsTabStop="False">
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="Grid.Row" Value="{Binding Position}" />
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <controls:DynamicList ItemsSource="{Binding ConfigElements}" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
         <Grid x:Name="PreviewBlock" Background="DimGray" Visibility="Collapsed"
               Focusable="False">
             <TextBlock Text="Settings Page" FontWeight="Bold" FontSize="22"

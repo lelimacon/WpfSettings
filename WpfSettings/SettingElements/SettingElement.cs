@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using WpfSettings.Annotations;
+using WpfSettings.Controls;
 using WpfSettings.Utils.Reflection;
 using WpfSettings.Utils.Wpf;
 
@@ -120,11 +121,18 @@ namespace WpfSettings.SettingElements
         }
     }
 
-    public abstract class SettingPageElement : SettingElement
+    public abstract class SettingPageElement : SettingElement, IListElement
     {
+        private string _height;
         private bool _autoSave;
         private string _details;
         private string _suffixLabel;
+
+        public string Height
+        {
+            get { return _height; }
+            set { Set(ref _height, value); }
+        }
 
         public bool AutoSave
         {
@@ -293,7 +301,6 @@ namespace WpfSettings.SettingElements
     internal class TextSetting : SettingPageElement
     {
         private string _value;
-        private int _height;
 
         public string Value
         {
@@ -301,16 +308,9 @@ namespace WpfSettings.SettingElements
             set { SetAndSave(ref _value, value); }
         }
 
-        public int Height
-        {
-            get { return _height; }
-            set { Set(ref _height, value); }
-        }
-
         public TextSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
-            Height = 60;
         }
 
         public override void Save()
@@ -404,7 +404,6 @@ namespace WpfSettings.SettingElements
     {
         private ObservableCollection<SettingField> _choices;
         private SettingField _selectedValue;
-        private int _height;
 
         public ObservableCollection<SettingField> Choices
         {
@@ -416,12 +415,6 @@ namespace WpfSettings.SettingElements
         {
             get { return _selectedValue; }
             set { SetAndSave(ref _selectedValue, value); }
-        }
-
-        public int Height
-        {
-            get { return _height; }
-            set { Set(ref _height, value); }
         }
 
         protected ChoiceSetting(object parent, MemberInfo member)

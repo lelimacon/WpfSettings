@@ -180,7 +180,7 @@ namespace WpfSettings.Example
         [SettingString]
         public string Title { get; set; } = "My Poetry";
 
-        [SettingText(Height = 80)]
+        [SettingText(Height = "*")]
         public string PageContent { get; set; }
 
         [SettingButton(Label = "Randomize content", Alignment = HorizontalAlignment.Right)]
@@ -241,7 +241,7 @@ namespace WpfSettings.Example
         [SettingBool]
         public bool UseSystemLanguage { get; set; } = true;
 
-        [SettingChoice(ItemsSource = nameof(Languages), Height = 100,
+        [SettingChoice(ItemsSource = nameof(Languages), Height = "*",
              Type = SettingChoiceType.ListView,
              ItemsLabelPath = "Name")]
         public string DisplayLanguage { get; set; } = "En";

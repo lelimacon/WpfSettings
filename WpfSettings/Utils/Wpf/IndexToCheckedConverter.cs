@@ -17,7 +17,7 @@ namespace WpfSettings.Utils.Wpf
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            throw new ApplicationException("Convert back should not be used.");
+            throw new ApplicationException("Convert back should not be used");
         }
     }
 }

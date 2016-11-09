@@ -29,6 +29,27 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <!--
+            <Grid  Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="6,2,0,2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" Grid.Column="0">
+                    <TextBlock Text="Test" />
+                </Border>
+                <TextBox Grid.Row="0" Grid.Column="1"
+                     TextWrapping="Wrap" AcceptsReturn="True"
+                     Text="Another test" Background="Aqua" />
+                <TextBlock Grid.Row="1" Grid.Column="1"
+                              Text="This is yet another test."
+                              TextWrapping="Wrap" FontStyle="Italic" />
+            </Grid>
+            -->
             <TextBox Grid.Row="0" Grid.Column="0" Margin="3"
                      Text="{Binding Settings.Interface.Content.Title}"
                      VerticalContentAlignment="Center"
