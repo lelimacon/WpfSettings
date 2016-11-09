@@ -7,71 +7,51 @@ namespace WpfSettings.Utils.Wpf
 {
     internal static class MvvmUtils
     {
-        /*
-        private static readonly Dictionary<Type, Dictionary<string, DependencyProperty>> _depProps;
-
-        static MvvmUtils()
+        internal static DependencyProperty RegisterDp<T>([CallerMemberName] string prop = null)
         {
-            _depProps = new Dictionary<Type, Dictionary<string, DependencyProperty>>();
+            return RegisterDp(typeof(T), prop, null, null);
         }
 
-        internal static DependencyProperty Dp(object parent,
+        internal static DependencyProperty RegisterDp<T>(object defaultValue,
             [CallerMemberName] string prop = null)
         {
-            if (prop == null)
-                throw new ArgumentNullException(nameof(prop));
-            Type parentType = parent.GetType();
-            return Dp(parentType, prop);
+            return RegisterDp(typeof(T), prop, defaultValue, null);
         }
 
-        internal static DependencyProperty Dp<T>([CallerMemberName] string prop = null)
-        {
-            if (prop == null)
-                throw new ArgumentNullException(nameof(prop));
-            return Dp(typeof(T), prop);
-        }
-
-        private static DependencyProperty Dp(Type parent, string prop)
-        {
-            if (!_depProps.ContainsKey(parent))
-                _depProps[parent] = new Dictionary<string, DependencyProperty>();
-            if (!_depProps[parent].ContainsKey(prop))
-                _depProps[parent][prop] = RegisterDp(parent, prop);
-            return _depProps[parent][prop];
-        }
-        */
-
-        internal static DependencyProperty RegisterDp(object parent, object defaultValue = null,
+        internal static DependencyProperty RegisterDp<T>(PropertyChangedCallback propertyChanged,
             [CallerMemberName] string prop = null)
         {
+            return RegisterDp(typeof(T), prop, null, propertyChanged);
+        }
+
+        internal static DependencyProperty RegisterDp<T>(object defaultValue,
+            PropertyChangedCallback propertyChanged,
+            [CallerMemberName] string prop = null)
+        {
+            return RegisterDp(typeof(T), prop, defaultValue, propertyChanged);
+        }
+
+        private static DependencyProperty RegisterDp(Type parentType, string prop, object defaultValue,
+            PropertyChangedCallback propertyChanged)
+        {
             if (prop == null)
                 throw new ArgumentNullException(nameof(prop));
-            Type parentType = parent.GetType();
             string ending = "Property";
             if (!prop.EndsWith(ending))
                 throw new ArgumentException($"Property name must end with {ending}: {prop}");
             prop = prop.Remove(prop.Length - ending.Length);
-            return RegisterDp(parentType, prop, defaultValue);
-        }
-
-        internal static DependencyProperty RegisterDp<T>(object defaultValue = null,
-            [CallerMemberName] string prop = null)
-        {
-            if (prop == null)
-                throw new ArgumentNullException(nameof(prop));
-            const string ending = "Property";
-            if (!prop.EndsWith(ending))
-                throw new ArgumentException($"Property name must end with {ending}: {prop}");
-            prop = prop.Remove(prop.Length - ending.Length);
-            return RegisterDp(typeof(T), prop, defaultValue);
-        }
-
-        private static DependencyProperty RegisterDp(Type parent, string prop, object defaultValue = null)
-        {
-            PropertyInfo propertyInfo = parent.GetProperty(prop);
+            PropertyInfo propertyInfo = parentType.GetProperty(prop);
             Type type = propertyInfo.PropertyType;
-            PropertyMetadata metadata = defaultValue == null ? null : new PropertyMetadata(defaultValue);
-            return DependencyProperty.Register(prop, type, parent, metadata);
+            PropertyMetadata metadata = GetMetadata(defaultValue, propertyChanged);
+            return DependencyProperty.Register(prop, type, parentType, metadata);
+        }
+
+        private static PropertyMetadata GetMetadata(object defaultValue,
+            PropertyChangedCallback propertyChanged)
+        {
+            if (defaultValue == null)
+                return new FrameworkPropertyMetadata(propertyChanged);
+            return new FrameworkPropertyMetadata(defaultValue, propertyChanged);
         }
     }
 }
