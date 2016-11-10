@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:utils="clr-namespace:WpfSettings.Utils" 
-        xmlns:wpfSettings="clr-namespace:WpfSettings" 
-        xmlns:wpf="clr-namespace:WpfSettings.Utils.Wpf"
+        xmlns:wpfSettings="clr-namespace:WpfSettings"
+        xmlns:controls="clr-namespace:WpfSettings.Controls"
         DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
         Title="Settings"
@@ -23,7 +22,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <wpf:PlaceHolderTextBox x:Name="SearchBox" Grid.Row="0" Grid.Column="0"
+        <controls:PlaceHolderTextBox x:Name="SearchBox" Grid.Row="0" Grid.Column="0"
                                      Margin="3" Height="26" Background="White"
                                      VerticalContentAlignment="Center" FontSize="12"
                                      PlaceHolderText="Search" />
@@ -41,8 +40,8 @@
         </Border>
 
         <wpfSettings:SettingsExplorer Grid.Row="1" Grid.Column="0" Margin="3"
-                                   Items="{Binding InternalConfig}"
-                                   ChangeAction="{Binding ChangeSectionAction}" />
+                                      Items="{Binding InternalConfig}"
+                                      ChangeAction="{Binding ChangeSectionAction}" />
 
         <ScrollViewer Grid.Row="1" Grid.Column="1"
                       Margin="3" VerticalScrollBarVisibility="Auto">

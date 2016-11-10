@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace WpfSettings.Utils.Wpf
+namespace WpfSettings.Controls
 {
     internal class ShyTextBlock : TextBlock
     {

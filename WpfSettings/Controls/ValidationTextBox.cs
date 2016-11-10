@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using WpfSettings.Utils.Wpf;
 
-namespace WpfSettings.Utils.Wpf
+namespace WpfSettings.Controls
 {
     internal class ValidationTextBox : TextBox
     {

@@ -30,11 +30,11 @@
                      Height="24" Text="{Binding Value}"
                      VerticalContentAlignment="Center" />
             <Border Grid.Row="0" Grid.Column="2" Height="24">
-                <wpf:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3,0,0,0" />
+                <controls:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3,0,0,0" />
             </Border>
-            <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                              Text="{Binding Details}"
-                              TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding Details}"
+                                   TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
@@ -72,11 +72,11 @@
                 <TextBlock Text="{Binding Value}" VerticalAlignment="Center" />
             </Border>
             <Border Grid.Row="0" Grid.Column="3" Height="24">
-                <wpf:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3,0,0,0" />
+                <controls:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3,0,0,0" />
             </Border>
-            <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                              Text="{Binding Details}"
-                              TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding Details}"
+                                   TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
@@ -97,9 +97,9 @@
             <TextBox Grid.Row="0" Grid.Column="1"
                      TextWrapping="Wrap" AcceptsReturn="True"
                      Text="{Binding Value}" />
-            <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                              Text="{Binding Details}"
-                              TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding Details}"
+                                   TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
@@ -108,8 +108,8 @@
         <StackPanel Orientation="Vertical" Margin="6,2,0,2">
             <CheckBox Content="{Binding Label}"
                       IsChecked="{Binding Value}" />
-            <wpf:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
-                              TextWrapping="Wrap" Margin="18,2,0,4" />
+            <controls:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
+                                   TextWrapping="Wrap" Margin="18,2,0,4" />
         </StackPanel>
     </DataTemplate>
 
@@ -129,9 +129,9 @@
             </Border>
             <DatePicker Grid.Row="0" Grid.Column="1"
                         Height="24" SelectedDate="{Binding Value}" />
-            <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                              Text="{Binding Details}"
-                              TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding Details}"
+                                   TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
@@ -164,9 +164,9 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                              Text="{Binding Details}" FontStyle="Italic"
-                              TextWrapping="Wrap" Margin="8,-2,0,0" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding Details}" FontStyle="Italic"
+                                   TextWrapping="Wrap" Margin="8,-2,0,0" />
         </Grid>
     </DataTemplate>
 
@@ -213,15 +213,15 @@
                                     </MultiBinding>
                                 </RadioButton.IsChecked>
                             </RadioButton>
-                            <wpf:ShyTextBlock Grid.Row="1" Text="{Binding Details}" FontStyle="Italic"
-                                              TextWrapping="Wrap" Margin="18,0,0,2" />
+                            <controls:ShyTextBlock Grid.Row="1" Text="{Binding Details}" FontStyle="Italic"
+                                                   TextWrapping="Wrap" Margin="18,0,0,2" />
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                              Text="{Binding Details}" FontStyle="Italic"
-                              TextWrapping="Wrap" Margin="8,-2,0,0" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding Details}" FontStyle="Italic"
+                                   TextWrapping="Wrap" Margin="8,-2,0,0" />
         </Grid>
     </DataTemplate>
 
@@ -252,9 +252,9 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <wpf:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                              Text="{Binding Details}" FontStyle="Italic"
-                              TextWrapping="Wrap" Margin="8,-2,0,0" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
+                                   Text="{Binding Details}" FontStyle="Italic"
+                                   TextWrapping="Wrap" Margin="8,-2,0,0" />
         </Grid>
     </DataTemplate>
 
@@ -265,8 +265,8 @@
                     Command="{Binding PressedCommand}">
                 <TextBlock Text="{Binding Label}" Margin="6,0,6,0" />
             </Button>
-            <wpf:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
-                              TextWrapping="Wrap" Margin="18,2,0,4" />
+            <controls:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
+                                   TextWrapping="Wrap" Margin="18,2,0,4" />
         </StackPanel>
     </DataTemplate>
 

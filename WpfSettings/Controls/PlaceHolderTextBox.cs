@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace WpfSettings.Utils.Wpf
+namespace WpfSettings.Controls
 {
     internal class PlaceHolderTextBox : TextBox
     {

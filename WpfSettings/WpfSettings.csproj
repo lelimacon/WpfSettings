@@ -87,8 +87,8 @@
     <Compile Include="Utils\Wpf\IndexToCheckedConverter.cs" />
     <Compile Include="Utils\BitmapUtils.cs" />
     <Compile Include="Utils\Wpf\LeftMarginMultiplierConverter.cs" />
-    <Compile Include="Utils\Wpf\ValidationTextBox.cs" />
-    <Compile Include="Utils\Wpf\PlaceHolderTextBox.cs" />
+    <Compile Include="Controls\ValidationTextBox.cs" />
+    <Compile Include="Controls\PlaceHolderTextBox.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utils\Reflection\MemberInfoUtils.cs" />
     <Compile Include="Utils\Wpf\RelayCommand.cs" />
@@ -101,7 +101,7 @@
     </Compile>
     <Compile Include="Utils\Reflection\ResourceUtils.cs" />
     <Compile Include="ViewModels\SettingsWindowViewModel.cs" />
-    <Compile Include="Utils\Wpf\ShyTextBlock.cs" />
+    <Compile Include="Controls\ShyTextBlock.cs" />
     <Compile Include="Utils\Wpf\TreeViewItemExtensions.cs" />
     <Compile Include="Utils\Wpf\MvvmUtils.cs" />
     <Page Include="Controls\NumberBox.xaml">
