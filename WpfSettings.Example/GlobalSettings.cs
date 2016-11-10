@@ -11,7 +11,7 @@ namespace WpfSettings.Example
     {
         private readonly GlobalSettings _settings;
 
-        [SettingChoice(LabelWidth = 80,
+        [SettingChoice(LabelWidth = "80",
              Details = "This will change the background to match your color preferences! No questions.")]
         public UserSettings.EGender Gender
         {
@@ -19,14 +19,14 @@ namespace WpfSettings.Example
             set { _settings.User.Gender = value; }
         }
 
-        [SettingString(LabelWidth = 80)]
+        [SettingString(LabelWidth = "80")]
         public string Name
         {
             get { return _settings.User.Name; }
             set { _settings.User.Name = value; }
         }
 
-        [SettingNumber(LabelWidth = 80, MinValue = "0", MaxValue = "160")]
+        [SettingNumber(LabelWidth = "80", MinValue = "0", MaxValue = "160")]
         public int Age
         {
             get { return _settings.User.Age; }
@@ -43,23 +43,23 @@ namespace WpfSettings.Example
     public class GlobalSettings
     {
         [SettingSection(
-             LabelWidth = 100,
+             LabelWidth = "100",
              Icon = "Resources.icon-bulb.png")]
         public GeneralSettings General { get; }
 
         [SettingSection(
-             LabelWidth = 100,
+             LabelWidth = "100",
              Icon = "Resources.icon-skull.png")]
         public UserSettings User { get; }
 
         [SettingSection(
-             LabelWidth = 100,
+             LabelWidth = "0.3*",
              Expansion = SectionExpansion.Expanded,
              Icon = "Resources.icon-window-system.png")]
         public InterfaceSettings Interface { get; }
 
         [SettingSection(
-             LabelWidth = 100,
+             LabelWidth = "Auto",
              Expansion = SectionExpansion.Expanded,
              Icon = "Resources.icon-globe.png")]
         public CulturalSettings Culture { get; }
@@ -147,10 +147,10 @@ namespace WpfSettings.Example
     [ImplementPropertyChanged]
     public class StyleSettings
     {
-        [SettingGroup(Position = 2, LabelWidth = 70)]
+        [SettingGroup(Position = 2, LabelWidth = "70")]
         public BoxStyle ContentStyle { get; }
 
-        [SettingGroup(Position = 1, LabelWidth = 70)]
+        [SettingGroup(Position = 1, LabelWidth = "70")]
         public BoxStyle TitleStyle { get; }
 
         public StyleSettings()

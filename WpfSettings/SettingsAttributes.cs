@@ -14,8 +14,6 @@ namespace WpfSettings
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public abstract class SettingAttribute : Attribute
     {
-        private int _labelWidth;
-
         /// <summary>
         ///     Gets or sets the order to display the settings.
         ///     Defaults to the declaration position.
@@ -29,20 +27,12 @@ namespace WpfSettings
         public string Label { get; set; }
 
         /// <summary>
-        ///     Gets or sets the labels width. Must be greater or equal than 0.
+        ///     Gets or sets the labels width.
+        ///     Supports 'Auto', star or absolute values.
         ///     This is a recursive parameter.
         ///     Defaults to 140.
         /// </summary>
-        public int LabelWidth
-        {
-            get { return _labelWidth; }
-            set
-            {
-                if (value <= 0)
-                    throw new ArgumentException("LabelWidth must be > 0");
-                _labelWidth = value;
-            }
-        }
+        public string LabelWidth { get; set; }
     }
 
     public enum SectionExpansion

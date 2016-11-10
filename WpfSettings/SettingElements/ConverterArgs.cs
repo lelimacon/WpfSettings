@@ -3,13 +3,13 @@
     internal class ConverterArgs
     {
         public bool AutoSave { get; set; }
-        public int LabelWidth { get; set; }
+        public string LabelWidth { get; set; }
         public SectionExpansion Expansion { get; set; }
 
         public ConverterArgs()
         {
             AutoSave = true;
-            LabelWidth = 140;
+            LabelWidth = "140";
             Expansion = SectionExpansion.Unset;
         }
 
@@ -23,14 +23,14 @@
         public ConverterArgs(ConverterArgs other, SettingAttribute attribute)
         {
             AutoSave = other.AutoSave;
-            LabelWidth = attribute.LabelWidth > 0 ? attribute.LabelWidth : other.LabelWidth;
+            LabelWidth = !string.IsNullOrEmpty(attribute.LabelWidth) ? attribute.LabelWidth : other.LabelWidth;
             Expansion = other.Expansion;
         }
 
         public ConverterArgs(ConverterArgs other, SettingSectionAttribute attribute)
         {
             AutoSave = other.AutoSave;
-            LabelWidth = attribute.LabelWidth > 0 ? attribute.LabelWidth : other.LabelWidth;
+            LabelWidth = !string.IsNullOrEmpty(attribute.LabelWidth) ? attribute.LabelWidth : other.LabelWidth;
             Expansion = attribute.Expansion != SectionExpansion.Unset
                 ? attribute.Expansion
                 : other.Expansion;
@@ -39,7 +39,7 @@
         public ConverterArgs ChildrenArgs(SettingSectionAttribute attribute)
         {
             var e = new ConverterArgs(this);
-            if (attribute.LabelWidth > 0)
+            if (!string.IsNullOrEmpty(attribute.LabelWidth))
                 e.LabelWidth = attribute.LabelWidth;
             e.Expansion = attribute.Expansion != SectionExpansion.Unset
                 ? attribute.Expansion
@@ -50,7 +50,7 @@
         public ConverterArgs ChildrenArgs(SettingGroupAttribute attribute)
         {
             var e = new ConverterArgs(this);
-            if (attribute.LabelWidth > 0)
+            if (!string.IsNullOrEmpty(attribute.LabelWidth))
                 e.LabelWidth = attribute.LabelWidth;
             return e;
         }

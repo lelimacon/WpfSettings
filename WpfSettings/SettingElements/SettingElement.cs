@@ -19,7 +19,6 @@ namespace WpfSettings.SettingElements
     {
         private int _position;
         private string _label;
-        private int _labelWidth;
         public object Parent { get; }
         public MemberInfo Member { get; }
 
@@ -33,12 +32,6 @@ namespace WpfSettings.SettingElements
         {
             get { return _label; }
             set { Set(ref _label, value); }
-        }
-
-        public int LabelWidth
-        {
-            get { return _labelWidth; }
-            set { Set(ref _labelWidth, value); }
         }
 
         protected SettingElement(object parent, MemberInfo member)
@@ -124,6 +117,7 @@ namespace WpfSettings.SettingElements
     public abstract class SettingPageElement : SettingElement, IListElement
     {
         private string _height;
+        private string _labelWidth;
         private bool _autoSave;
         private string _details;
         private string _suffixLabel;
@@ -132,6 +126,12 @@ namespace WpfSettings.SettingElements
         {
             get { return _height; }
             set { Set(ref _height, value); }
+        }
+
+        public string LabelWidth
+        {
+            get { return _labelWidth; }
+            set { Set(ref _labelWidth, value); }
         }
 
         public bool AutoSave
