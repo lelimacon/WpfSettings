@@ -19,7 +19,7 @@ namespace WpfSettings.Example
             set { _settings.User.Gender = value; }
         }
 
-        [SettingString(LabelWidth = "80")]
+        [SettingString(LabelWidth = "80", Prefix = "Sir", Suffix = "the Great")]
         public string Name
         {
             get { return _settings.User.Name; }
@@ -100,7 +100,7 @@ namespace WpfSettings.Example
              Details = "This will change the background to match your color preferences! No questions.")]
         public EGender Gender { get; set; } = EGender.Other;
 
-        [SettingString]
+        [SettingString(Prefix = "Sir", Suffix = "the Great")]
         public string Name { get; set; } = "Bob";
 
         [SettingNumber(MinValue = "0", MaxValue = "160")]
@@ -108,6 +108,9 @@ namespace WpfSettings.Example
 
         [SettingDate]
         public DateTime Birthday { get; set; }
+
+        [SettingString(Prefix = "https://")]
+        public string Website { get; set; } = "duckduckgo.com";
     }
 
     [ImplementPropertyChanged]

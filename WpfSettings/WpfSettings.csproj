@@ -78,12 +78,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\DynamicList.cs" />
+    <Compile Include="Controls\ExtendedTextBox.xaml.cs">
+      <DependentUpon>ExtendedTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\NumberBox.xaml.cs">
       <DependentUpon>NumberBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingElements\SettingElement.cs" />
     <Compile Include="SettingElements\ConverterArgs.cs" />
     <Compile Include="SettingElements\SettingsConverter.cs" />
+    <Compile Include="Utils\Wpf\ContentToVisibilityConverter.cs" />
+    <Compile Include="Utils\Wpf\TextToWidthConverter.cs" />
+    <Compile Include="Utils\Wpf\PrefixSuffixToPaddingConverter.cs" />
     <Compile Include="Utils\Wpf\IndexToCheckedConverter.cs" />
     <Compile Include="Utils\BitmapUtils.cs" />
     <Compile Include="Utils\Wpf\LeftMarginMultiplierConverter.cs" />
@@ -104,6 +110,10 @@
     <Compile Include="Controls\ShyTextBlock.cs" />
     <Compile Include="Utils\Wpf\TreeViewItemExtensions.cs" />
     <Compile Include="Utils\Wpf\MvvmUtils.cs" />
+    <Page Include="Controls\ExtendedTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\NumberBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

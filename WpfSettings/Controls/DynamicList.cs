@@ -54,7 +54,7 @@ namespace WpfSettings.Controls
 
         private static void ItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            DynamicList dynamicList = (DynamicList) d;
+            var dynamicList = (DynamicList) d;
             dynamicList.SetRowDefinitions();
         }
     }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -26,7 +28,7 @@ namespace WpfSettings.Controls
         public int Value
         {
             get { return (int) GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
+            set { SetValueDp(ValueProperty, value); }
         }
 
         /// <summary>
@@ -36,7 +38,7 @@ namespace WpfSettings.Controls
         public int Step
         {
             get { return (int) GetValue(StepProperty); }
-            set { SetValue(StepProperty, value); }
+            set { SetValueDp(StepProperty, value); }
         }
 
         /// <summary>
@@ -46,7 +48,7 @@ namespace WpfSettings.Controls
         public int MinValue
         {
             get { return (int) GetValue(MinValueProperty); }
-            set { SetValue(MinValueProperty, value); }
+            set { SetValueDp(MinValueProperty, value); }
         }
 
         /// <summary>
@@ -56,12 +58,21 @@ namespace WpfSettings.Controls
         public int MaxValue
         {
             get { return (int) GetValue(MaxValueProperty); }
-            set { SetValue(MaxValueProperty, value); }
+            set { SetValueDp(MaxValueProperty, value); }
         }
 
         public Func<string, bool> ValidateInput { get; }
         public ICommand IncrementCommand { get; }
         public ICommand DecrementCommand { get; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void SetValueDp(DependencyProperty property, object value,
+            [CallerMemberName] string p = null)
+        {
+            SetValue(property, value);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(p));
+        }
 
         public NumberBox()
         {

@@ -120,6 +120,8 @@ namespace WpfSettings.SettingElements
         private string _labelWidth;
         private bool _autoSave;
         private string _details;
+        private string _prefix;
+        private string _suffix;
         private string _suffixLabel;
 
         public string Height
@@ -144,6 +146,18 @@ namespace WpfSettings.SettingElements
         {
             get { return _details; }
             set { Set(ref _details, value); }
+        }
+
+        public string Prefix
+        {
+            get { return _prefix; }
+            set { Set(ref _prefix, value); }
+        }
+
+        public string Suffix
+        {
+            get { return _suffix; }
+            set { Set(ref _suffix, value); }
         }
 
         public string SuffixLabel
