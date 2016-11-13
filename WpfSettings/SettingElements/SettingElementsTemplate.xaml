@@ -6,22 +6,22 @@
 
     <!-- Group: Box -->
     <DataTemplate DataType="{x:Type settingElements:SettingGroupBox}">
-        <GroupBox Header="{Binding Label}" Margin="6,2,0,2">
+        <GroupBox Header="{Binding Label}" Margin="3">
             <ItemsControl ItemsSource="{Binding Elements}" />
         </GroupBox>
     </DataTemplate>
 
     <!-- Group: Title -->
     <DataTemplate DataType="{x:Type settingElements:SettingGroupTitle}">
-        <StackPanel Margin="6,2,0,2" Orientation="Vertical">
-            <TextBlock Text="{Binding Label}" FontWeight="Bold" Margin="0,3" />
-            <ItemsControl ItemsSource="{Binding Elements}" Margin="6,3,0,3" />
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="{Binding Label}" FontWeight="Bold" Margin="3" />
+            <ItemsControl ItemsSource="{Binding Elements}" Margin="9,3,3,3" />
         </StackPanel>
     </DataTemplate>
 
     <!-- String -->
     <DataTemplate DataType="{x:Type settingElements:StringSetting}">
-        <Grid Margin="6,2,0,2">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding LabelWidth}" />
                 <ColumnDefinition Width="*" />
@@ -31,18 +31,17 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="0,0,3,0">
+            <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="3">
                 <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
             </Border>
-            <controls:ExtendedTextBox Grid.Row="0" Grid.Column="1"
+            <controls:ExtendedTextBox Grid.Row="0" Grid.Column="1" Margin="3"
                                       Height="24" Text="{Binding Value}"
                                       Prefix="{Binding Prefix}" Suffix="{Binding Suffix}" />
             <Border Grid.Row="0" Grid.Column="2" Height="24">
-                <controls:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3,0,0,0" />
+                <controls:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3" />
             </Border>
-            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                   Text="{Binding Details}"
-                                   TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="3,0,3,3"
+                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
@@ -51,7 +50,7 @@
         <DataTemplate.Resources>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         </DataTemplate.Resources>
-        <Grid Margin="6,2,0,2">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding LabelWidth}" />
                 <ColumnDefinition Width="{Binding SliderWidth}" />
@@ -62,35 +61,34 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="0,0,3,0">
+            <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="3">
                 <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
             </Border>
-            <Slider Grid.Row="0" Grid.Column="1" Height="24" x:Name="SettingSlider"
+            <Slider x:Name="SettingSlider" Grid.Row="0" Grid.Column="1" Height="24" Margin="3"
                     Minimum="{Binding MinValue}" Maximum="{Binding MaxValue}"
                     Value="{Binding Value}" Orientation="Horizontal"
                     TickPlacement="BottomRight" TickFrequency="{Binding TickFrequency}"
                     IsSnapToTickEnabled="{Binding SnapToTick}"
                     Visibility="{Binding SliderVisible, Converter={StaticResource BooleanToVisibility}}" />
-            <controls:NumberBox Grid.Row="0" Grid.Column="2" Height="24"
+            <controls:NumberBox Grid.Row="0" Grid.Column="2" Height="24" Margin="3"
                                 Value="{Binding Value}" Step="{Binding Step}"
                                 MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}"
                                 Visibility="{Binding SpinnerVisible, Converter={StaticResource BooleanToVisibility}}" />
-            <Border Grid.Row="0" Grid.Column="2" Height="24" Margin="3,0,0,0"
+            <Border Grid.Row="0" Grid.Column="2" Height="24" Margin="3"
                     Visibility="{Binding LabelVisible, Converter={StaticResource BooleanToVisibility}}">
                 <TextBlock Text="{Binding Value}" VerticalAlignment="Center" />
             </Border>
             <Border Grid.Row="0" Grid.Column="3" Height="24">
-                <controls:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3,0,0,0" />
+                <controls:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3" />
             </Border>
-            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                   Text="{Binding Details}"
-                                   TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="3,0,3,3"
+                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
     <!-- Text -->
     <DataTemplate DataType="{x:Type settingElements:TextSetting}">
-        <Grid Margin="6,2,0,2">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding LabelWidth}" />
                 <ColumnDefinition Width="*" />
@@ -99,31 +97,30 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" Grid.Column="0" Margin="0,0,3,0">
+            <Border Grid.Row="0" Grid.Column="0" Margin="3">
                 <TextBlock Text="{Binding Label}" />
             </Border>
-            <TextBox Grid.Row="0" Grid.Column="1"
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="3"
                      TextWrapping="Wrap" AcceptsReturn="True"
                      Text="{Binding Value}" />
-            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                   Text="{Binding Details}"
-                                   TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="3,0,3,3"
+                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
     <!-- Bool -->
     <DataTemplate DataType="{x:Type settingElements:BoolSetting}">
-        <StackPanel Orientation="Vertical" Margin="6,2,0,2">
-            <CheckBox Content="{Binding Label}"
+        <StackPanel Orientation="Vertical">
+            <CheckBox Margin="3" Content="{Binding Label}"
                       IsChecked="{Binding Value}" />
             <controls:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
-                                   TextWrapping="Wrap" Margin="18,2,0,4" />
+                                   TextWrapping="Wrap" Margin="18,0,3,3" />
         </StackPanel>
     </DataTemplate>
 
     <!-- Date -->
     <DataTemplate DataType="{x:Type settingElements:DateSetting}">
-        <Grid Margin="6,2,0,2">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding LabelWidth}" />
                 <ColumnDefinition Width="*" />
@@ -132,20 +129,19 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="0,0,3,0">
+            <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="3">
                 <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
             </Border>
-            <DatePicker Grid.Row="0" Grid.Column="1"
+            <DatePicker Grid.Row="0" Grid.Column="1" Margin="3"
                         Height="24" SelectedDate="{Binding Value}" />
-            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                   Text="{Binding Details}"
-                                   TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="3,0,3,3"
+                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
     <!-- Choice: DropDown -->
     <DataTemplate DataType="{x:Type settingElements:DropDownSetting}">
-        <Grid Margin="6,2,0,2">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding LabelWidth}" />
                 <ColumnDefinition Width="*" />
@@ -154,11 +150,11 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="0,0,3,0">
+            <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="3">
                 <TextBlock Text="{Binding Label}"
                            VerticalAlignment="Center" />
             </Border>
-            <ComboBox Grid.Row="0" Grid.Column="1" Height="24"
+            <ComboBox Grid.Row="0" Grid.Column="1" Height="24" Margin="3"
                       ItemsSource="{Binding Choices}" SelectedItem="{Binding SelectedValue}"
                       IsEditable="True" IsReadOnly="True" VerticalContentAlignment="Center">
                 <ComboBox.Resources>
@@ -172,15 +168,14 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                   Text="{Binding Details}" FontStyle="Italic"
-                                   TextWrapping="Wrap" Margin="8,-2,0,0" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="8,-2,3,3"
+                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
     <!-- Choice: RadioButtons -->
     <DataTemplate DataType="{x:Type settingElements:RadioButtonsSetting}">
-        <Grid Margin="6,2,0,2">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding LabelWidth}" />
                 <ColumnDefinition Width="*" />
@@ -189,8 +184,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Label}" Margin="0,2,0,0" />
-            <ItemsControl Grid.Row="0" Grid.Column="1"
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Label}" Margin="3" />
+            <ItemsControl Grid.Row="0" Grid.Column="1" Margin="0,0,0,3"
                           ItemsSource="{Binding Choices}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -207,7 +202,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <RadioButton Grid.Row="0" Content="{Binding Label}"
+                            <RadioButton Grid.Row="0" Margin="3,3,3,0" Content="{Binding Label}"
                                          GroupName="{Binding DataContext.GroupName,
                                                          RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                          Command="{Binding DataContext.OnSelectionCommand,
@@ -221,21 +216,20 @@
                                     </MultiBinding>
                                 </RadioButton.IsChecked>
                             </RadioButton>
-                            <controls:ShyTextBlock Grid.Row="1" Text="{Binding Details}" FontStyle="Italic"
-                                                   TextWrapping="Wrap" Margin="18,0,0,2" />
+                            <controls:ShyTextBlock Grid.Row="1" Margin="22,0,0,2"
+                                                   Text="{Binding Details}" FontStyle="Italic" TextWrapping="Wrap" />
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                   Text="{Binding Details}" FontStyle="Italic"
-                                   TextWrapping="Wrap" Margin="8,-2,0,0" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="8,0,3,3"
+                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
     <!-- Choice: ListView -->
     <DataTemplate DataType="{x:Type settingElements:ListViewSetting}">
-        <Grid Margin="6,2,0,2">
+        <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding LabelWidth}" />
                 <ColumnDefinition Width="*" />
@@ -244,10 +238,10 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="0,0,3,0" VerticalAlignment="Top">
+            <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="3" VerticalAlignment="Top">
                 <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
             </Border>
-            <ListView Grid.Row="0" Grid.Column="1"
+            <ListView Grid.Row="0" Grid.Column="1" Margin="3"
                       ItemsSource="{Binding Choices}" SelectedItem="{Binding SelectedValue}">
                 <ListView.Resources>
                     <Style TargetType="ComboBoxItem">
@@ -260,21 +254,20 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1"
-                                   Text="{Binding Details}" FontStyle="Italic"
-                                   TextWrapping="Wrap" Margin="8,-2,0,0" />
+            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="8,-2,3,3"
+                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
     </DataTemplate>
 
     <!-- Button -->
     <DataTemplate DataType="{x:Type settingElements:ButtonSetting}">
-        <StackPanel Orientation="Vertical" Margin="6,2,0,2">
-            <Button Height="26" HorizontalAlignment="{Binding Alignment}"
+        <StackPanel Orientation="Vertical">
+            <Button Height="26" Margin="3" HorizontalAlignment="{Binding Alignment}"
                     Command="{Binding PressedCommand}">
                 <TextBlock Text="{Binding Label}" Margin="6,0,6,0" />
             </Button>
-            <controls:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
-                                   TextWrapping="Wrap" Margin="18,2,0,4" />
+            <controls:ShyTextBlock Margin="3,-2,3,3" HorizontalAlignment="{Binding Alignment}"
+                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
         </StackPanel>
     </DataTemplate>
 

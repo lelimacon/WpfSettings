@@ -36,7 +36,7 @@
 
         <Border Grid.Row="0" Grid.Column="1" BorderBrush="{x:Null}">
             <TextBlock Text="{Binding CategoryTitle}" FontWeight="Bold"
-                       VerticalAlignment="Center" Margin="3" FontSize="12" />
+                       VerticalAlignment="Center" Margin="6,3,3,3" FontSize="13" />
         </Border>
 
         <wpfSettings:SettingsExplorer Grid.Row="1" Grid.Column="0" Margin="3"
@@ -48,7 +48,7 @@
             <wpfSettings:SettingsPage ConfigElements="{Binding CurrentPageConfig, Mode=TwoWay}" />
         </ScrollViewer>
 
-        <Rectangle Grid.Row="1" Grid.Column="1" Margin="3" Height="1"
+        <Rectangle Grid.Row="1" Grid.Column="1" Margin="6,3" Height="1"
                    VerticalAlignment="Bottom" Fill="Gray" />
 
         <StackPanel Grid.Row="2" Grid.Column="1"
