@@ -181,7 +181,7 @@ namespace WpfSettings.SettingElements
         }
     }
 
-    internal class SettingGroup : SettingPageElement
+    internal abstract class SettingGroup : SettingPageElement
     {
         private IEnumerable<SettingPageElement> _elements;
 
@@ -191,10 +191,9 @@ namespace WpfSettings.SettingElements
             set { Set(ref _elements, value); }
         }
 
-        public SettingGroup(object parent, MemberInfo member, IEnumerable<SettingPageElement> elements)
+        protected SettingGroup(object parent, MemberInfo member)
             : base(parent, member)
         {
-            Elements = elements;
         }
 
         public override void Save()
@@ -204,6 +203,22 @@ namespace WpfSettings.SettingElements
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+        }
+    }
+
+    internal class SettingGroupBox : SettingGroup
+    {
+        public SettingGroupBox(object parent, MemberInfo member)
+            : base(parent, member)
+        {
+        }
+    }
+
+    internal class SettingGroupTitle : SettingGroup
+    {
+        public SettingGroupTitle(object parent, MemberInfo member)
+            : base(parent, member)
         {
         }
     }

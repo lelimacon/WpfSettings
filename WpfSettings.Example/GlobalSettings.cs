@@ -153,7 +153,7 @@ namespace WpfSettings.Example
         [SettingGroup(Position = 2, LabelWidth = "70")]
         public BoxStyle ContentStyle { get; }
 
-        [SettingGroup(Position = 1, LabelWidth = "70")]
+        [SettingGroup(Position = 1, LabelWidth = "70", Type = GroupType.Title)]
         public BoxStyle TitleStyle { get; }
 
         public StyleSettings()

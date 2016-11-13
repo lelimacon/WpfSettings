@@ -112,8 +112,20 @@ namespace WpfSettings
         }
     }
 
+    public enum GroupType
+    {
+        Box,
+        Title
+    }
+
     public class SettingGroupAttribute : SettingPageAttribute
     {
+        /// <summary>
+        ///     Gets or sets the type of display of the group.
+        ///     Defaults to Box.
+        /// </summary>
+        public GroupType Type { get; set; }
+
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
@@ -123,11 +135,26 @@ namespace WpfSettings
             object value = member.GetValue(parent);
             e = e.ChildrenArgs(this);
             var elements = SettingsConverter.GetElements(value, e);
-            SettingGroup element = new SettingGroup(parent, member, elements);
+            SettingGroup element = GetSetting(parent, member);
             Fill(element, member, e);
+            element.Elements = elements;
             return element;
         }
+
+        private SettingGroup GetSetting(object parent, MemberInfo member)
+        {
+            switch (Type)
+            {
+                case GroupType.Box:
+                    return new SettingGroupBox(parent, member);
+                case GroupType.Title:
+                    return new SettingGroupTitle(parent, member);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     }
+
 
     public class SettingStringAttribute : SettingPageAttribute
     {

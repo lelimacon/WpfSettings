@@ -4,11 +4,19 @@
                     xmlns:wpf="clr-namespace:WpfSettings.Utils.Wpf"
                     xmlns:controls="clr-namespace:WpfSettings.Controls">
 
-    <!-- Group -->
-    <DataTemplate DataType="{x:Type settingElements:SettingGroup}">
+    <!-- Group: Box -->
+    <DataTemplate DataType="{x:Type settingElements:SettingGroupBox}">
         <GroupBox Header="{Binding Label}" Margin="6,2,0,2">
             <ItemsControl ItemsSource="{Binding Elements}" />
         </GroupBox>
+    </DataTemplate>
+
+    <!-- Group: Title -->
+    <DataTemplate DataType="{x:Type settingElements:SettingGroupTitle}">
+        <StackPanel Margin="6,2,0,2" Orientation="Vertical">
+            <TextBlock Text="{Binding Label}" FontWeight="Bold" Margin="0,3" />
+            <ItemsControl ItemsSource="{Binding Elements}" Margin="6,3,0,3" />
+        </StackPanel>
     </DataTemplate>
 
     <!-- String -->
