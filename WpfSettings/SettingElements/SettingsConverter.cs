@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -13,34 +15,59 @@ namespace WpfSettings.SettingElements
             var sections = members
                 .Select(p => GetSection(settings, p, e))
                 .Where(s => s != null)
-                .OrderBy(s => s.Position)
-                .ThenBy(s => s.Member.MetadataToken);
-            return new ObservableCollection<SettingSection>(sections);
+                .OrderSettings();
+            return sections;
         }
 
         public static ObservableCollection<SettingPageElement> GetElements(object settings, ConverterArgs e)
         {
-            MemberInfo[] members = settings.GetType().GetMembers();
-            var elements = members
-                .Select(p => GetElement(settings, p, e))
-                .Where(s => s != null)
-                .OrderBy(s => s.Position)
-                .ThenBy(s => s.Member.MetadataToken);
-            var pageElements = new ObservableCollection<SettingPageElement>(elements);
-            for (var i = 0; i < pageElements.Count; i++)
-                pageElements[i].Position = i;
-            return pageElements;
+            Type type = settings.GetType();
+            MemberInfo[] members = type.GetMembers();
+
+            // Group definitions
+            var groupDefinitions = type.GetCustomAttributes<SettingGroupDefinitionAttribute>(false).ToList();
+            var groups = groupDefinitions.Select(p => p.GetElement(settings, e)).OfType<SettingGroup>().ToList();
+
+            // Elements
+            var elements = new ObservableCollection<SettingPageElement>(groups);
+            foreach (MemberInfo member in members)
+            {
+                var attribute = member.GetCustomAttribute<SettingPageAttribute>(false);
+                if (attribute == null)
+                    continue;
+                SettingPageElement element = attribute.GetElement(settings, member, e);
+                if (attribute.InGroup != null)
+                    groups[groupDefinitions.FindIndex(g => g.Name == attribute.InGroup)].Elements.Add(element);
+                else
+                    elements.Add(element);
+            }
+
+            // Order
+            foreach (SettingGroup group in groups)
+                group.Elements = group.Elements.OrderSettings();
+            elements = elements.OrderSettings();
+
+            // Set positions
+            foreach (SettingGroup group in groups)
+                for (var i = 0; i < group.Elements.Count; i++)
+                    group.Elements[i].Position = i;
+            for (var i = 0; i < elements.Count; i++)
+                elements[i].Position = i;
+            return elements;
+        }
+
+        private static ObservableCollection<TSetting> OrderSettings<TSetting>(this IEnumerable<TSetting> elements)
+            where TSetting : SettingElement
+        {
+            var orderedElements = elements
+                .OrderBy(e => e.Position)
+                .ThenBy(e => e.Member?.MetadataToken);
+            return new ObservableCollection<TSetting>(orderedElements);
         }
 
         private static SettingSection GetSection(object parent, MemberInfo member, ConverterArgs e)
         {
             var attribute = member.GetCustomAttribute<SettingSectionAttribute>(false);
-            return attribute?.GetElement(parent, member, e);
-        }
-
-        private static SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
-        {
-            var attribute = member.GetCustomAttribute<SettingPageAttribute>(false);
             return attribute?.GetElement(parent, member, e);
         }
 

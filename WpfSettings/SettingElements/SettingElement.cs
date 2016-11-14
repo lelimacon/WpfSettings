@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -183,9 +182,9 @@ namespace WpfSettings.SettingElements
 
     internal abstract class SettingGroup : SettingPageElement
     {
-        private IEnumerable<SettingPageElement> _elements;
+        private ObservableCollection<SettingPageElement> _elements;
 
-        public IEnumerable<SettingPageElement> Elements
+        public ObservableCollection<SettingPageElement> Elements
         {
             get { return _elements; }
             set { Set(ref _elements, value); }
@@ -194,6 +193,7 @@ namespace WpfSettings.SettingElements
         protected SettingGroup(object parent, MemberInfo member)
             : base(parent, member)
         {
+            Elements = new ObservableCollection<SettingPageElement>();
         }
 
         public override void Save()

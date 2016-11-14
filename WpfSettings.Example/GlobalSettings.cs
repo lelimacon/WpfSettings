@@ -87,6 +87,8 @@ namespace WpfSettings.Example
     }
 
     [ImplementPropertyChanged]
+    [SettingGroupDefinition(Type = GroupType.Title, Position = 0, Name = "GeneralInformation")]
+    [SettingGroupDefinition(Type = GroupType.Title, Position = 1, Name = "UsefulInformation")]
     public class UserSettings
     {
         public enum EGender
@@ -97,19 +99,23 @@ namespace WpfSettings.Example
         }
 
         [SettingChoice(
-             Details = "This will change the background to match your color preferences! No questions.")]
+             Details = "This will change the background to match your color preferences! No questions.",
+             InGroup = "GeneralInformation")]
         public EGender Gender { get; set; } = EGender.Other;
 
-        [SettingString(Prefix = "Sir", Suffix = "the Great")]
+        [SettingString(Prefix = "Sir", Suffix = "the Great",
+             InGroup = "GeneralInformation")]
         public string Name { get; set; } = "Bob";
 
-        [SettingNumber(MinValue = "0", MaxValue = "160")]
+        [SettingNumber(MinValue = "0", MaxValue = "160",
+             InGroup = "GeneralInformation")]
         public int Age { get; set; } = 42;
 
-        [SettingDate]
+        [SettingDate(InGroup = "UsefulInformation")]
         public DateTime Birthday { get; set; }
 
-        [SettingString(Prefix = "https://")]
+        [SettingString(Prefix = "https://",
+             InGroup = "UsefulInformation")]
         public string Website { get; set; } = "duckduckgo.com";
     }
 
@@ -153,7 +159,7 @@ namespace WpfSettings.Example
         [SettingGroup(Position = 2, LabelWidth = "70")]
         public BoxStyle ContentStyle { get; }
 
-        [SettingGroup(Position = 1, LabelWidth = "70", Type = GroupType.Title)]
+        [SettingGroup(Position = 1, LabelWidth = "70")]
         public BoxStyle TitleStyle { get; }
 
         public StyleSettings()

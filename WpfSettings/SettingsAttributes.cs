@@ -99,11 +99,18 @@ namespace WpfSettings
         /// </summary>
         public string Details { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the group name the attribute should be moved in.
+        ///     The group must be created in the direct parent class
+        ///     with <see cref="SettingGroupDefinitionAttribute" />.
+        /// </summary>
+        public string InGroup { get; set; }
+
         internal abstract SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e);
 
-        internal void Fill(SettingPageElement element, MemberInfo member, ConverterArgs e)
+        internal void Fill(SettingPageElement element, ConverterArgs e, string name)
         {
-            element.Label = Label ?? SettingsConverter.InferLabel(member.Name);
+            element.Label = Label ?? SettingsConverter.InferLabel(name);
             element.LabelWidth = e.LabelWidth;
             if (Details != null)
                 element.Details = Details;
@@ -136,12 +143,12 @@ namespace WpfSettings
             e = e.ChildrenArgs(this);
             var elements = SettingsConverter.GetElements(value, e);
             SettingGroup element = GetSetting(parent, member);
-            Fill(element, member, e);
+            Fill(element, e, member.Name);
             element.Elements = elements;
             return element;
         }
 
-        private SettingGroup GetSetting(object parent, MemberInfo member)
+        internal SettingGroup GetSetting(object parent, MemberInfo member)
         {
             switch (Type)
             {
@@ -155,6 +162,23 @@ namespace WpfSettings
         }
     }
 
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = true)]
+    public class SettingGroupDefinitionAttribute : SettingGroupAttribute
+    {
+        /// <summary>
+        ///     Gets or sets the name of the group.
+        /// </summary>
+        public string Name { get; set; }
+
+        internal SettingPageElement GetElement(object parent, ConverterArgs e)
+        {
+            e = new ConverterArgs(e, this);
+            e = e.ChildrenArgs(this);
+            SettingGroup element = GetSetting(parent, null);
+            Fill(element, e, Name);
+            return element;
+        }
+    }
 
     public class SettingStringAttribute : SettingPageAttribute
     {
@@ -180,7 +204,7 @@ namespace WpfSettings
                 throw new ArgumentException("SettingStringAttribute must target a string");
             e = new ConverterArgs(e, this);
             StringSetting element = new StringSetting(parent, member);
-            Fill(element, member, e);
+            Fill(element, e, member.Name);
             element.Value = (string) member.GetValue(parent);
             element.Prefix = Prefix;
             element.Suffix = Suffix;
@@ -233,7 +257,7 @@ namespace WpfSettings
                 throw new ArgumentException("SettingNumberAttribute must target an integer");
             e = new ConverterArgs(e, this);
             NumberSetting element = new NumberSetting(parent, member);
-            Fill(element, member, e);
+            Fill(element, e, member.Name);
             element.Value = (int) member.GetValue(parent);
             element.SuffixLabel = SuffixLabel;
             if (!string.IsNullOrEmpty(MinValue))
@@ -277,7 +301,7 @@ namespace WpfSettings
                 throw new ArgumentException("SettingTextAttribute must target a string");
             e = new ConverterArgs(e, this);
             TextSetting element = new TextSetting(parent, member);
-            Fill(element, member, e);
+            Fill(element, e, member.Name);
             element.Value = (string) member.GetValue(parent);
             element.Height = Height ?? "60";
             return element;
@@ -293,7 +317,7 @@ namespace WpfSettings
                 throw new ArgumentException("SettingBoolAttribute must target a boolean");
             e = new ConverterArgs(e, this);
             BoolSetting element = new BoolSetting(parent, member);
-            Fill(element, member, e);
+            Fill(element, e, member.Name);
             element.Value = (bool) member.GetValue(parent);
             return element;
         }
@@ -308,7 +332,7 @@ namespace WpfSettings
                 throw new ArgumentException("SettingStringAttribute must target a DateTime");
             e = new ConverterArgs(e, this);
             DateSetting element = new DateSetting(parent, member);
-            Fill(element, member, e);
+            Fill(element, e, member.Name);
             element.Value = (DateTime) member.GetValue(parent);
             return element;
         }
@@ -361,7 +385,7 @@ namespace WpfSettings
             e = new ConverterArgs(e, this);
             var choices = type.IsEnum ? GetEnumChoices(parent, type) : GetListChoices(parent);
             ChoiceSetting element = GetSetting(parent, member);
-            Fill(element, member, e);
+            Fill(element, e, member.Name);
             element.Height = Type == SettingChoiceType.ListView ? (Height ?? "160") : "Auto";
             element.Choices = choices;
             var value = member.GetValue(parent);
@@ -468,7 +492,7 @@ namespace WpfSettings
                 throw new ArgumentException("SettingButtonAttribute must target an Action");
             e = new ConverterArgs(e, this);
             ButtonSetting element = new ButtonSetting(parent, member);
-            Fill(element, member, e);
+            Fill(element, e, member.Name);
             element.Action = (Action) member.GetValue(parent);
             element.Alignment = Alignment;
             return element;
