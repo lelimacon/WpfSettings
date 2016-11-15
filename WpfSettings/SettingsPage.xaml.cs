@@ -10,31 +10,25 @@ namespace WpfSettings
 {
     public partial class SettingsPage : UserControl
     {
-        public static readonly DependencyProperty ConfigElementsProperty =
-            MvvmUtils.RegisterDp<SettingsPage>();
-
         public static readonly DependencyProperty SettingsProperty =
+            MvvmUtils.RegisterDp<SettingsPage>(SettingsChanged);
+
+        public static readonly DependencyProperty SettingElementsProperty =
             MvvmUtils.RegisterDp<SettingsPage>();
 
         public static readonly DependencyProperty AutoSaveProperty =
             MvvmUtils.RegisterDp<SettingsPage>();
 
-        public ObservableCollection<SettingPageElement> ConfigElements
-        {
-            get { return (ObservableCollection<SettingPageElement>) GetValue(ConfigElementsProperty); }
-            set { SetValueDp(ConfigElementsProperty, value); }
-        }
-
         public object Settings
         {
             get { return GetValue(SettingsProperty); }
-            set
-            {
-                SetValueDp(SettingsProperty, value);
-                ConverterArgs args = new ConverterArgs {AutoSave = AutoSave};
-                var elements = SettingsConverter.GetElements(value, args);
-                ConfigElements = elements;
-            }
+            set { SetValueDp(SettingsProperty, value); }
+        }
+
+        public ObservableCollection<SettingPageElement> SettingElements
+        {
+            get { return (ObservableCollection<SettingPageElement>) GetValue(SettingElementsProperty); }
+            set { SetValueDp(SettingElementsProperty, value); }
         }
 
         public bool AutoSave
@@ -58,6 +52,14 @@ namespace WpfSettings
             if (DesignerProperties.GetIsInDesignMode(this))
                 PreviewBlock.Visibility = Visibility.Visible;
             AutoSave = true;
+        }
+
+        private static void SettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            SettingsPage page = (SettingsPage) d;
+            ConverterArgs args = new ConverterArgs {AutoSave = page.AutoSave};
+            var elements = SettingsConverter.GetElements(page.Settings, args);
+            page.SettingElements = elements;
         }
     }
 }

@@ -10,8 +10,6 @@ namespace WpfSettings.Example
         {
             ViewModel = new MainViewModel();
             InitializeComponent();
-            // TODO: Fix binding
-            QuickSettings.Settings = ViewModel.QuickSettings;
         }
     }
 }

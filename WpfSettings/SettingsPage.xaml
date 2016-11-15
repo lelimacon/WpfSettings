@@ -12,7 +12,7 @@
     </UserControl.Resources>
 
     <Grid DataContext="{Binding ElementName=Root}">
-        <ItemsControl ItemsSource="{Binding ConfigElements}" IsTabStop="False">
+        <ItemsControl ItemsSource="{Binding SettingElements}" IsTabStop="False">
             <ItemsControl.ItemContainerStyle>
                 <Style>
                     <Setter Property="Grid.Row" Value="{Binding Position}" />
@@ -20,7 +20,7 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <controls:DynamicList ItemsSource="{Binding ConfigElements}" />
+                    <controls:DynamicList ItemsSource="{Binding SettingElements}" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
