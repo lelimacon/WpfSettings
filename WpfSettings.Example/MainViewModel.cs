@@ -22,10 +22,11 @@ namespace WpfSettings.Example
 
         private void ShowSettings(MainWindow mainWindow)
         {
-            var settingsWindow = new SettingsWindow(Settings)
+            var settingsWindow = new SettingsWindow
             {
+                Settings = Settings,
                 IconSource = "Resources.icon-cog.png",
-                ExplorerWidth = 180,
+                ExplorerWidth = "180",
                 Width = 600,
                 Height = 400,
                 Owner = mainWindow

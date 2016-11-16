@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="WpfSettings.SettingsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:WpfSettings"
+             xmlns:controls="clr-namespace:WpfSettings.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="200" d:DesignWidth="400"
+             x:Name="Root">
+
+    <Grid DataContext="{Binding ElementName=Root}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding ExplorerWidth}" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <controls:PlaceHolderTextBox x:Name="SearchBox" Grid.Row="0" Grid.Column="0"
+                                     Margin="3" Height="26" Background="White"
+                                     VerticalContentAlignment="Center" FontSize="12"
+                                     PlaceHolderText="Search" />
+
+        <Button Grid.Row="0" Grid.Column="0" Margin="3"
+                Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                HorizontalAlignment="Right" VerticalAlignment="Stretch"
+                Focusable="False">
+            <Image Source="Resources/icon-search.png" Width="16" Height="16" />
+        </Button>
+
+        <Border Grid.Row="0" Grid.Column="1" BorderBrush="{x:Null}">
+            <TextBlock Text="{Binding CategoryTitle}" FontWeight="Bold"
+                       VerticalAlignment="Center" Margin="6,3,3,3" FontSize="13" />
+        </Border>
+
+        <local:SettingsExplorer Grid.Row="1" Grid.Column="0" Margin="3"
+                                Items="{Binding SettingElements}"
+                                ChangeAction="{Binding ChangeSectionAction}" />
+
+        <ScrollViewer Grid.Row="1" Grid.Column="1"
+                      Margin="3" VerticalScrollBarVisibility="Auto">
+            <local:SettingsPage SettingElements="{Binding CurrentPageConfig, Mode=TwoWay}" />
+        </ScrollViewer>
+
+        <Rectangle Grid.Row="1" Grid.Column="1" Margin="6,3" Height="1"
+                   VerticalAlignment="Bottom" Fill="Gray" />
+
+    </Grid>
+
+</UserControl>

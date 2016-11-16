@@ -175,12 +175,6 @@
             </Setter>
         </Style>
 
-        <!--
-        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#CCCCCC" />
-        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#CCCCCC" />
-        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#222222" />
-        <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="#222222" />
-        -->
     </UserControl.Resources>
 
     <TreeView DataContext="{Binding ElementName=Root}"

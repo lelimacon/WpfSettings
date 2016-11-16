@@ -14,23 +14,23 @@ namespace WpfSettings
         public static readonly DependencyProperty ItemsProperty =
             MvvmUtils.RegisterDp<SettingsExplorer>();
 
+        public static readonly DependencyProperty SelectedProperty =
+            MvvmUtils.RegisterDp<SettingsExplorer>();
+
+        public static readonly DependencyProperty ChangeActionProperty =
+            MvvmUtils.RegisterDp<SettingsExplorer>();
+
         public ObservableCollection<SettingSection> Items
         {
             get { return (ObservableCollection<SettingSection>) GetValue(ItemsProperty); }
             set { SetValueDp(ItemsProperty, value); }
         }
 
-        public static readonly DependencyProperty SelectedProperty =
-            MvvmUtils.RegisterDp<SettingsExplorer>();
-
         public string Selected
         {
             get { return (string) GetValue(SelectedProperty); }
             set { SetValueDp(SelectedProperty, value); }
         }
-
-        public static readonly DependencyProperty ChangeActionProperty =
-            MvvmUtils.RegisterDp<SettingsExplorer>();
 
         public Action<SettingSection> ChangeAction
         {

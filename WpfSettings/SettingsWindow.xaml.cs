@@ -23,15 +23,29 @@ namespace WpfSettings
             }
         }
 
-        public int ExplorerWidth
+        /// <summary>
+        ///     Gets or sets the object used as base for settings.
+        /// </summary>
+        public object Settings
+        {
+            get { return ViewModel.Settings; }
+            set { ViewModel.Settings = value; }
+        }
+
+        /// <summary>
+        ///     Gets or sets the width of the explorer (left panel ListView).
+        ///     Supports 'Auto', star or absolute values.
+        ///     Defaults to 220.
+        /// </summary>
+        public string ExplorerWidth
         {
             get { return ViewModel.ExplorerWidth; }
             set { ViewModel.ExplorerWidth = value; }
         }
 
-        public SettingsWindow(object config)
+        public SettingsWindow()
         {
-            ViewModel = new SettingsWindowViewModel(config);
+            ViewModel = new SettingsWindowViewModel();
             InitializeComponent();
         }
     }

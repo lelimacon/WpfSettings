@@ -17,7 +17,7 @@ namespace WpfSettings
             MvvmUtils.RegisterDp<SettingsPage>();
 
         public static readonly DependencyProperty AutoSaveProperty =
-            MvvmUtils.RegisterDp<SettingsPage>();
+            MvvmUtils.RegisterDp<SettingsPage>(true);
 
         public object Settings
         {
@@ -49,9 +49,10 @@ namespace WpfSettings
         public SettingsPage()
         {
             InitializeComponent();
+
+            // Show preview for design mode
             if (DesignerProperties.GetIsInDesignMode(this))
                 PreviewBlock.Visibility = Visibility.Visible;
-            AutoSave = true;
         }
 
         private static void SettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
