@@ -54,7 +54,8 @@ namespace WpfSettings.ViewModels
 
         private void Ok(SettingsWindow window)
         {
-            // Changes the focus so the current setting (if changed) is saved
+            // Changes the focus so the current setting (if changed) is saved...
+            // And thus even if it doesn't have an UpdateSourceTrigger on PropertyChanged.
             window.OkButton.Focus();
             Save();
             window.Close();

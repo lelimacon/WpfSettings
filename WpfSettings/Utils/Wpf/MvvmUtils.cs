@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Data;
 
 namespace WpfSettings.Utils.Wpf
 {
@@ -31,8 +32,20 @@ namespace WpfSettings.Utils.Wpf
             return RegisterDp(typeof(T), prop, defaultValue, propertyChanged);
         }
 
+        internal static DependencyProperty RegisterDp<T>(PropertyMetadata metadata,
+            [CallerMemberName] string prop = null)
+        {
+            return RegisterDp(typeof(T), prop, metadata);
+        }
+
         private static DependencyProperty RegisterDp(Type parentType, string prop, object defaultValue,
             PropertyChangedCallback propertyChanged)
+        {
+            PropertyMetadata metadata = GetMetadata(defaultValue, propertyChanged);
+            return RegisterDp(parentType, prop, metadata);
+        }
+
+        private static DependencyProperty RegisterDp(Type parentType, string prop, PropertyMetadata metadata)
         {
             if (prop == null)
                 throw new ArgumentNullException(nameof(prop));
@@ -42,16 +55,21 @@ namespace WpfSettings.Utils.Wpf
             prop = prop.Remove(prop.Length - ending.Length);
             PropertyInfo propertyInfo = parentType.GetProperty(prop);
             Type type = propertyInfo.PropertyType;
-            PropertyMetadata metadata = GetMetadata(defaultValue, propertyChanged);
             return DependencyProperty.Register(prop, type, parentType, metadata);
         }
 
         private static PropertyMetadata GetMetadata(object defaultValue,
             PropertyChangedCallback propertyChanged)
         {
-            if (defaultValue == null)
-                return new FrameworkPropertyMetadata(propertyChanged);
-            return new FrameworkPropertyMetadata(defaultValue, propertyChanged);
+            FrameworkPropertyMetadata metadata = new FrameworkPropertyMetadata
+            {
+                BindsTwoWayByDefault = true,
+                DefaultUpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                PropertyChangedCallback = propertyChanged,
+            };
+            if (defaultValue != null)
+                metadata.DefaultValue = defaultValue;
+            return metadata;
         }
     }
 }

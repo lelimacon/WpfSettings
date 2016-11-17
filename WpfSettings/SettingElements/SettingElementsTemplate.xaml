@@ -35,7 +35,8 @@
                 <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
             </Border>
             <controls:ExtendedTextBox Grid.Row="0" Grid.Column="1" Margin="3"
-                                      Height="24" Text="{Binding Value}"
+                                      Height="24"
+                                      Text="{Binding Value}"
                                       Prefix="{Binding Prefix}" Suffix="{Binding Suffix}" />
             <Border Grid.Row="0" Grid.Column="2" Height="24">
                 <controls:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3" />

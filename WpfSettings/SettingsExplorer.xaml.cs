@@ -18,7 +18,7 @@ namespace WpfSettings
             MvvmUtils.RegisterDp<SettingsExplorer>();
 
         public static readonly DependencyProperty ChangeActionProperty =
-            MvvmUtils.RegisterDp<SettingsExplorer>();
+            MvvmUtils.RegisterDp<SettingsExplorer>(new FrameworkPropertyMetadata());
 
         public ObservableCollection<SettingSection> Items
         {

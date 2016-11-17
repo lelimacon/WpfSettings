@@ -11,7 +11,7 @@ namespace WpfSettings.Controls
         private int _lastPosition;
 
         public static readonly DependencyProperty ValidateInputProperty
-            = MvvmUtils.RegisterDp<ValidationTextBox>();
+            = MvvmUtils.RegisterDp<ValidationTextBox>(new FrameworkPropertyMetadata());
 
         /// <summary>
         ///     Indicates if the new input is valid or not.

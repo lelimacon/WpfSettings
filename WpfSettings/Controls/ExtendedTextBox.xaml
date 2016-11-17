@@ -14,7 +14,8 @@
     </UserControl.Resources>
 
     <Grid DataContext="{Binding ElementName=Root}">
-        <TextBox Text="{Binding Text}" VerticalContentAlignment="Center">
+        <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
+                 VerticalContentAlignment="Center">
             <TextBox.Padding>
                 <MultiBinding Converter="{StaticResource PrefixSuffixToPadding}" Mode="OneWay">
                     <Binding Path="Prefix" />
