@@ -10,7 +10,7 @@
 
     <Grid DataContext="{Binding ElementName=Root}">
         <controls:ValidationTextBox x:Name="NumberTextBox" VerticalContentAlignment="Center"
-                                    Text="{Binding Value}"
+                                    Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
                                     ValidateInput="{Binding ValidateInput}" />
         <Button Width="20" Height="12" Margin="1"
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"

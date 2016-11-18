@@ -26,7 +26,7 @@ namespace WpfSettings.Example
             set { _settings.User.Name = value; }
         }
 
-        [SettingNumber(LabelWidth = "80", MinValue = "0", MaxValue = "160")]
+        [SettingNumber(LabelWidth = "80", MinValue = 0, MaxValue = 160)]
         public int Age
         {
             get { return _settings.User.Age; }
@@ -81,7 +81,7 @@ namespace WpfSettings.Example
         public bool StartReboot { get; set; }
 
         [SettingNumber(Type = NumberSettingType.SliderAndValue,
-             MinValue = "100", MaxValue = "250", TickFrequency = "50",
+             MinValue = 100, MaxValue = 250, TickFrequency = 50,
              SuffixLabel = "%")]
         public int ElementsSizes { get; set; } = 100;
     }
@@ -107,11 +107,15 @@ namespace WpfSettings.Example
              InGroup = "GeneralInformation")]
         public string Name { get; set; } = "Bob";
 
-        [SettingNumber(MinValue = "0", MaxValue = "160",
+        [SettingNumber(MinValue = 0, MaxValue = 160,
              InGroup = "GeneralInformation")]
         public int Age { get; set; } = 42;
 
-        [SettingDate(InGroup = "UsefulInformation")]
+        [SettingNumber(Type = NumberSettingType.SliderAndSpinner, MinValue = 1900, MaxValue = 2020,
+             TickFrequency = 10, InGroup = "UsefulInformation", Details = "Just to make sure...")]
+        public int YearOfBirth { get; set; } = 1980;
+
+        [SettingDate(InGroup = "UsefulInformation", Details = "Triple check!")]
         public DateTime Birthday { get; set; }
 
         [SettingString(Prefix = "https://",

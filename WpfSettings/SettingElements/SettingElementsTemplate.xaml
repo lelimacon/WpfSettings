@@ -69,6 +69,7 @@
                     Minimum="{Binding MinValue}" Maximum="{Binding MaxValue}"
                     Value="{Binding Value}" Orientation="Horizontal"
                     TickPlacement="BottomRight" TickFrequency="{Binding TickFrequency}"
+                    Foreground="DarkGray"
                     IsSnapToTickEnabled="{Binding SnapToTick}"
                     Visibility="{Binding SliderVisible, Converter={StaticResource BooleanToVisibility}}" />
             <controls:NumberBox Grid.Row="0" Grid.Column="2" Height="24" Margin="3"

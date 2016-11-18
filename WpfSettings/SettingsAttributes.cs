@@ -219,25 +219,25 @@ namespace WpfSettings
         ///     Gets or sets the minimum value.
         ///     Defaults to min int.
         /// </summary>
-        public string MinValue { get; set; }
+        public int MinValue { get; set; } = Int32.MinValue;
 
         /// <summary>
         ///     Gets or sets the minimum value.
         ///     Defaults to max int.
         /// </summary>
-        public string MaxValue { get; set; }
+        public int MaxValue { get; set; } = Int32.MaxValue;
 
         /// <summary>
         ///     Gets or sets the ticks frequency on the slider.
         ///     Defaults to 0 (two ticks, under min and max values).
         /// </summary>
-        public string TickFrequency { get; set; }
+        public int TickFrequency { get; set; } = 0;
 
         /// <summary>
         ///     Gets or sets the step for the spinner.
         ///     Defaults to 1.
         /// </summary>
-        public int Step { get; set; }
+        public int Step { get; set; } = 1;
 
         /// <summary>
         ///     Gets or sets the type of display of the number.
@@ -260,24 +260,12 @@ namespace WpfSettings
             Fill(element, e, member.Name);
             element.Value = (int) member.GetValue(parent);
             element.SuffixLabel = SuffixLabel;
-            if (!string.IsNullOrEmpty(MinValue))
-                element.MinValue = GetInt(MinValue);
-            if (!string.IsNullOrEmpty(MaxValue))
-                element.MaxValue = GetInt(MaxValue);
-            if (!string.IsNullOrEmpty(TickFrequency))
-                element.TickFrequency = GetInt(TickFrequency);
+            element.MinValue = MinValue;
+            element.MaxValue = MaxValue;
+            element.TickFrequency = TickFrequency;
             element.Step = Step;
             element.Type = Type;
             return element;
-        }
-
-        private int GetInt(string input)
-        {
-            int value;
-            bool parsed = int.TryParse(input, out value);
-            if (!parsed)
-                throw new ArgumentException("Value must be an integer");
-            return value;
         }
     }
 
