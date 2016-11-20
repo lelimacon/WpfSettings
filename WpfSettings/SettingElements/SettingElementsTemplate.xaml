@@ -7,7 +7,7 @@
     <!-- Group: Box -->
     <DataTemplate DataType="{x:Type settingElements:SettingGroupBox}">
         <GroupBox Header="{Binding Label}" Margin="3">
-            <ItemsControl ItemsSource="{Binding Elements}" />
+            <ItemsControl ItemsSource="{Binding Elements}" IsTabStop="False" />
         </GroupBox>
     </DataTemplate>
 
@@ -15,7 +15,7 @@
     <DataTemplate DataType="{x:Type settingElements:SettingGroupTitle}">
         <StackPanel Orientation="Vertical">
             <TextBlock Text="{Binding Label}" FontWeight="Bold" Margin="3" />
-            <ItemsControl ItemsSource="{Binding Elements}" Margin="9,3,3,3" />
+            <ItemsControl ItemsSource="{Binding Elements}" Margin="9,3,3,3" IsTabStop="False" />
         </StackPanel>
     </DataTemplate>
 
@@ -188,7 +188,7 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Label}" Margin="3" />
             <ItemsControl Grid.Row="0" Grid.Column="1" Margin="0,0,0,3"
-                          ItemsSource="{Binding Choices}">
+                          ItemsSource="{Binding Choices}" IsTabStop="False">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
