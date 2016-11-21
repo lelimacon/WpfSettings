@@ -70,6 +70,7 @@ namespace WpfSettings.SettingElements
         private ObservableCollection<SettingSection> _subSections;
         private ObservableCollection<SettingPageElement> _elements;
         private bool _isExpanded;
+        private bool _isSelected;
 
         public BitmapSource Icon
         {
@@ -93,6 +94,12 @@ namespace WpfSettings.SettingElements
         {
             get { return _isExpanded; }
             set { Set(ref _isExpanded, value); }
+        }
+
+        public bool IsSelected
+        {
+            get { return _isSelected; }
+            set { Set(ref _isSelected, value); }
         }
 
         public SettingSection(object parent, MemberInfo member)

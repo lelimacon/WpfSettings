@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,10 +13,7 @@ namespace WpfSettings
     internal partial class SettingsExplorer : UserControl
     {
         public static readonly DependencyProperty ItemsProperty =
-            MvvmUtils.RegisterDp<SettingsExplorer>();
-
-        public static readonly DependencyProperty SelectedProperty =
-            MvvmUtils.RegisterDp<SettingsExplorer>();
+            MvvmUtils.RegisterDp<SettingsExplorer>(ItemsChanged);
 
         public static readonly DependencyProperty ChangeActionProperty =
             MvvmUtils.RegisterDp<SettingsExplorer>(new FrameworkPropertyMetadata());
@@ -24,12 +22,6 @@ namespace WpfSettings
         {
             get { return (ObservableCollection<SettingSection>) GetValue(ItemsProperty); }
             set { SetValueDp(ItemsProperty, value); }
-        }
-
-        public string Selected
-        {
-            get { return (string) GetValue(SelectedProperty); }
-            set { SetValueDp(SelectedProperty, value); }
         }
 
         public Action<SettingSection> ChangeAction
@@ -50,12 +42,28 @@ namespace WpfSettings
         public SettingsExplorer()
         {
             InitializeComponent();
+            ItemsTreeView.Focus();
         }
 
         private void OnSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             SettingSection section = (SettingSection) e.NewValue;
             ChangeAction?.Invoke(section);
+        }
+
+        private static void ItemsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            SettingsExplorer explorer = (SettingsExplorer) d;
+            if (explorer.Items.Any())
+                explorer.SelectSection(0);
+        }
+
+        public void SelectSection(int index)
+        {
+            if (index < 0 || index >= Items.Count)
+                throw new IndexOutOfRangeException();
+            Items[index].IsSelected = true;
+            ItemsTreeView.Focus();
         }
     }
 }

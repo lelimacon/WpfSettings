@@ -63,6 +63,8 @@
                     Value="Transparent" />
             <Setter Property="IsExpanded"
                     Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
+            <Setter Property="IsSelected"
+                    Value="{Binding Path=IsSelected, Mode=TwoWay}" />
             <Setter Property="HorizontalContentAlignment"
                     Value="{Binding Path=HorizontalContentAlignment,
                                     RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
@@ -89,7 +91,7 @@
                                     Padding="{TemplateBinding Padding}">
                                 <Grid
                                     Margin="{Binding Converter={StaticResource LengthConverter},
-                                                                               RelativeSource={RelativeSource TemplatedParent}}">
+                                                     RelativeSource={RelativeSource TemplatedParent}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="19" />
                                         <ColumnDefinition />
@@ -177,13 +179,12 @@
 
     </UserControl.Resources>
 
-    <TreeView DataContext="{Binding ElementName=Root}"
+    <TreeView x:Name="ItemsTreeView" DataContext="{Binding ElementName=Root}"
               ItemsSource="{Binding Items}"
-              SelectedValuePath="{Binding Selected}"
               SelectedItemChanged="OnSelectionChanged"
               Background="#F5F5F5">
-        <TreeView.Resources>
 
+        <TreeView.Resources>
             <HierarchicalDataTemplate DataType="{x:Type settingElements:SettingSection}"
                                       ItemsSource="{Binding SubSections}">
                 <Border BorderBrush="{x:Null}" Height="22">
@@ -194,8 +195,8 @@
                     </StackPanel>
                 </Border>
             </HierarchicalDataTemplate>
-
         </TreeView.Resources>
+
     </TreeView>
 
 </UserControl>
