@@ -476,14 +476,27 @@ namespace WpfSettings
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
-            if (type != typeof(Action))
-                throw new ArgumentException("SettingButtonAttribute must target an Action");
+            if (type != typeof(Action) && type != typeof(string))
+                throw new ArgumentException("SettingButtonAttribute must target an Action for custom action, " +
+                                            "or a string for a link to other sections.");
             e = new ConverterArgs(e, this);
-            ButtonSetting element = new ButtonSetting(parent, member);
+            ButtonSetting element = GetSetting(parent, member, type, e);
             Fill(element, e, member.Name);
-            element.Action = (Action) member.GetValue(parent);
             element.Alignment = Alignment;
             return element;
+        }
+
+        private ButtonSetting GetSetting(object parent, MemberInfo member, Type type, ConverterArgs e)
+        {
+            if (type == typeof(Action))
+                return new CustomButtonSetting(parent, member) {Action = (Action) member.GetValue(parent)};
+            if (type == typeof(string))
+                return new LinkButtonSetting(parent, member)
+                {
+                    Path = (string) member.GetValue(parent),
+                    SelectSection = e.SelectSection
+                };
+            throw new ArgumentException($"Unknown type \"{type.FullName}\"");
         }
     }
 }

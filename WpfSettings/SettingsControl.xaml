@@ -36,7 +36,7 @@
                        VerticalAlignment="Center" Margin="6,3,3,3" FontSize="13" />
         </Border>
 
-        <local:SettingsExplorer Grid.Row="1" Grid.Column="0" Margin="3"
+        <local:SettingsExplorer x:Name="Explorer" Grid.Row="1" Grid.Column="0" Margin="3"
                                 Items="{Binding SettingElements}"
                                 ChangeAction="{Binding ChangeSectionAction}" />
 

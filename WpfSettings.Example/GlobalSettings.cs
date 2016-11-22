@@ -84,6 +84,9 @@ namespace WpfSettings.Example
              MinValue = 100, MaxValue = 250, TickFrequency = 50,
              SuffixLabel = "%")]
         public int ElementsSizes { get; set; } = 100;
+
+        [SettingButton(Label = "Style settings")]
+        public string LinkToStyle { get; } = "Interface.Style";
     }
 
     [ImplementPropertyChanged]

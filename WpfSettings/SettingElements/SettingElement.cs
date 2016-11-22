@@ -20,6 +20,7 @@ namespace WpfSettings.SettingElements
         private string _label;
         public object Parent { get; }
         public MemberInfo Member { get; }
+        public string Name => Member.Name;
 
         public int Position
         {
@@ -515,18 +516,86 @@ namespace WpfSettings.SettingElements
         }
     }
 
-    internal class ButtonSetting : SettingPageElement
+    internal abstract class ButtonSetting : SettingPageElement
     {
-        public Action Action { get; set; }
-        public string GetAction { get; set; }
-        public ICommand PressedCommand { get; set; }
-        public HorizontalAlignment Alignment { get; set; }
+        private HorizontalAlignment _alignment;
 
-        public ButtonSetting(object parent, MemberInfo member)
+        public HorizontalAlignment Alignment
+        {
+            get { return _alignment; }
+            set { Set(ref _alignment, value); }
+        }
+
+        public ICommand PressedCommand { get; set; }
+
+        protected ButtonSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
-            PressedCommand = new RelayCommand(() => { Action(); });
             Alignment = HorizontalAlignment.Left;
+            PressedCommand = new RelayCommand(OnPressed);
+        }
+
+        protected abstract void OnPressed();
+
+        protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+        }
+    }
+
+    internal class LinkButtonSetting : ButtonSetting
+    {
+        private string _path;
+
+        public string Path
+        {
+            get { return _path; }
+            set { SetAndSave(ref _path, value); }
+        }
+
+        public Action<string> SelectSection { get; set; }
+
+        public LinkButtonSetting(object parent, MemberInfo member)
+            : base(parent, member)
+        {
+        }
+
+        protected override void OnPressed()
+        {
+            SelectSection?.Invoke(Path);
+        }
+
+        public override void Save()
+        {
+            Member.SetValue(Parent, Path);
+        }
+
+        protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OuterPropertyChanged(sender, e);
+            if (e.PropertyName == Member.Name)
+                Path = (string) Member.GetValue(Parent);
+        }
+    }
+
+    internal class CustomButtonSetting : ButtonSetting
+    {
+        private Action _action;
+
+        public Action Action
+        {
+            get { return _action; }
+            set { SetAndSave(ref _action, value); }
+        }
+
+
+        public CustomButtonSetting(object parent, MemberInfo member)
+            : base(parent, member)
+        {
+        }
+
+        protected override void OnPressed()
+        {
+            Action();
         }
 
         public override void Save()
@@ -536,6 +605,7 @@ namespace WpfSettings.SettingElements
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            base.OuterPropertyChanged(sender, e);
             if (e.PropertyName == Member.Name)
                 Action = (Action) Member.GetValue(Parent);
         }

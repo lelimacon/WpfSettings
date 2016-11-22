@@ -100,7 +100,11 @@ namespace WpfSettings
         private static void SettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             SettingsControl control = (SettingsControl) d;
-            ConverterArgs args = new ConverterArgs {AutoSave = control.AutoSave};
+            ConverterArgs args = new ConverterArgs
+            {
+                AutoSave = control.AutoSave,
+                SelectSection = control.Explorer.SelectSection
+            };
             var sections = SettingsConverter.GetSections(control.Settings, args);
             control.SettingElements = sections;
             control.ChangeSection(control.SettingElements[0]);
