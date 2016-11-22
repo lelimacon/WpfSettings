@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -62,8 +63,51 @@ namespace WpfSettings
         {
             if (index < 0 || index >= Items.Count)
                 throw new IndexOutOfRangeException();
-            Items[index].IsSelected = true;
+            SettingSection section = SearchSection(Items, index);
+            if (section != null)
+                section.IsSelected = true;
             ItemsTreeView.Focus();
+        }
+
+        public void SelectSection(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentException("Path must not be empty");
+            string[] names = path.Split('.');
+            SettingSection section = Items.FirstOrDefault(s => s.Name == names[0]);
+            for (int i = 1; i < names.Length; i++)
+                section = section?.SubSections?.FirstOrDefault(s => s.Name == names[i]);
+            if (section == null)
+                throw new ArgumentException("Invalid path");
+            section.IsSelected = true;
+            ItemsTreeView.Focus();
+        }
+
+        private SettingSection SearchSection(IEnumerable<SettingSection> sections, int index)
+        {
+            foreach (SettingSection s in sections)
+            {
+                SettingSection childSection = SearchSection(s, ref index);
+                if (childSection != null)
+                    return childSection;
+            }
+            return null;
+        }
+
+        private SettingSection SearchSection(SettingSection section, ref int index)
+        {
+            if (index == 0)
+                return section;
+            index--;
+            if (section.SubSections == null)
+                return null;
+            foreach (SettingSection s in section.SubSections)
+            {
+                SettingSection childSection = SearchSection(s, ref index);
+                if (childSection != null)
+                    return childSection;
+            }
+            return null;
         }
     }
 }
