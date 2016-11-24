@@ -8,6 +8,7 @@ namespace WpfSettings.SettingElements
         public string LabelWidth { get; set; }
         public SectionExpansion Expansion { get; set; }
         public Action<string> SelectSection { get; set; }
+        public string Path { get; private set; }
 
         public ConverterArgs()
         {
@@ -15,6 +16,7 @@ namespace WpfSettings.SettingElements
             LabelWidth = "140";
             Expansion = SectionExpansion.Unset;
             SelectSection = null;
+            Path = string.Empty;
         }
 
         public ConverterArgs(ConverterArgs other)
@@ -23,6 +25,7 @@ namespace WpfSettings.SettingElements
             LabelWidth = other.LabelWidth;
             Expansion = other.Expansion;
             SelectSection = other.SelectSection;
+            Path = other.Path;
         }
 
         public ConverterArgs(ConverterArgs other, SettingAttribute attribute)
@@ -31,6 +34,7 @@ namespace WpfSettings.SettingElements
             LabelWidth = !string.IsNullOrEmpty(attribute.LabelWidth) ? attribute.LabelWidth : other.LabelWidth;
             Expansion = other.Expansion;
             SelectSection = other.SelectSection;
+            Path = other.Path;
         }
 
         public ConverterArgs(ConverterArgs other, SettingSectionAttribute attribute)
@@ -41,9 +45,10 @@ namespace WpfSettings.SettingElements
                 ? attribute.Expansion
                 : other.Expansion;
             SelectSection = other.SelectSection;
+            Path = other.Path;
         }
 
-        public ConverterArgs ChildrenArgs(SettingSectionAttribute attribute)
+        public ConverterArgs ChildrenArgs(SettingSectionAttribute attribute, string name)
         {
             var e = new ConverterArgs(this);
             if (!string.IsNullOrEmpty(attribute.LabelWidth))
@@ -51,6 +56,7 @@ namespace WpfSettings.SettingElements
             e.Expansion = attribute.Expansion != SectionExpansion.Unset
                 ? attribute.Expansion
                 : NextExpansion();
+            e.Path += (e.Path == "" ? "" : ".") + name;
             return e;
         }
 

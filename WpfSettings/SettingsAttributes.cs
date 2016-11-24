@@ -70,7 +70,7 @@ namespace WpfSettings
                 IsExpanded = e.Expansion == SectionExpansion.Expanded ||
                              e.Expansion == SectionExpansion.ExpandedRecursive
             };
-            e = e.ChildrenArgs(this);
+            e = e.ChildrenArgs(this, member.Name);
             section.SubSections = SettingsConverter.GetSections(value, e);
             section.Elements = SettingsConverter.GetElements(value, e);
             section.Label = Label ?? SettingsConverter.InferLabel(member.Name);
@@ -81,7 +81,27 @@ namespace WpfSettings
                 section.Icon = image.ToBitmapSource();
             }
             section.Position = Position;
+
+            // Add links to sub-sections page if no elements
+            if (!section.Elements.Any())
+            {
+                int pos = 0;
+                foreach (SettingSection subSection in section.SubSections)
+                    section.Elements.Add(CreateLink(e, value, subSection, pos++));
+            }
+
             return section;
+        }
+
+        private static LinkButtonSetting CreateLink(ConverterArgs e, object value, SettingSection subSection, int pos)
+        {
+            return new LinkButtonSetting(value, null)
+            {
+                Label = subSection.Label,
+                Path = e.Path + "." + subSection.Name,
+                SelectSection = e.SelectSection,
+                Position = pos
+            };
         }
     }
 
