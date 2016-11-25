@@ -264,9 +264,39 @@
     <!-- Button -->
     <DataTemplate DataType="{x:Type settingElements:ButtonSetting}">
         <StackPanel Orientation="Vertical">
+            <StackPanel.Resources>
+                <Style x:Key="FlatButtonStyle">
+                    <Setter Property="Button.Background" Value="{x:Null}" />
+                    <Setter Property="Button.BorderBrush" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <Trigger Property="Button.IsMouseOver" Value="True">
+                            <Setter Property="Button.Background" Value="{x:Null}" />
+                            <Setter Property="Button.BorderBrush" Value="{x:Null}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style x:Key="LinkButtonStyle">
+                    <Setter Property="Button.Background" Value="{x:Null}" />
+                    <Setter Property="Button.BorderBrush" Value="{x:Null}" />
+                    <Setter Property="Button.Foreground" Value="DimGray" />
+                    <Setter Property="TextBlock.TextDecorations" Value="Underline" />
+                    <Style.Triggers>
+                        <Trigger Property="Button.IsMouseOver" Value="True">
+                            <Setter Property="Button.Background" Value="{x:Null}" />
+                            <Setter Property="Button.BorderBrush" Value="{x:Null}" />
+                            <Setter Property="Button.Foreground" Value="Black" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <wpf:ButtonTypeToStyleConverter x:Key="ButtonTypeToStyle"
+                                                FlatStyle="{StaticResource FlatButtonStyle}"
+                                                LinkStyle="{StaticResource LinkButtonStyle}" />
+            </StackPanel.Resources>
             <Button Height="26" Margin="3" HorizontalAlignment="{Binding Alignment}"
-                    Command="{Binding PressedCommand}">
-                <TextBlock Text="{Binding Label}" Margin="6,0,6,0" />
+                    Command="{Binding PressedCommand}"
+                    Style="{Binding Type, Converter={StaticResource ButtonTypeToStyle}}">
+                <TextBlock Text="{Binding Label}" Margin="6,0,6,0"
+                           Style="{Binding Type, Converter={StaticResource ButtonTypeToStyle}}" />
             </Button>
             <controls:ShyTextBlock Margin="3,-2,3,3" HorizontalAlignment="{Binding Alignment}"
                                    Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />

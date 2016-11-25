@@ -95,13 +95,15 @@ namespace WpfSettings
 
         private static LinkButtonSetting CreateLink(ConverterArgs e, object value, SettingSection subSection, int pos)
         {
-            return new LinkButtonSetting(value, null)
+            var button = new LinkButtonSetting(value, null)
             {
                 Label = subSection.Label,
                 Path = e.Path + "." + subSection.Name,
                 SelectSection = e.SelectSection,
-                Position = pos
+                Position = pos,
+                Type = ButtonType.Link
             };
+            return button;
         }
     }
 
@@ -493,6 +495,12 @@ namespace WpfSettings
         /// </summary>
         public HorizontalAlignment Alignment { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the style of the button.
+        ///     Defaults to Normal.
+        /// </summary>
+        public ButtonType Type { get; set; }
+
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
@@ -503,6 +511,7 @@ namespace WpfSettings
             ButtonSetting element = GetSetting(parent, member, type, e);
             Fill(element, e, member.Name);
             element.Alignment = Alignment;
+            element.Type = Type;
             return element;
         }
 

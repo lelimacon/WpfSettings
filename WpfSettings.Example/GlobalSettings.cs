@@ -85,7 +85,7 @@ namespace WpfSettings.Example
              SuffixLabel = "%")]
         public int ElementsSizes { get; set; } = 100;
 
-        [SettingButton(Label = "Style settings")]
+        [SettingButton(Label = "Style settings", Type = ButtonType.Link)]
         public string LinkToStyle { get; } = "Interface.Style";
     }
 

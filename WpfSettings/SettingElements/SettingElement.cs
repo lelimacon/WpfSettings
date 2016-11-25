@@ -516,14 +516,28 @@ namespace WpfSettings.SettingElements
         }
     }
 
+    public enum ButtonType
+    {
+        Normal,
+        Flat,
+        Link
+    }
+
     internal abstract class ButtonSetting : SettingPageElement
     {
         private HorizontalAlignment _alignment;
+        private ButtonType _type;
 
         public HorizontalAlignment Alignment
         {
             get { return _alignment; }
             set { Set(ref _alignment, value); }
+        }
+
+        public ButtonType Type
+        {
+            get { return _type; }
+            set { Set(ref _type, value); }
         }
 
         public ICommand PressedCommand { get; set; }
