@@ -234,6 +234,7 @@ namespace WpfSettings.SettingElements
     internal class StringSetting : SettingPageElement
     {
         private string _value;
+        private char _separator;
 
         public string Value
         {
@@ -241,20 +242,42 @@ namespace WpfSettings.SettingElements
             set { SetAndSave(ref _value, value); }
         }
 
+        public char Separator
+        {
+            get { return _separator; }
+            set { Set(ref _separator, value); }
+        }
+
         public StringSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
+            Separator = ';';
         }
 
         public override void Save()
         {
-            Member.SetValue(Parent, Value);
+            if (Member.DeclaringType == typeof(string))
+                Member.SetValue(Parent, Value);
+            else if (Member.DeclaringType == typeof(string[]))
+            {
+                string[] values = Value.Split(Separator);
+                Member.SetValue(Parent, values);
+            }
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Member.Name)
-                Value = (string) Member.GetValue(Parent);
+                Value = GetValue();
+        }
+
+        private string GetValue()
+        {
+            Type type = Member.GetValueType();
+            if (type == typeof(string))
+                return (string) Member.GetValue(Parent);
+            // type == typeof(string[])
+            return string.Join(Separator.ToString(), (string[]) Member.GetValue(Parent));
         }
     }
 

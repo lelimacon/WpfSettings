@@ -202,6 +202,9 @@ namespace WpfSettings.Example
         [SettingButton(Label = "Randomize content", Alignment = HorizontalAlignment.Right)]
         public Action Randomize { get; set; }
 
+        [SettingString(Separator = '/', Details = "Specify the note's keywords, separated by slashes.")]
+        public string[] Keywords { get; set; } = {".NET", "C#", "WPF", "settings"};
+
         public ContentSettings()
         {
             Randomize = ChangeContent;

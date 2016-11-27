@@ -219,19 +219,35 @@ namespace WpfSettings
         /// </summary>
         public string SuffixLabel { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the separator character for enumeration conversions.
+        ///     Defaults to ';' and ignored if target is string.
+        /// </summary>
+        public char Separator { get; set; } = ';';
+
         internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
-            if (type != typeof(string))
-                throw new ArgumentException("SettingStringAttribute must target a string");
+            if (type != typeof(string) && type != typeof(string[]))
+                throw new ArgumentException("SettingStringAttribute must target a string or string array");
             e = new ConverterArgs(e, this);
             StringSetting element = new StringSetting(parent, member);
             Fill(element, e, member.Name);
-            element.Value = (string) member.GetValue(parent);
+            element.Value = GetValue(parent, member);
             element.Prefix = Prefix;
             element.Suffix = Suffix;
             element.SuffixLabel = SuffixLabel;
+            element.Separator = Separator;
             return element;
+        }
+
+        private string GetValue(object parent, MemberInfo member)
+        {
+            Type type = member.GetValueType();
+            if (type == typeof(string))
+                return (string) member.GetValue(parent);
+            // type == typeof(string[])
+            return string.Join(Separator.ToString(), (string[]) member.GetValue(parent));
         }
     }
 
