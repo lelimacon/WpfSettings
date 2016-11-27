@@ -603,7 +603,6 @@ namespace WpfSettings.SettingElements
 
         public override void Save()
         {
-            Member.SetValue(Parent, Path);
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -637,7 +636,6 @@ namespace WpfSettings.SettingElements
 
         public override void Save()
         {
-            Member.SetValue(Parent, Action);
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
