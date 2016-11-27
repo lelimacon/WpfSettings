@@ -29,6 +29,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <TextBox Grid.Row="0" Grid.Column="0" Margin="3"
@@ -41,13 +42,30 @@
                      FontWeight="{Binding Settings.Interface.Style.ContentStyle.Style, Converter={StaticResource StyleToWeight}}"
                      FontStyle="{Binding Settings.Interface.Style.ContentStyle.Style, Converter={StaticResource StyleToFontStyle}}"
                      TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True" />
+            <StackPanel Grid.Row="2" Grid.Column="0" Margin="3"
+                        Orientation="Horizontal">
+                <TextBlock Text="Keywords:" FontWeight="Bold" Margin="3,0" />
+                <ItemsControl ItemsSource="{Binding Settings.Interface.Content.Keywords}" IsTabStop="False">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" Margin="3,0" Padding="3,0" Background="LightYellow" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
             <TextBlock Grid.Row="0" Grid.Column="1" Margin="3"
                        VerticalAlignment="Center" Text="Quick Settings" FontWeight="Bold" />
             <Button Grid.Row="0" Grid.Column="2" Margin="3" Height="26"
                     Content="All Settings"
                     Command="{Binding ShowSettingsCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" />
-            <wpfSettings:SettingsPage Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="3"
+            <wpfSettings:SettingsPage Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="3"
                                       Settings="{Binding QuickSettings}" />
         </Grid>
 

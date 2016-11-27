@@ -256,9 +256,10 @@ namespace WpfSettings.SettingElements
 
         public override void Save()
         {
-            if (Member.DeclaringType == typeof(string))
+            Type type = Member.GetValueType();
+            if (type == typeof(string))
                 Member.SetValue(Parent, Value);
-            else if (Member.DeclaringType == typeof(string[]))
+            else // type == typeof(string[])
             {
                 string[] values = Value.Split(Separator);
                 Member.SetValue(Parent, values);
