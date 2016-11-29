@@ -280,6 +280,7 @@
                     <Setter Property="Button.BorderBrush" Value="{x:Null}" />
                     <Setter Property="Button.Foreground" Value="DimGray" />
                     <Setter Property="TextBlock.TextDecorations" Value="Underline" />
+                    <Setter Property="Button.Cursor" Value="{x:Static Cursors.Hand}" />
                     <Style.Triggers>
                         <Trigger Property="Button.IsMouseOver" Value="True">
                             <Setter Property="Button.Background" Value="{x:Null}" />
