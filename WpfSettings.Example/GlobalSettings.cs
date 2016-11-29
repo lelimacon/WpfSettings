@@ -263,9 +263,9 @@ namespace WpfSettings.Example
         [SettingChoice(ItemsSource = nameof(Languages), Height = "*",
              Type = SettingChoiceType.ListView,
              ItemsLabelPath = "Name")]
-        public string DisplayLanguage { get; set; } = "En";
+        public Language DisplayLanguage { get; set; } = Languages[1];
 
-        public List<Language> Languages { get; } = new List<Language>
+        public static List<Language> Languages { get; } = new List<Language>
         {
             new Language("de", "German"),
             new Language("en", "English"),
