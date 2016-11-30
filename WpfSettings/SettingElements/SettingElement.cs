@@ -173,6 +173,8 @@ namespace WpfSettings.SettingElements
             set { Set(ref _suffixLabel, value); }
         }
 
+        public bool IsReadOnly => Member.IsReadOnly();
+
         protected SettingPageElement(object parent, MemberInfo member)
             : base(parent, member)
         {

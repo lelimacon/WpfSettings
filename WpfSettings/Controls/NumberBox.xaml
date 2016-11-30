@@ -4,20 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:WpfSettings.Controls"
+             xmlns:wpf="clr-namespace:WpfSettings.Utils.Wpf"
              mc:Ignorable="d"
              x:Name="Root"
              d:DesignWidth="300" d:DesignHeight="30">
 
+    <UserControl.Resources>
+        <wpf:NotConverter x:Key="Not" />
+    </UserControl.Resources>
+
     <Grid DataContext="{Binding ElementName=Root}">
         <controls:ValidationTextBox x:Name="NumberTextBox" VerticalContentAlignment="Center"
                                     Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
-                                    ValidateInput="{Binding ValidateInput}" />
+                                    ValidateInput="{Binding ValidateInput}"
+                                    IsReadOnly="{Binding IsReadOnly}" />
         <Button Width="20" Height="12" Margin="1"
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                 Focusable="False"
                 VerticalContentAlignment="Center" VerticalAlignment="Top"
                 HorizontalAlignment="Right"
-                Command="{Binding IncrementCommand}">
+                Command="{Binding IncrementCommand}"
+                IsEnabled="{Binding IsReadOnly, Converter={StaticResource Not}}">
             <TextBlock Text="▴" Margin="-5" Foreground="DimGray" Focusable="False" />
         </Button>
         <Button Width="20" Height="12" Margin="1"
@@ -25,7 +32,8 @@
                 Focusable="False"
                 VerticalContentAlignment="Center" VerticalAlignment="Bottom"
                 HorizontalAlignment="Right"
-                Command="{Binding DecrementCommand}">
+                Command="{Binding DecrementCommand}"
+                IsEnabled="{Binding IsReadOnly, Converter={StaticResource Not}}">
             <TextBlock Text="▾" Margin="-5" Foreground="DimGray" Focusable="False" />
         </Button>
     </Grid>

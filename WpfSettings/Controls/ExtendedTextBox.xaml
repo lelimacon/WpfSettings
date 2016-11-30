@@ -15,6 +15,7 @@
 
     <Grid DataContext="{Binding ElementName=Root}">
         <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
+                 IsReadOnly="{Binding IsReadOnly}"
                  VerticalContentAlignment="Center">
             <TextBox.Padding>
                 <MultiBinding Converter="{StaticResource PrefixSuffixToPadding}" Mode="OneWay">

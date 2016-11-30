@@ -22,6 +22,9 @@ namespace WpfSettings.Controls
         public static readonly DependencyProperty MaxValueProperty
             = MvvmUtils.RegisterDp<NumberBox>(int.MaxValue);
 
+        public static readonly DependencyProperty IsReadOnlyProperty
+            = MvvmUtils.RegisterDp<NumberBox>();
+
         /// <summary>
         ///     Gets or sets the value of the number.
         /// </summary>
@@ -59,6 +62,15 @@ namespace WpfSettings.Controls
         {
             get { return (int) GetValue(MaxValueProperty); }
             set { SetValueDp(MaxValueProperty, value); }
+        }
+
+        /// <summary>
+        ///     Gets or sets wether the content is editable.
+        /// </summary>
+        public bool IsReadOnly
+        {
+            get { return (bool) GetValue(IsReadOnlyProperty); }
+            set { SetValueDp(IsReadOnlyProperty, value); }
         }
 
         public Func<string, bool> ValidateInput { get; }

@@ -4,6 +4,8 @@
                     xmlns:wpf="clr-namespace:WpfSettings.Utils.Wpf"
                     xmlns:controls="clr-namespace:WpfSettings.Controls">
 
+    <wpf:NotConverter x:Key="Not" />
+
     <!-- Group: Box -->
     <DataTemplate DataType="{x:Type settingElements:SettingGroupBox}">
         <GroupBox Header="{Binding Label}" Margin="3">
@@ -37,7 +39,8 @@
             <controls:ExtendedTextBox Grid.Row="0" Grid.Column="1" Margin="3"
                                       Height="24"
                                       Text="{Binding Value}"
-                                      Prefix="{Binding Prefix}" Suffix="{Binding Suffix}" />
+                                      Prefix="{Binding Prefix}" Suffix="{Binding Suffix}"
+                                      IsReadOnly="{Binding IsReadOnly, Mode=OneWay}" />
             <Border Grid.Row="0" Grid.Column="2" Height="24">
                 <controls:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3" />
             </Border>
@@ -71,11 +74,13 @@
                     TickPlacement="BottomRight" TickFrequency="{Binding TickFrequency}"
                     Foreground="DarkGray"
                     IsSnapToTickEnabled="{Binding SnapToTick}"
-                    Visibility="{Binding SliderVisible, Converter={StaticResource BooleanToVisibility}}" />
+                    Visibility="{Binding SliderVisible, Converter={StaticResource BooleanToVisibility}}"
+                    IsEnabled="{Binding IsReadOnly, Mode=OneWay, Converter={StaticResource Not}}" />
             <controls:NumberBox Grid.Row="0" Grid.Column="2" Height="24" Margin="3"
                                 Value="{Binding Value}" Step="{Binding Step}"
                                 MinValue="{Binding MinValue}" MaxValue="{Binding MaxValue}"
-                                Visibility="{Binding SpinnerVisible, Converter={StaticResource BooleanToVisibility}}" />
+                                Visibility="{Binding SpinnerVisible, Converter={StaticResource BooleanToVisibility}}"
+                                IsReadOnly="{Binding IsReadOnly, Mode=OneWay}" />
             <Border Grid.Row="0" Grid.Column="2" Height="24" Margin="3"
                     Visibility="{Binding LabelVisible, Converter={StaticResource BooleanToVisibility}}">
                 <TextBlock Text="{Binding Value}" VerticalAlignment="Center" />
@@ -104,7 +109,8 @@
             </Border>
             <TextBox Grid.Row="0" Grid.Column="1" Margin="3"
                      TextWrapping="Wrap" AcceptsReturn="True"
-                     Text="{Binding Value}" />
+                     Text="{Binding Value}"
+                     IsReadOnly="{Binding IsReadOnly, Mode=OneWay}" />
             <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="3,0,3,3"
                                    Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
@@ -114,7 +120,8 @@
     <DataTemplate DataType="{x:Type settingElements:BoolSetting}">
         <StackPanel Orientation="Vertical">
             <CheckBox Margin="3" Content="{Binding Label}"
-                      IsChecked="{Binding Value}" />
+                      IsChecked="{Binding Value}"
+                      IsEnabled="{Binding IsReadOnly, Mode=OneWay, Converter={StaticResource Not}}" />
             <controls:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
                                    TextWrapping="Wrap" Margin="18,0,3,3" />
         </StackPanel>
@@ -135,7 +142,8 @@
                 <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
             </Border>
             <DatePicker Grid.Row="0" Grid.Column="1" Margin="3"
-                        Height="24" SelectedDate="{Binding Value}" />
+                        Height="24" SelectedDate="{Binding Value}"
+                        IsEnabled="{Binding IsReadOnly, Mode=OneWay, Converter={StaticResource Not}}" />
             <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="3,0,3,3"
                                    Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
         </Grid>
@@ -158,7 +166,8 @@
             </Border>
             <ComboBox Grid.Row="0" Grid.Column="1" Height="24" Margin="3"
                       ItemsSource="{Binding Choices}" SelectedItem="{Binding SelectedValue}"
-                      IsEditable="True" IsReadOnly="True" VerticalContentAlignment="Center">
+                      IsEditable="True" IsReadOnly="True" VerticalContentAlignment="Center"
+                      IsEnabled="{Binding IsReadOnly, Mode=OneWay, Converter={StaticResource Not}}">
                 <ComboBox.Resources>
                     <Style TargetType="ComboBoxItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -188,7 +197,8 @@
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Label}" Margin="3" />
             <ItemsControl Grid.Row="0" Grid.Column="1" Margin="0,0,0,3"
-                          ItemsSource="{Binding Choices}" IsTabStop="False">
+                          ItemsSource="{Binding Choices}" IsTabStop="False"
+                          IsEnabled="{Binding IsReadOnly, Mode=OneWay, Converter={StaticResource Not}}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
@@ -244,7 +254,8 @@
                 <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
             </Border>
             <ListView Grid.Row="0" Grid.Column="1" Margin="3"
-                      ItemsSource="{Binding Choices}" SelectedItem="{Binding SelectedValue}">
+                      ItemsSource="{Binding Choices}" SelectedItem="{Binding SelectedValue}"
+                      IsEnabled="{Binding IsReadOnly, Mode=OneWay, Converter={StaticResource Not}}">
                 <ListView.Resources>
                     <Style TargetType="ComboBoxItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />

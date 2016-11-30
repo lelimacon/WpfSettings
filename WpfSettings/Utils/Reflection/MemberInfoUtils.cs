@@ -18,6 +18,19 @@ namespace WpfSettings.Utils.Reflection
             }
         }
 
+        internal static bool IsReadOnly(this MemberInfo memberInfo)
+        {
+            switch (memberInfo.MemberType)
+            {
+                case MemberTypes.Field:
+                    return ((FieldInfo) memberInfo).IsInitOnly;
+                case MemberTypes.Property:
+                    return !((PropertyInfo) memberInfo).CanWrite;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
         internal static object GetValue(this MemberInfo memberInfo, object parent)
         {
             switch (memberInfo.MemberType)

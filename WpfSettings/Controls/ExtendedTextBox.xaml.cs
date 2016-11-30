@@ -17,6 +17,9 @@ namespace WpfSettings.Controls
         public static readonly DependencyProperty SuffixProperty
             = MvvmUtils.RegisterDp<ExtendedTextBox>();
 
+        public static readonly DependencyProperty IsReadOnlyProperty
+            = MvvmUtils.RegisterDp<ExtendedTextBox>();
+
         /// <summary>
         ///     Gets or sets the text content.
         /// </summary>
@@ -42,6 +45,15 @@ namespace WpfSettings.Controls
         {
             get { return (string) GetValue(SuffixProperty); }
             set { SetValueDp(SuffixProperty, value); }
+        }
+
+        /// <summary>
+        ///     Gets or sets wether the content is editable.
+        /// </summary>
+        public bool IsReadOnly
+        {
+            get { return (bool) GetValue(IsReadOnlyProperty); }
+            set { SetValueDp(IsReadOnlyProperty, value); }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -312,25 +312,20 @@ namespace WpfSettings.Example
     public class LocalizationSettings
     {
         [SettingString]
-        public string TimeFormat { get; set; } = "yyyy-MM-dd";
+        public string TimeFormat { get; } = "yyyy-MM-dd";
 
         [SettingChoice(ItemsSource = nameof(Currencies), ItemsLabelPath = "Name")]
-        public Currency Currency { get; set; }
+        public Currency Currency { get; } = Currencies[1];
 
         [SettingChoice]
-        public TemperatureUnit TemperatureUnit { get; set; } = TemperatureUnit.Celsius;
+        public TemperatureUnit TemperatureUnit { get; } = TemperatureUnit.Celsius;
 
-        public List<Currency> Currencies { get; } = new List<Currency>
+        public static List<Currency> Currencies { get; } = new List<Currency>
         {
             new Currency("USD", "$", "United States dollar"),
             new Currency("EUR", "€", "Euro"),
             new Currency("JPY", "¥", "Japanese Yen"),
             new Currency("GBP", "£", "Pound sterling")
         };
-
-        public LocalizationSettings()
-        {
-            Currency = Currencies[1];
-        }
     }
 }
