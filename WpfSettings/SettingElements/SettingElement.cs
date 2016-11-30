@@ -173,7 +173,7 @@ namespace WpfSettings.SettingElements
             set { Set(ref _suffixLabel, value); }
         }
 
-        public bool IsReadOnly => Member.IsReadOnly();
+        public bool IsReadOnly => Member?.IsReadOnly() ?? true;
 
         protected SettingPageElement(object parent, MemberInfo member)
             : base(parent, member)
@@ -236,12 +236,19 @@ namespace WpfSettings.SettingElements
     internal class StringSetting : SettingPageElement
     {
         private string _value;
+        private string _placeHolderText;
         private char _separator;
 
         public string Value
         {
             get { return _value; }
             set { SetAndSave(ref _value, value); }
+        }
+
+        public string PlaceHolderText
+        {
+            get { return _placeHolderText; }
+            set { Set(ref _placeHolderText, value); }
         }
 
         public char Separator

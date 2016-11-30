@@ -205,6 +205,11 @@ namespace WpfSettings
     public class SettingStringAttribute : SettingPageAttribute
     {
         /// <summary>
+        ///     Gets or sets the placeholder text string to display in the TextBox.
+        /// </summary>
+        public string PlaceHolderText { get; set; }
+
+        /// <summary>
         ///     Gets or sets the prefix string to display in the TextBox.
         /// </summary>
         public string Prefix { get; set; }
@@ -215,7 +220,7 @@ namespace WpfSettings
         public string Suffix { get; set; }
 
         /// <summary>
-        ///     Gets or sets a secondary label to display on the right.
+        ///     Gets or sets a secondary label to display on the right of the TextBox.
         /// </summary>
         public string SuffixLabel { get; set; }
 
@@ -234,6 +239,7 @@ namespace WpfSettings
             StringSetting element = new StringSetting(parent, member);
             Fill(element, e, member.Name);
             element.Value = GetValue(parent, member);
+            element.PlaceHolderText = PlaceHolderText;
             element.Prefix = Prefix;
             element.Suffix = Suffix;
             element.SuffixLabel = SuffixLabel;

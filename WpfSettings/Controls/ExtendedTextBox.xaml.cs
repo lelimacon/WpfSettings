@@ -11,6 +11,9 @@ namespace WpfSettings.Controls
         public static readonly DependencyProperty TextProperty
             = MvvmUtils.RegisterDp<ExtendedTextBox>();
 
+        public static readonly DependencyProperty PlaceHolderTextProperty
+            = MvvmUtils.RegisterDp<ExtendedTextBox>();
+
         public static readonly DependencyProperty PrefixProperty
             = MvvmUtils.RegisterDp<ExtendedTextBox>();
 
@@ -21,12 +24,21 @@ namespace WpfSettings.Controls
             = MvvmUtils.RegisterDp<ExtendedTextBox>();
 
         /// <summary>
-        ///     Gets or sets the text content.
+        ///     Gets or sets the box content.
         /// </summary>
         public string Text
         {
             get { return (string) GetValue(TextProperty); }
             set { SetValueDp(TextProperty, value); }
+        }
+
+        /// <summary>
+        ///     Gets or sets the placeholder text.
+        /// </summary>
+        public string PlaceHolderText
+        {
+            get { return (string) GetValue(PlaceHolderTextProperty); }
+            set { SetValueDp(PlaceHolderTextProperty, value); }
         }
 
         /// <summary>

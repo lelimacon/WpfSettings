@@ -10,13 +10,32 @@
 
     <UserControl.Resources>
         <wpf:ContentToVisibilityConverter x:Key="ContentToVisibility" />
+        <wpf:ContentToVisibilityInvConverter x:Key="ContentToVisibilityInv" />
         <wpf:PrefixSuffixToPaddingConverter x:Key="PrefixSuffixToPadding" />
     </UserControl.Resources>
 
     <Grid DataContext="{Binding ElementName=Root}">
+        <Border Background="White">
+            <TextBlock Text="{Binding PlaceHolderText}"
+                       Visibility="{Binding Text, Converter={StaticResource ContentToVisibilityInv}}"
+                       VerticalAlignment="Center" Foreground="DimGray" Margin="3,0">
+                <TextBlock.Padding>
+                    <MultiBinding Converter="{StaticResource PrefixSuffixToPadding}" Mode="OneWay">
+                        <Binding Path="Prefix" />
+                        <Binding Path="Suffix" />
+                        <Binding Path="FontFamily" />
+                        <Binding Path="FontStyle" />
+                        <Binding Path="FontWeight" />
+                        <Binding Path="FontStretch" />
+                        <Binding Path="FontSize" />
+                    </MultiBinding>
+                </TextBlock.Padding>
+            </TextBlock>
+        </Border>
         <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
                  IsReadOnly="{Binding IsReadOnly}"
-                 VerticalContentAlignment="Center">
+                 VerticalContentAlignment="Center"
+                 Background="Transparent">
             <TextBox.Padding>
                 <MultiBinding Converter="{StaticResource PrefixSuffixToPadding}" Mode="OneWay">
                     <Binding Path="Prefix" />

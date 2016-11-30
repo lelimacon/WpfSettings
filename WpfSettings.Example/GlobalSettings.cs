@@ -107,6 +107,7 @@ namespace WpfSettings.Example
         public EGender Gender { get; set; } = EGender.Other;
 
         [SettingString(Prefix = "Sir", Suffix = "the Great",
+             PlaceHolderText = "You have got to put a name...",
              InGroup = "GeneralInformation")]
         public string Name { get; set; } = "Bob";
 
@@ -156,7 +157,7 @@ namespace WpfSettings.Example
         public TextStyle Style { get; set; } = TextStyle.Bold;
 
         // TODO: color picker
-        [SettingString(Position = 0)]
+        [SettingString(Position = 0, PlaceHolderText = "Color here...")]
         public string Color { get; set; }
     }
 
@@ -258,7 +259,7 @@ namespace WpfSettings.Example
     public class LanguageSettings
     {
         [SettingBool]
-        public bool UseSystemLanguage { get; set; } = true;
+        public bool UseSystemLanguage { get; set; } = false;
 
         [SettingChoice(ItemsSource = nameof(Languages), Height = "*",
              Type = SettingChoiceType.ListView,
