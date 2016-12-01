@@ -11,6 +11,14 @@ using WpfSettings.Utils.Reflection;
 
 namespace WpfSettings
 {
+    public enum ReadOnly
+    {
+        Unset,
+        No,
+        Yes,
+        YesRecursive
+    }
+
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public abstract class SettingAttribute : Attribute
     {
@@ -33,6 +41,15 @@ namespace WpfSettings
         ///     Defaults to 140.
         /// </summary>
         public string LabelWidth { get; set; }
+
+        /// <summary>
+        ///     Gets or sets write ability on setting elements.
+        ///     Overrides a non-readonly field or a property with public setter.
+        ///     Does not affect sections or groups.
+        ///     This is a recursive parameter.
+        ///     Defaults to Unset (No).
+        /// </summary>
+        public ReadOnly IsReadOnly { get; set; }
     }
 
     public enum SectionExpansion
@@ -132,6 +149,7 @@ namespace WpfSettings
 
         internal void Fill(SettingPageElement element, ConverterArgs e, string name)
         {
+            element.ReadOnly = e.IsReadOnly == ReadOnly.Yes || e.IsReadOnly == ReadOnly.YesRecursive;
             element.Label = Label ?? SettingsConverter.InferLabel(name);
             element.LabelWidth = e.LabelWidth;
             if (Details != null)

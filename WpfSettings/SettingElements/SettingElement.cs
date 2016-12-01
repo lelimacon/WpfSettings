@@ -130,6 +130,7 @@ namespace WpfSettings.SettingElements
         private string _prefix;
         private string _suffix;
         private string _suffixLabel;
+        private bool _readOnly;
 
         public string Height
         {
@@ -173,7 +174,13 @@ namespace WpfSettings.SettingElements
             set { Set(ref _suffixLabel, value); }
         }
 
-        public bool IsReadOnly => Member?.IsReadOnly() ?? true;
+        public bool ReadOnly
+        {
+            get { return _readOnly; }
+            set { Set(ref _readOnly, value); }
+        }
+
+        public bool IsReadOnly => ReadOnly || (Member?.IsReadOnly() ?? true);
 
         protected SettingPageElement(object parent, MemberInfo member)
             : base(parent, member)
@@ -265,6 +272,8 @@ namespace WpfSettings.SettingElements
 
         public override void Save()
         {
+            if (IsReadOnly)
+                return;
             Type type = Member.GetValueType();
             if (type == typeof(string))
                 Member.SetValue(Parent, Value);
@@ -358,6 +367,8 @@ namespace WpfSettings.SettingElements
 
         public override void Save()
         {
+            if (IsReadOnly)
+                return;
             Member.SetValue(Parent, Value);
         }
 
@@ -385,6 +396,8 @@ namespace WpfSettings.SettingElements
 
         public override void Save()
         {
+            if (IsReadOnly)
+                return;
             Member.SetValue(Parent, Value);
         }
 
@@ -412,6 +425,8 @@ namespace WpfSettings.SettingElements
 
         public override void Save()
         {
+            if (IsReadOnly)
+                return;
             Member.SetValue(Parent, Value);
         }
 
@@ -439,6 +454,8 @@ namespace WpfSettings.SettingElements
 
         public override void Save()
         {
+            if (IsReadOnly)
+                return;
             Member.SetValue(Parent, Value);
         }
 
@@ -494,6 +511,8 @@ namespace WpfSettings.SettingElements
 
         public override void Save()
         {
+            if (IsReadOnly)
+                return;
             if (SelectedValue == null)
                 return;
             Member.SetValue(Parent, SelectedValue.Value);
