@@ -100,7 +100,6 @@
     <Compile Include="Utils\BitmapUtils.cs" />
     <Compile Include="Utils\Wpf\LeftMarginMultiplierConverter.cs" />
     <Compile Include="Controls\ValidationTextBox.cs" />
-    <Compile Include="Controls\PlaceHolderTextBox.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utils\Reflection\MemberInfoUtils.cs" />
     <Compile Include="Utils\Wpf\RelayCommand.cs" />

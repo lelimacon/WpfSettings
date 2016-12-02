@@ -19,10 +19,9 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <controls:PlaceHolderTextBox x:Name="SearchBox" Grid.Row="0" Grid.Column="0"
-                                     Margin="3" Height="26" Background="White"
-                                     VerticalContentAlignment="Center" FontSize="12"
-                                     PlaceHolderText="Search" />
+        <controls:ExtendedTextBox x:Name="SearchBox" Grid.Row="0" Grid.Column="0"
+                                  Margin="3" Height="24" FontSize="12"
+                                  PlaceHolderText="Search" />
 
         <Button Grid.Row="0" Grid.Column="0" Margin="3"
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
