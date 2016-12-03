@@ -16,6 +16,9 @@ namespace WpfSettings
         public static readonly DependencyProperty ItemsProperty =
             MvvmUtils.RegisterDp<SettingsExplorer>(ItemsChanged);
 
+        public static readonly DependencyProperty FilterProperty =
+            MvvmUtils.RegisterDp<SettingsExplorer>();
+
         public static readonly DependencyProperty ChangeActionProperty =
             MvvmUtils.RegisterDp<SettingsExplorer>(new FrameworkPropertyMetadata());
 
@@ -23,6 +26,12 @@ namespace WpfSettings
         {
             get { return (ObservableCollection<SettingSection>) GetValue(ItemsProperty); }
             set { SetValueDp(ItemsProperty, value); }
+        }
+
+        public string Filter
+        {
+            get { return (string) GetValue(FilterProperty); }
+            set { SetValueDp(FilterProperty, value); }
         }
 
         public Action<SettingSection> ChangeAction

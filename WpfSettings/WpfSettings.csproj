@@ -91,6 +91,7 @@
       <DependentUpon>SettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\Wpf\ContentToVisibilityInvConverter.cs" />
+    <Compile Include="Utils\Wpf\SettingSectionFilterConverter.cs" />
     <Compile Include="Utils\Wpf\NotConverter.cs" />
     <Compile Include="Utils\Wpf\ButtonTypeToStyleConverter.cs" />
     <Compile Include="Utils\Wpf\ContentToVisibilityConverter.cs" />

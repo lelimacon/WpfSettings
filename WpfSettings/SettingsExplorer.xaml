@@ -177,16 +177,32 @@
             </Setter>
         </Style>
 
+        <wpf:SettingSectionFilterConverter x:Key="SettingSectionFilter" />
+
     </UserControl.Resources>
 
     <TreeView x:Name="ItemsTreeView" DataContext="{Binding ElementName=Root}"
-              ItemsSource="{Binding Items}"
               SelectedItemChanged="OnSelectionChanged"
               Background="#F5F5F5">
 
+        <TreeView.ItemsSource>
+            <MultiBinding Converter="{StaticResource SettingSectionFilter}" Mode="OneWay">
+                <Binding Path="Items" />
+                <Binding Path="Filter" />
+            </MultiBinding>
+        </TreeView.ItemsSource>
+
         <TreeView.Resources>
-            <HierarchicalDataTemplate DataType="{x:Type settingElements:SettingSection}"
-                                      ItemsSource="{Binding SubSections}">
+            <HierarchicalDataTemplate DataType="{x:Type settingElements:SettingSection}">
+
+                <HierarchicalDataTemplate.ItemsSource>
+                    <MultiBinding Converter="{StaticResource SettingSectionFilter}" Mode="OneWay">
+                        <Binding Path="SubSections" />
+                        <Binding Path="DataContext.Filter"
+                                 RelativeSource="{RelativeSource AncestorType={x:Type ItemsControl}}" />
+                    </MultiBinding>
+                </HierarchicalDataTemplate.ItemsSource>
+
                 <Border BorderBrush="{x:Null}" Height="22">
                     <StackPanel x:Name="TreeViewFolderItem" Orientation="Horizontal"
                                 VerticalAlignment="Center">
