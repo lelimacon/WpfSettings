@@ -63,6 +63,12 @@ namespace WpfSettings.SettingElements
 
         public abstract void Save();
         protected abstract void OuterPropertyChanged(object sender, PropertyChangedEventArgs e);
+
+        public virtual bool Matches(string filter)
+        {
+            bool labelMatch = Label?.ToUpper().Contains(filter) ?? false;
+            return labelMatch;
+        }
     }
 
     public class SettingSection : SettingElement
@@ -118,6 +124,14 @@ namespace WpfSettings.SettingElements
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+        }
+
+        public override bool Matches(string filter)
+        {
+            bool parentMatch = base.Matches(filter);
+            bool childrenMatch = Elements.Any(e => e.Matches(filter));
+            bool subSectionsMatch = SubSections.Any(e => e.Matches(filter));
+            return parentMatch || childrenMatch || subSectionsMatch;
         }
     }
 
@@ -195,6 +209,13 @@ namespace WpfSettings.SettingElements
             if (AutoSave)
                 Save();
         }
+
+        public override bool Matches(string filter)
+        {
+            bool parentMatch = base.Matches(filter);
+            bool detailsMatch = Details?.ToUpper().Contains(filter) ?? false;
+            return parentMatch || detailsMatch;
+        }
     }
 
     internal abstract class SettingGroup : SettingPageElement
@@ -221,6 +242,13 @@ namespace WpfSettings.SettingElements
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+        }
+
+        public override bool Matches(string filter)
+        {
+            bool parentMatch = base.Matches(filter);
+            bool childrenMatch = Elements.Any(e => e.Matches(filter));
+            return parentMatch || childrenMatch;
         }
     }
 
@@ -485,6 +513,13 @@ namespace WpfSettings.SettingElements
         {
             return Label;
         }
+
+        public bool Matches(string filter)
+        {
+            bool labelMatch = Label?.ToUpper().Contains(filter) ?? false;
+            bool detailsMatch = Details?.ToUpper().Contains(filter) ?? false;
+            return labelMatch || detailsMatch;
+        }
     }
 
     internal abstract class ChoiceSetting : SettingPageElement
@@ -526,6 +561,13 @@ namespace WpfSettings.SettingElements
                 SettingField field = Choices.FirstOrDefault(a => a.Value.Equals(value));
                 SelectedValue = field;
             }
+        }
+
+        public override bool Matches(string filter)
+        {
+            bool parentMatch = base.Matches(filter);
+            bool childrenMatch = Choices.Any(e => e.Matches(filter));
+            return parentMatch || childrenMatch;
         }
     }
 

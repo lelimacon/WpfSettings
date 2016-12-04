@@ -20,6 +20,7 @@
         </Grid.RowDefinitions>
 
         <controls:ExtendedTextBox x:Name="SearchBox" Grid.Row="0" Grid.Column="0"
+                                  Text="{Binding Filter, Mode=OneWayToSource}"
                                   Margin="3" Height="24" FontSize="12"
                                   PlaceHolderText="Search" />
 
@@ -37,6 +38,7 @@
 
         <local:SettingsExplorer x:Name="Explorer" Grid.Row="1" Grid.Column="0" Margin="3"
                                 Items="{Binding SettingElements}"
+                                Filter="{Binding Filter, Mode=OneWay}"
                                 ChangeAction="{Binding ChangeSectionAction}" />
 
         <ScrollViewer Grid.Row="1" Grid.Column="1"

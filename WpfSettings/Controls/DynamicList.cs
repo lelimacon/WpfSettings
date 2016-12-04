@@ -36,6 +36,8 @@ namespace WpfSettings.Controls
 
         private void SetRowDefinitions()
         {
+            if (ItemsSource == null)
+                return;
             foreach (IListElement item in ItemsSource)
             {
                 GridLength height = GetHeight(item.Height);

@@ -32,6 +32,9 @@ namespace WpfSettings
         public static readonly DependencyProperty ExplorerWidthProperty =
             MvvmUtils.RegisterDp<SettingsControl>(defaultValue: "220");
 
+        public static readonly DependencyProperty FilterProperty =
+            MvvmUtils.RegisterDp<SettingsControl>();
+
         public object Settings
         {
             get { return GetValue(SettingsProperty); }
@@ -74,6 +77,12 @@ namespace WpfSettings
             set { SetValueDp(ExplorerWidthProperty, value); }
         }
 
+        public string Filter
+        {
+            get { return (string) GetValue(FilterProperty); }
+            set { SetValueDp(FilterProperty, value); }
+        }
+
         public Action<SettingSection> ChangeSectionAction { get; }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -93,8 +102,8 @@ namespace WpfSettings
 
         private void ChangeSection(SettingSection section)
         {
-            CategoryTitle = section.Label;
-            CurrentPageConfig = section.Elements;
+            CategoryTitle = section?.Label;
+            CurrentPageConfig = section?.Elements;
         }
 
         private static void SettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

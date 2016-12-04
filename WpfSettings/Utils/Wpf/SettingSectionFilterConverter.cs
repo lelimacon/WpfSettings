@@ -16,7 +16,7 @@ namespace WpfSettings.Utils.Wpf
             if (sections == null || string.IsNullOrEmpty(filter))
                 return sections;
             filter = filter.ToUpper();
-            return sections.Where(s => s.Name?.ToUpper().Contains(filter) ?? true);
+            return sections.Where(s => s.Matches(filter));
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
