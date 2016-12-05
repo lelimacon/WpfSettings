@@ -177,7 +177,7 @@
             </Setter>
         </Style>
 
-        <wpf:SettingSectionFilterConverter x:Key="SettingSectionFilter" />
+        <wpf:SettingFilterConverter x:Key="SettingFilter" />
 
     </UserControl.Resources>
 
@@ -186,7 +186,7 @@
               Background="#F5F5F5">
 
         <TreeView.ItemsSource>
-            <MultiBinding Converter="{StaticResource SettingSectionFilter}" Mode="OneWay">
+            <MultiBinding Converter="{StaticResource SettingFilter}" Mode="OneWay">
                 <Binding Path="Items" />
                 <Binding Path="Filter" />
             </MultiBinding>
@@ -196,7 +196,7 @@
             <HierarchicalDataTemplate DataType="{x:Type settingElements:SettingSection}">
 
                 <HierarchicalDataTemplate.ItemsSource>
-                    <MultiBinding Converter="{StaticResource SettingSectionFilter}" Mode="OneWay">
+                    <MultiBinding Converter="{StaticResource SettingFilter}" Mode="OneWay">
                         <Binding Path="SubSections" />
                         <Binding Path="DataContext.Filter"
                                  RelativeSource="{RelativeSource AncestorType={x:Type ItemsControl}}" />

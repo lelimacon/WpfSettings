@@ -17,15 +17,23 @@ namespace WpfSettings.SettingElements
     public abstract class SettingElement : INotifyPropertyChanged
     {
         private int _position;
+        private bool _visible;
         private string _label;
+
         public object Parent { get; }
         public MemberInfo Member { get; }
-        public string Name => Member.Name;
+        public string Name => Member?.Name;
 
         public int Position
         {
             get { return _position; }
             set { Set(ref _position, value); }
+        }
+
+        public bool Visible
+        {
+            get { return _visible; }
+            set { Set(ref _visible, value); }
         }
 
         public string Label
@@ -36,9 +44,10 @@ namespace WpfSettings.SettingElements
 
         protected SettingElement(object parent, MemberInfo member)
         {
+            Visible = true;
             Parent = parent;
             Member = member;
-            Label = member?.Name;
+            Label = Name;
             var propertyChanged = parent as INotifyPropertyChanged;
             if (propertyChanged != null)
                 propertyChanged.PropertyChanged += OuterPropertyChanged;
@@ -64,10 +73,11 @@ namespace WpfSettings.SettingElements
         public abstract void Save();
         protected abstract void OuterPropertyChanged(object sender, PropertyChangedEventArgs e);
 
-        public virtual bool Matches(string filter)
+        public virtual bool Matches(string filter, bool parentMatch = false)
         {
             bool labelMatch = Label?.ToUpper().Contains(filter) ?? false;
-            return labelMatch;
+            Visible = parentMatch || labelMatch;
+            return parentMatch || labelMatch;
         }
     }
 
@@ -126,12 +136,14 @@ namespace WpfSettings.SettingElements
         {
         }
 
-        public override bool Matches(string filter)
+        public override bool Matches(string filter, bool parentMatch = false)
         {
-            bool parentMatch = base.Matches(filter);
-            bool childrenMatch = Elements.Any(e => e.Matches(filter));
-            bool subSectionsMatch = SubSections.Any(e => e.Matches(filter));
-            return parentMatch || childrenMatch || subSectionsMatch;
+            bool baseMatch = base.Matches(filter, parentMatch);
+            // Using count so all elements are processed (any stops at first occurrence)
+            bool childrenMatch = Elements.Count(e => e.Matches(filter, baseMatch)) > 0;
+            bool subSectionsMatch = SubSections.Count(e => e.Matches(filter, baseMatch)) > 0;
+            Visible = baseMatch || childrenMatch || subSectionsMatch;
+            return baseMatch || childrenMatch || subSectionsMatch;
         }
     }
 
@@ -210,11 +222,12 @@ namespace WpfSettings.SettingElements
                 Save();
         }
 
-        public override bool Matches(string filter)
+        public override bool Matches(string filter, bool parentMatch = false)
         {
-            bool parentMatch = base.Matches(filter);
+            bool baseMatch = base.Matches(filter, parentMatch);
             bool detailsMatch = Details?.ToUpper().Contains(filter) ?? false;
-            return parentMatch || detailsMatch;
+            Visible = baseMatch || detailsMatch;
+            return baseMatch || detailsMatch;
         }
     }
 
@@ -244,11 +257,13 @@ namespace WpfSettings.SettingElements
         {
         }
 
-        public override bool Matches(string filter)
+        public override bool Matches(string filter, bool parentMatch = false)
         {
-            bool parentMatch = base.Matches(filter);
-            bool childrenMatch = Elements.Any(e => e.Matches(filter));
-            return parentMatch || childrenMatch;
+            bool baseMatch = base.Matches(filter, parentMatch);
+            // Using count so all elements are processed (any stops at first occurrence)
+            bool childrenMatch = Elements.Count(e => e.Matches(filter, baseMatch)) > 0;
+            Visible = baseMatch || childrenMatch;
+            return baseMatch || childrenMatch;
         }
     }
 
@@ -514,7 +529,7 @@ namespace WpfSettings.SettingElements
             return Label;
         }
 
-        public bool Matches(string filter)
+        public bool Matches(string filter, bool parentMatch = false)
         {
             bool labelMatch = Label?.ToUpper().Contains(filter) ?? false;
             bool detailsMatch = Details?.ToUpper().Contains(filter) ?? false;
@@ -563,11 +578,13 @@ namespace WpfSettings.SettingElements
             }
         }
 
-        public override bool Matches(string filter)
+        public override bool Matches(string filter, bool parentMatch = false)
         {
-            bool parentMatch = base.Matches(filter);
-            bool childrenMatch = Choices.Any(e => e.Matches(filter));
-            return parentMatch || childrenMatch;
+            bool baseMatch = base.Matches(filter, parentMatch);
+            // Using count so all elements are processed (any stops at first occurrence)
+            bool childrenMatch = Choices.Count(e => e.Matches(filter, baseMatch)) > 0;
+            Visible = baseMatch || childrenMatch;
+            return baseMatch || childrenMatch;
         }
     }
 

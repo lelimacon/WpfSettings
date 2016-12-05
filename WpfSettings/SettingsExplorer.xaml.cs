@@ -17,7 +17,7 @@ namespace WpfSettings
             MvvmUtils.RegisterDp<SettingsExplorer>(ItemsChanged);
 
         public static readonly DependencyProperty FilterProperty =
-            MvvmUtils.RegisterDp<SettingsExplorer>();
+            MvvmUtils.RegisterDp<SettingsExplorer>(FilterChanged);
 
         public static readonly DependencyProperty ChangeActionProperty =
             MvvmUtils.RegisterDp<SettingsExplorer>(new FrameworkPropertyMetadata());
@@ -117,6 +117,14 @@ namespace WpfSettings
                     return childSection;
             }
             return null;
+        }
+
+        private static void FilterChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            SettingsExplorer explorer = (SettingsExplorer) d;
+            string filter = (e.NewValue as string)?.ToUpper();
+            foreach (SettingSection section in explorer.Items)
+                section.Matches(filter);
         }
     }
 }
