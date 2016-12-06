@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:settingElements="clr-namespace:WpfSettings.SettingElements"
              xmlns:wpf="clr-namespace:WpfSettings.Utils.Wpf"
+             xmlns:controls="clr-namespace:WpfSettings.Controls"
              mc:Ignorable="d"
              x:Name="Root"
              d:DesignHeight="100" d:DesignWidth="300"
@@ -199,7 +200,7 @@
                     <MultiBinding Converter="{StaticResource SettingFilter}" Mode="OneWay">
                         <Binding Path="SubSections" />
                         <Binding Path="DataContext.Filter"
-                                 RelativeSource="{RelativeSource AncestorType={x:Type ItemsControl}}" />
+                                 RelativeSource="{RelativeSource AncestorType={x:Type TreeView}}" />
                     </MultiBinding>
                 </HierarchicalDataTemplate.ItemsSource>
 
@@ -207,9 +208,13 @@
                     <StackPanel x:Name="TreeViewFolderItem" Orientation="Horizontal"
                                 VerticalAlignment="Center">
                         <Image Source="{Binding Icon}" Margin="0,0,5,0" MaxWidth="16" MaxHeight="16" />
-                        <TextBlock Text="{Binding Label}" />
+                        <controls:ExtendedTextBlock
+                            Text="{Binding Label}"
+                            HighlightText="{Binding DataContext.Filter, Mode=TwoWay,
+                                RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}" />
                     </StackPanel>
                 </Border>
+
             </HierarchicalDataTemplate>
         </TreeView.Resources>
 

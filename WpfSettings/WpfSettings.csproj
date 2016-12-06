@@ -78,6 +78,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\DynamicList.cs" />
+    <Compile Include="Controls\ExtendedTextBlock.xaml.cs">
+      <DependentUpon>ExtendedTextBlock.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ExtendedTextBox.xaml.cs">
       <DependentUpon>ExtendedTextBox.xaml</DependentUpon>
     </Compile>
@@ -116,6 +119,10 @@
     <Compile Include="Controls\ShyTextBlock.cs" />
     <Compile Include="Utils\Wpf\TreeViewItemExtensions.cs" />
     <Compile Include="Utils\Wpf\MvvmUtils.cs" />
+    <Page Include="Controls\ExtendedTextBlock.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Controls\ExtendedTextBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
