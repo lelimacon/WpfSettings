@@ -43,7 +43,8 @@
 
         <ScrollViewer Grid.Row="1" Grid.Column="1"
                       Margin="3" VerticalScrollBarVisibility="Auto">
-            <local:SettingsPage SettingElements="{Binding CurrentPageConfig, Mode=TwoWay}" />
+            <local:SettingsPage SettingElements="{Binding CurrentPageConfig, Mode=TwoWay}"
+                                Filter="{Binding Filter, Mode=OneWay}" />
         </ScrollViewer>
 
         <Rectangle Grid.Row="1" Grid.Column="1" Margin="6,3" Height="1"

@@ -2,13 +2,20 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:settingElements="clr-namespace:WpfSettings.SettingElements"
                     xmlns:wpf="clr-namespace:WpfSettings.Utils.Wpf"
-                    xmlns:controls="clr-namespace:WpfSettings.Controls">
+                    xmlns:controls="clr-namespace:WpfSettings.Controls"
+                    xmlns:local="clr-namespace:WpfSettings">
 
     <wpf:NotConverter x:Key="Not" />
 
     <!-- Group: Box -->
     <DataTemplate DataType="{x:Type settingElements:SettingGroupBox}">
-        <GroupBox Header="{Binding Label}" Margin="3">
+        <GroupBox Margin="3">
+            <GroupBox.Header>
+                <controls:ExtendedTextBlock
+                    Text="{Binding Label}" VerticalAlignment="Center"
+                    HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
+            </GroupBox.Header>
             <ItemsControl ItemsSource="{Binding Elements}" IsTabStop="False" />
         </GroupBox>
     </DataTemplate>
@@ -16,7 +23,11 @@
     <!-- Group: Title -->
     <DataTemplate DataType="{x:Type settingElements:SettingGroupTitle}">
         <StackPanel Orientation="Vertical">
-            <TextBlock Text="{Binding Label}" FontWeight="Bold" Margin="3" />
+            <controls:ExtendedTextBlock
+                Text="{Binding Label}" Margin="3"
+                VerticalAlignment="Center" FontWeight="Bold"
+                HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
             <ItemsControl ItemsSource="{Binding Elements}" Margin="9,3,3,3" IsTabStop="False" />
         </StackPanel>
     </DataTemplate>
@@ -34,7 +45,10 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="3">
-                <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
+                <controls:ExtendedTextBlock
+                    Text="{Binding Label}" VerticalAlignment="Center"
+                    HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
             </Border>
             <controls:ExtendedTextBox Grid.Row="0" Grid.Column="1" Margin="3"
                                       Height="24"
@@ -66,7 +80,10 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="3">
-                <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
+                <controls:ExtendedTextBlock
+                    Text="{Binding Label}" VerticalAlignment="Center"
+                    HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
             </Border>
             <Slider x:Name="SettingSlider" Grid.Row="0" Grid.Column="1" Height="24" Margin="3"
                     Minimum="{Binding MinValue}" Maximum="{Binding MaxValue}"
@@ -83,7 +100,10 @@
                                 IsReadOnly="{Binding IsReadOnly, Mode=OneWay}" />
             <Border Grid.Row="0" Grid.Column="2" Height="24" Margin="3"
                     Visibility="{Binding LabelVisible, Converter={StaticResource BooleanToVisibility}}">
-                <TextBlock Text="{Binding Value}" VerticalAlignment="Center" />
+                <controls:ExtendedTextBlock
+                    Text="{Binding Value}" VerticalAlignment="Center"
+                    HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
             </Border>
             <Border Grid.Row="0" Grid.Column="3" Height="24">
                 <controls:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3" />
@@ -105,7 +125,10 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Grid.Column="0" Margin="3">
-                <TextBlock Text="{Binding Label}" />
+                <controls:ExtendedTextBlock
+                    Text="{Binding Label}" VerticalAlignment="Center"
+                    HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
             </Border>
             <TextBox Grid.Row="0" Grid.Column="1" Margin="3"
                      TextWrapping="Wrap" AcceptsReturn="True"
@@ -139,7 +162,10 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="3">
-                <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
+                <controls:ExtendedTextBlock
+                    Text="{Binding Label}" VerticalAlignment="Center"
+                    HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
             </Border>
             <DatePicker Grid.Row="0" Grid.Column="1" Margin="3"
                         Height="24" SelectedDate="{Binding Value}"
@@ -161,8 +187,10 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="3">
-                <TextBlock Text="{Binding Label}"
-                           VerticalAlignment="Center" />
+                <controls:ExtendedTextBlock
+                    Text="{Binding Label}" VerticalAlignment="Center"
+                    HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
             </Border>
             <ComboBox Grid.Row="0" Grid.Column="1" Height="24" Margin="3"
                       ItemsSource="{Binding Choices}" SelectedItem="{Binding SelectedValue}"
@@ -175,7 +203,11 @@
                 </ComboBox.Resources>
                 <ComboBox.ItemTemplate>
                     <DataTemplate DataType="settingElements:SettingField">
-                        <TextBlock Margin="0,1,0,1" Text="{Binding Label}" ToolTip="{Binding Details}" />
+                        <controls:ExtendedTextBlock
+                            Text="{Binding Label, Mode=OneWay}" VerticalAlignment="Center"
+                            ToolTip="{Binding Details}" Margin="0,1,0,1"
+                            HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
@@ -195,7 +227,12 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Label}" Margin="3" />
+            <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="3">
+                <controls:ExtendedTextBlock
+                    Text="{Binding Label}" VerticalAlignment="Center"
+                    HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
+            </Border>
             <ItemsControl Grid.Row="0" Grid.Column="1" Margin="0,0,0,3"
                           ItemsSource="{Binding Choices}" IsTabStop="False"
                           IsEnabled="{Binding IsReadOnly, Mode=OneWay, Converter={StaticResource Not}}">
@@ -214,7 +251,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            <RadioButton Grid.Row="0" Margin="3,3,3,0" Content="{Binding Label}"
+                            <RadioButton Grid.Row="0" Margin="3,3,3,0"
                                          GroupName="{Binding DataContext.GroupName,
                                                          RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                          Command="{Binding DataContext.OnSelectionCommand,
@@ -227,6 +264,11 @@
                                         <Binding Path="." />
                                     </MultiBinding>
                                 </RadioButton.IsChecked>
+                                <controls:ExtendedTextBlock
+                                    Text="{Binding Label, Mode=OneWay}" VerticalAlignment="Center"
+                                    ToolTip="{Binding Details}" Margin="0,1,0,1"
+                                    HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
                             </RadioButton>
                             <controls:ShyTextBlock Grid.Row="1" Margin="22,0,0,2"
                                                    Text="{Binding Details}" FontStyle="Italic" TextWrapping="Wrap" />
@@ -251,7 +293,10 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="3" VerticalAlignment="Top">
-                <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
+                <controls:ExtendedTextBlock
+                    Text="{Binding Label}" VerticalAlignment="Center"
+                    HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
             </Border>
             <ListView Grid.Row="0" Grid.Column="1" Margin="3"
                       ItemsSource="{Binding Choices}" SelectedItem="{Binding SelectedValue}"
@@ -263,7 +308,11 @@
                 </ListView.Resources>
                 <ListView.ItemTemplate>
                     <DataTemplate DataType="settingElements:SettingField">
-                        <TextBlock Margin="0,1,0,1" Text="{Binding Label}" ToolTip="{Binding Details}" />
+                        <controls:ExtendedTextBlock
+                            Text="{Binding Label, Mode=OneWay}" VerticalAlignment="Center"
+                            ToolTip="{Binding Details}" Margin="0,1,0,1"
+                            HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -307,8 +356,11 @@
             <Button Height="26" Margin="3" HorizontalAlignment="{Binding Alignment}"
                     Command="{Binding PressedCommand}"
                     Style="{Binding Type, Converter={StaticResource ButtonTypeToStyle}}">
-                <TextBlock Text="{Binding Label}" Margin="6,0,6,0"
-                           Style="{Binding Type, Converter={StaticResource ButtonTypeToStyle}}" />
+                <controls:ExtendedTextBlock
+                    Text="{Binding Label}" VerticalAlignment="Center" Margin="6,0,6,0"
+                    HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                            RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}"
+                    Style="{Binding Type, Converter={StaticResource ButtonTypeToStyle}}" />
             </Button>
             <controls:ShyTextBlock Margin="3,-2,3,3" HorizontalAlignment="{Binding Alignment}"
                                    Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />

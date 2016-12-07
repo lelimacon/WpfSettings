@@ -19,6 +19,15 @@ namespace WpfSettings
         public static readonly DependencyProperty AutoSaveProperty =
             MvvmUtils.RegisterDp<SettingsPage>(true);
 
+        public static readonly DependencyProperty FilterProperty =
+            MvvmUtils.RegisterDp<SettingsPage>();
+
+        public string Filter
+        {
+            get { return (string) GetValue(FilterProperty); }
+            set { SetValueDp(FilterProperty, value); }
+        }
+
         public object Settings
         {
             get { return GetValue(SettingsProperty); }
