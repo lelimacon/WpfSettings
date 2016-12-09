@@ -93,7 +93,10 @@
     <Compile Include="SettingsControl.xaml.cs">
       <DependentUpon>SettingsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\EmptyChecker.cs" />
+    <Compile Include="Utils\Wpf\AnyToVisibilityConverter.cs" />
     <Compile Include="Utils\Wpf\ContentToVisibilityInvConverter.cs" />
+    <Compile Include="Utils\Wpf\AllToVisibilityConverter.cs" />
     <Compile Include="Utils\Wpf\SettingFilterConverter.cs" />
     <Compile Include="Utils\Wpf\NotConverter.cs" />
     <Compile Include="Utils\Wpf\ButtonTypeToStyleConverter.cs" />
