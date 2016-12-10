@@ -119,7 +119,6 @@
     </Compile>
     <Compile Include="Utils\Reflection\ResourceUtils.cs" />
     <Compile Include="ViewModels\SettingsWindowViewModel.cs" />
-    <Compile Include="Controls\ShyTextBlock.cs" />
     <Compile Include="Utils\Wpf\TreeViewItemExtensions.cs" />
     <Compile Include="Utils\Wpf\MvvmUtils.cs" />
     <Page Include="Controls\ExtendedTextBlock.xaml">

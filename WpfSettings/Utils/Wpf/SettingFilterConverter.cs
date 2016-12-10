@@ -11,7 +11,7 @@ namespace WpfSettings.Utils.Wpf
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            var sections = (IEnumerable<SettingElement>) values[0];
+            var sections = (IEnumerable<SettingSection>) values[0];
             var filter = values[1] as string;
             if (sections == null || string.IsNullOrEmpty(filter))
                 return sections;
