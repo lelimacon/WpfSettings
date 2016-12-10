@@ -5,9 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:WpfSettings"
              xmlns:controls="clr-namespace:WpfSettings.Controls"
+             xmlns:wpf="clr-namespace:WpfSettings.Utils.Wpf"
              mc:Ignorable="d"
              d:DesignHeight="200" d:DesignWidth="400"
              x:Name="Root">
+
+    <UserControl.Resources>
+        <wpf:ContentToVisibilityConverter x:Key="ContentToVisibility" />
+    </UserControl.Resources>
 
     <Grid DataContext="{Binding ElementName=Root}">
         <Grid.ColumnDefinitions>
@@ -20,15 +25,16 @@
         </Grid.RowDefinitions>
 
         <controls:ExtendedTextBox x:Name="SearchBox" Grid.Row="0" Grid.Column="0"
-                                  Text="{Binding Filter, Mode=OneWayToSource}"
+                                  Text="{Binding Filter}"
                                   Margin="3" Height="24" FontSize="12"
                                   PlaceHolderText="Search" />
 
         <Button Grid.Row="0" Grid.Column="0" Margin="3"
                 Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
-                HorizontalAlignment="Right" VerticalAlignment="Stretch"
-                Focusable="False">
-            <Image Source="Resources/icon-search.png" Width="16" Height="16" />
+                HorizontalAlignment="Right" VerticalAlignment="Stretch" Focusable="False"
+                Visibility="{Binding Filter, Converter={StaticResource ContentToVisibility}}"
+                Command="{Binding EmptySearchBoxCommand}">
+            <Image Source="Resources/icon-delete.png" Width="16" Height="16" />
         </Button>
 
         <Border Grid.Row="0" Grid.Column="1" BorderBrush="{x:Null}">

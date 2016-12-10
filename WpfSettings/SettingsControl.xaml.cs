@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using WpfSettings.SettingElements;
 using WpfSettings.Utils.Wpf;
 
@@ -85,6 +86,8 @@ namespace WpfSettings
 
         public Action<SettingSection> ChangeSectionAction { get; }
 
+        public ICommand EmptySearchBoxCommand { get; }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         void SetValueDp(DependencyProperty property, object value,
@@ -97,6 +100,7 @@ namespace WpfSettings
         public SettingsControl()
         {
             ChangeSectionAction = ChangeSection;
+            EmptySearchBoxCommand = new RelayCommand(EmptySearchBox);
             InitializeComponent();
         }
 
@@ -104,6 +108,11 @@ namespace WpfSettings
         {
             CategoryTitle = section?.Label;
             CurrentPageConfig = section?.Elements;
+        }
+
+        private void EmptySearchBox()
+        {
+            Filter = string.Empty;
         }
 
         private static void SettingsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
