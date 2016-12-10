@@ -58,8 +58,11 @@
             <Border Grid.Row="0" Grid.Column="2" Height="24">
                 <controls:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3" />
             </Border>
-            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="3,0,3,3"
-                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ExtendedTextBlock
+                Grid.Row="1" Grid.Column="1" Margin="3,0,3,3"
+                Text="{Binding Details}" FontStyle="Italic"
+                HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                        RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
         </Grid>
     </DataTemplate>
 
@@ -108,8 +111,11 @@
             <Border Grid.Row="0" Grid.Column="3" Height="24">
                 <controls:ShyTextBlock Text="{Binding SuffixLabel}" VerticalAlignment="Center" Margin="3" />
             </Border>
-            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="3,0,3,3"
-                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ExtendedTextBlock
+                Grid.Row="1" Grid.Column="1" Margin="3,0,3,3"
+                Text="{Binding Details}" FontStyle="Italic"
+                HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                        RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
         </Grid>
     </DataTemplate>
 
@@ -134,8 +140,11 @@
                      TextWrapping="Wrap" AcceptsReturn="True"
                      Text="{Binding Value}"
                      IsReadOnly="{Binding IsReadOnly, Mode=OneWay}" />
-            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="3,0,3,3"
-                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ExtendedTextBlock
+                Grid.Row="1" Grid.Column="1" Margin="3,0,3,3"
+                Text="{Binding Details}" FontStyle="Italic"
+                HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                        RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
         </Grid>
     </DataTemplate>
 
@@ -145,8 +154,10 @@
             <CheckBox Margin="3" Content="{Binding Label}"
                       IsChecked="{Binding Value}"
                       IsEnabled="{Binding IsReadOnly, Mode=OneWay, Converter={StaticResource Not}}" />
-            <controls:ShyTextBlock Text="{Binding Details}" FontStyle="Italic"
-                                   TextWrapping="Wrap" Margin="18,0,3,3" />
+            <controls:ExtendedTextBlock
+                Margin="18,0,3,3" Text="{Binding Details}" FontStyle="Italic"
+                HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                        RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
         </StackPanel>
     </DataTemplate>
 
@@ -211,8 +222,11 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="8,-2,3,3"
-                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ExtendedTextBlock
+                Grid.Row="1" Grid.Column="1" Margin="8,-2,3,3"
+                Text="{Binding Details}" FontStyle="Italic"
+                HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                        RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
         </Grid>
     </DataTemplate>
 
@@ -270,14 +284,20 @@
                                     HighlightText="{Binding DataContext.Filter, Mode=OneWay,
                                             RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
                             </RadioButton>
-                            <controls:ShyTextBlock Grid.Row="1" Margin="22,0,0,2"
-                                                   Text="{Binding Details}" FontStyle="Italic" TextWrapping="Wrap" />
+                            <controls:ExtendedTextBlock
+                                Grid.Row="1" Margin="22,0,0,3"
+                                Text="{Binding Details}" FontStyle="Italic"
+                                HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                        RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="8,0,3,3"
-                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ExtendedTextBlock
+                Grid.Row="1" Grid.Column="1" Margin="8,0,3,3"
+                Text="{Binding Details}" FontStyle="Italic"
+                HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                        RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
         </Grid>
     </DataTemplate>
 
@@ -316,8 +336,11 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <controls:ShyTextBlock Grid.Row="1" Grid.Column="1" Margin="8,-2,3,3"
-                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ExtendedTextBlock
+                Grid.Row="1" Grid.Column="1" Margin="8,-2,3,3"
+                Text="{Binding Details}" FontStyle="Italic"
+                HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                        RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
         </Grid>
     </DataTemplate>
 
@@ -362,8 +385,11 @@
                                             RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}"
                     Style="{Binding Type, Converter={StaticResource ButtonTypeToStyle}}" />
             </Button>
-            <controls:ShyTextBlock Margin="3,-2,3,3" HorizontalAlignment="{Binding Alignment}"
-                                   Text="{Binding Details}" TextWrapping="Wrap" FontStyle="Italic" />
+            <controls:ExtendedTextBlock
+                Margin="3,-2,3,3" HorizontalAlignment="{Binding Alignment}"
+                Text="{Binding Details}" FontStyle="Italic"
+                HighlightText="{Binding DataContext.Filter, Mode=OneWay,
+                                        RelativeSource={RelativeSource AncestorType={x:Type local:SettingsPage}}}" />
         </StackPanel>
     </DataTemplate>
 

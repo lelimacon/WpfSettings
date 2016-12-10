@@ -24,6 +24,9 @@ namespace WpfSettings.Controls
         public static readonly DependencyProperty HighlightColorProperty
             = MvvmUtils.RegisterDp<ExtendedTextBlock>(Brushes.Yellow, OnUpdate);
 
+        public static readonly DependencyProperty CollapsedIfEmptyProperty
+            = MvvmUtils.RegisterDp<ExtendedTextBlock>(true);
+
         /// <summary>
         ///     Gets or sets the box content.
         /// </summary>
@@ -52,6 +55,16 @@ namespace WpfSettings.Controls
             set { SetValueDp(HighlightColorProperty, value); }
         }
 
+        /// <summary>
+        ///     Gets or sets wether the text block should be collapsed if text is empty.
+        ///     Defaults to true.
+        /// </summary>
+        public bool CollapsedIfEmpty
+        {
+            get { return (bool) GetValue(CollapsedIfEmptyProperty); }
+            set { SetValueDp(CollapsedIfEmptyProperty, value); }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         void SetValueDp(DependencyProperty property, object value,
@@ -69,7 +82,7 @@ namespace WpfSettings.Controls
         private void Update()
         {
             Block.Inlines.Clear();
-            if (string.IsNullOrEmpty(HighlightText))
+            if (string.IsNullOrEmpty(Text) || string.IsNullOrEmpty(HighlightText))
                 Block.Text = Text;
             else
                 Block.Inlines.AddRange(GetRuns());

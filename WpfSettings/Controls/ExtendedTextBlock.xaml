@@ -3,12 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:wpf="clr-namespace:WpfSettings.Utils.Wpf"
              mc:Ignorable="d"
              x:Name="Root"
              d:DesignHeight="24" d:DesignWidth="300">
 
+    <UserControl.Resources>
+        <wpf:NotConverter x:Key="Not" />
+        <wpf:AnyToVisibilityConverter x:Key="AnyToVisibility" />
+    </UserControl.Resources>
+
     <Grid DataContext="{Binding ElementName=Root}">
-        <TextBlock x:Name="Block" />
+        <Grid.Visibility>
+            <MultiBinding Converter="{StaticResource AnyToVisibility}" Mode="OneWay">
+                <Binding Path="Text" />
+                <Binding Path="CollapsedIfEmpty" Converter="{StaticResource Not}" />
+            </MultiBinding>
+        </Grid.Visibility>
+        <TextBlock x:Name="Block" TextWrapping="Wrap" />
     </Grid>
 
 </UserControl>
