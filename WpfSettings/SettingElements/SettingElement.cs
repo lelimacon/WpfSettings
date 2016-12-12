@@ -14,6 +14,27 @@ using WpfSettings.Utils.Wpf;
 
 namespace WpfSettings.SettingElements
 {
+
+    #region Value changed event
+
+    public delegate void ValueChangedEventHandler(object sender, ValueChangedEventArgs args);
+
+    public class ValueChangedEventArgs : EventArgs
+    {
+        public object OldValue { get; }
+        public object NewValue { get; }
+        public bool SameAsOriginal { get; }
+
+        public ValueChangedEventArgs(object oldValue, object newValue, bool sameAsOriginal)
+        {
+            OldValue = oldValue;
+            NewValue = newValue;
+            SameAsOriginal = sameAsOriginal;
+        }
+    }
+
+    #endregion Value changed event
+
     public abstract class SettingElement : INotifyPropertyChanged
     {
         private int _position;
@@ -58,13 +79,22 @@ namespace WpfSettings.SettingElements
                 propertyChanged.PropertyChanged += OuterPropertyChanged;
         }
 
-        protected void Set<T>(ref T variable, T value,
-            [CallerMemberName] string propertyName = null)
+        /// <summary>
+        ///     If value is different, sets the value of a variable and calls OnPropertyChanged.
+        /// </summary>
+        /// <typeparam name="T">The type of the variable (infered from value).</typeparam>
+        /// <param name="variable">The variable to set.</param>
+        /// <param name="value">The new value of the variable.</param>
+        /// <param name="prop">The name of the property (provided by runtime).</param>
+        /// <returns>True if value was changed, false otherwise.</returns>
+        protected bool Set<T>(ref T variable, T value,
+            [CallerMemberName] string prop = null)
         {
             if (Equals(value, variable))
-                return;
+                return false;
             variable = value;
-            OnPropertyChanged(propertyName);
+            OnPropertyChanged(prop);
+            return true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -73,6 +103,18 @@ namespace WpfSettings.SettingElements
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public event ValueChangedEventHandler ValueChanged;
+
+        protected void OnValueChanged(object oldValue, object newValue, bool sameAsOriginal)
+        {
+            ValueChanged?.Invoke(this, new ValueChangedEventArgs(oldValue, newValue, sameAsOriginal));
+        }
+
+        protected void OnValueChanged(object sender, ValueChangedEventArgs args)
+        {
+            ValueChanged?.Invoke(sender, args);
         }
 
         public abstract void Save();
@@ -112,13 +154,35 @@ namespace WpfSettings.SettingElements
         public ObservableCollection<SettingSection> SubSections
         {
             get { return _subSections; }
-            set { Set(ref _subSections, value); }
+            set
+            {
+                if (!Set(ref _subSections, value))
+                    return;
+                foreach (var section in SubSections)
+                    section.ValueChanged += OnValueChanged;
+                SubSections.CollectionChanged += (s, e) =>
+                {
+                    foreach (SettingPageElement item in e.NewItems)
+                        item.ValueChanged += OnValueChanged;
+                };
+            }
         }
 
         public ObservableCollection<SettingPageElement> Elements
         {
             get { return _elements; }
-            set { Set(ref _elements, value); }
+            set
+            {
+                if (!Set(ref _elements, value))
+                    return;
+                foreach (var element in Elements)
+                    element.ValueChanged += OnValueChanged;
+                Elements.CollectionChanged += (s, e) =>
+                {
+                    foreach (SettingPageElement item in e.NewItems)
+                        item.ValueChanged += OnValueChanged;
+                };
+            }
         }
 
         public bool IsExpanded
@@ -236,13 +300,25 @@ namespace WpfSettings.SettingElements
         {
         }
 
-        protected void SetAndSave<T>(ref T variable, T value,
-            [CallerMemberName] string propertyName = null)
+        /// <summary>
+        ///     Calls Set and if value was overwritten, save it.
+        /// </summary>
+        /// <typeparam name="T">The type of the variable (infered from value).</typeparam>
+        /// <param name="variable">The variable to set.</param>
+        /// <param name="value">The new value of the variable.</param>
+        /// <param name="originalValue">The variable original value, to create the ValueChanged event.</param>
+        /// <param name="prop">The name of the property (provided by runtime).</param>
+        /// <returns>True if value was changed, false otherwise.</returns>
+        protected void SetAndSave<T>(ref T variable, T value, T originalValue,
+            [CallerMemberName] string prop = null)
         {
+            T oldValue = variable;
             // ReSharper disable once ExplicitCallerInfoArgument
-            Set(ref variable, value, propertyName);
+            if (!Set(ref variable, value, prop))
+                return;
             if (AutoSave)
                 Save();
+            OnValueChanged(oldValue, value, Equals(value, originalValue));
         }
 
         public override bool Matches(string filter, bool parentMatch = false)
@@ -263,7 +339,18 @@ namespace WpfSettings.SettingElements
         public ObservableCollection<SettingPageElement> Elements
         {
             get { return _elements; }
-            set { Set(ref _elements, value); }
+            set
+            {
+                if (!Set(ref _elements, value))
+                    return;
+                foreach (var element in Elements)
+                    element.ValueChanged += OnValueChanged;
+                Elements.CollectionChanged += (s, e) =>
+                {
+                    foreach (SettingPageElement item in e.NewItems)
+                        item.ValueChanged += OnValueChanged;
+                };
+            }
         }
 
         protected SettingGroup(object parent, MemberInfo member)
@@ -311,6 +398,7 @@ namespace WpfSettings.SettingElements
 
     internal class StringSetting : SettingPageElement
     {
+        private string _originalValue;
         private string _value;
         private string _placeHolderText;
         private char _separator;
@@ -318,7 +406,12 @@ namespace WpfSettings.SettingElements
         public string Value
         {
             get { return _value; }
-            set { SetAndSave(ref _value, value); }
+            set
+            {
+                if (_originalValue == null)
+                    _originalValue = value;
+                SetAndSave(ref _value, value, _originalValue);
+            }
         }
 
         public string PlaceHolderText
@@ -380,6 +473,8 @@ namespace WpfSettings.SettingElements
     internal class NumberSetting : SettingPageElement
     {
         private NumberSettingType _type;
+        private bool _originalValueSet;
+        private int _originalValue;
         private int _value;
         private int _maxValue;
         private int _minValue;
@@ -402,7 +497,15 @@ namespace WpfSettings.SettingElements
         public int Value
         {
             get { return _value; }
-            set { SetAndSave(ref _value, value); }
+            set
+            {
+                if (!_originalValueSet)
+                {
+                    _originalValue = value;
+                    _originalValueSet = true;
+                }
+                SetAndSave(ref _value, value, _originalValue);
+            }
         }
 
         public int MinValue
@@ -432,6 +535,7 @@ namespace WpfSettings.SettingElements
         public NumberSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
+            _originalValueSet = false;
         }
 
         public override void Save()
@@ -450,12 +554,18 @@ namespace WpfSettings.SettingElements
 
     internal class TextSetting : SettingPageElement
     {
+        private string _originalValue;
         private string _value;
 
         public string Value
         {
             get { return _value; }
-            set { SetAndSave(ref _value, value); }
+            set
+            {
+                if (_originalValue == null)
+                    _originalValue = value;
+                SetAndSave(ref _value, value, _originalValue);
+            }
         }
 
         public TextSetting(object parent, MemberInfo member)
@@ -479,17 +589,28 @@ namespace WpfSettings.SettingElements
 
     internal class BoolSetting : SettingPageElement
     {
+        private bool _originalValueSet;
+        private bool _originalValue;
         private bool _value;
 
         public bool Value
         {
             get { return _value; }
-            set { SetAndSave(ref _value, value); }
+            set
+            {
+                if (!_originalValueSet)
+                {
+                    _originalValue = value;
+                    _originalValueSet = true;
+                }
+                SetAndSave(ref _value, value, _originalValue);
+            }
         }
 
         public BoolSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
+            _originalValueSet = false;
         }
 
         public override void Save()
@@ -508,17 +629,28 @@ namespace WpfSettings.SettingElements
 
     internal class DateSetting : SettingPageElement
     {
+        private bool _originalValueSet;
+        private DateTime _originalValue;
         private DateTime _value;
 
         public DateTime Value
         {
             get { return _value; }
-            set { SetAndSave(ref _value, value); }
+            set
+            {
+                if (!_originalValueSet)
+                {
+                    _originalValue = value;
+                    _originalValueSet = true;
+                }
+                SetAndSave(ref _value, value, _originalValue);
+            }
         }
 
         public DateSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
+            _originalValueSet = false;
         }
 
         public override void Save()
@@ -575,6 +707,7 @@ namespace WpfSettings.SettingElements
     internal abstract class ChoiceSetting : SettingPageElement
     {
         private ObservableCollection<SettingField> _choices;
+        private SettingField _originalValue;
         private SettingField _selectedValue;
 
         public ObservableCollection<SettingField> Choices
@@ -586,7 +719,12 @@ namespace WpfSettings.SettingElements
         public SettingField SelectedValue
         {
             get { return _selectedValue; }
-            set { SetAndSave(ref _selectedValue, value); }
+            set
+            {
+                if (_originalValue == null)
+                    _originalValue = value;
+                SetAndSave(ref _selectedValue, value, _originalValue);
+            }
         }
 
         protected ChoiceSetting(object parent, MemberInfo member)
@@ -705,12 +843,18 @@ namespace WpfSettings.SettingElements
 
     internal class LinkButtonSetting : ButtonSetting
     {
+        private string _originalValue;
         private string _path;
 
         public string Path
         {
             get { return _path; }
-            set { SetAndSave(ref _path, value); }
+            set
+            {
+                if (_originalValue == null)
+                    _originalValue = value;
+                SetAndSave(ref _path, value, _originalValue);
+            }
         }
 
         public Action<string> SelectSection { get; set; }
@@ -739,12 +883,18 @@ namespace WpfSettings.SettingElements
 
     internal class CustomButtonSetting : ButtonSetting
     {
+        private Action _originalValue;
         private Action _action;
 
         public Action Action
         {
             get { return _action; }
-            set { SetAndSave(ref _action, value); }
+            set
+            {
+                if (_originalValue == null)
+                    _originalValue = value;
+                SetAndSave(ref _action, value, _originalValue);
+            }
         }
 
 
