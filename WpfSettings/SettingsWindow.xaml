@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfSettings"
+        xmlns:wpf="clr-namespace:WpfSettings.Utils.Wpf"
         DataContext="{Binding ViewModel, RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
         Title="Settings"
@@ -11,19 +12,41 @@
         Background="#F0F0F0"
         ResizeMode="CanResizeWithGrip">
 
+    <Window.Resources>
+        <wpf:AnyToVisibilityConverter x:Key="AnyToVisibility" />
+    </Window.Resources>
+
     <Grid Margin="6">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
 
-        <local:SettingsControl Grid.Row="0" Margin="3"
+        <local:SettingsControl Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="3"
                                AutoSave="False" Save="{Binding Save, Mode=OneWayToSource}"
+                               UnsavedSettings="{Binding UnsavedSettings, Mode=OneWayToSource}"
                                Settings="{Binding Settings}"
                                ExplorerWidth="{Binding ExplorerWidth}" />
 
-        <StackPanel Grid.Row="1"
+        <Border Grid.Row="1" Grid.Column="0" Margin="6,3,3,3">
+            <Border.Visibility>
+                <MultiBinding Converter="{StaticResource AnyToVisibility}" Mode="OneWay">
+                    <Binding Path="UnsavedSettings" />
+                </MultiBinding>
+            </Border.Visibility>
+            <StackPanel Orientation="Horizontal" Background="#FFC2DD"
+                        VerticalAlignment="Center" HorizontalAlignment="Left">
+                <TextBlock Text="{Binding UnsavedSettings, Mode=OneWay}" Margin="6,3,0,3" />
+                <TextBlock Text=" modified setting(s) will be saved" Margin="0,3,6,3" />
+            </StackPanel>
+        </Border>
+
+        <StackPanel Grid.Row="1" Grid.Column="1"
                     Orientation="Horizontal" Margin="3"
                     HorizontalAlignment="Right">
             <Button Content="Apply" HorizontalAlignment="Right"

@@ -11,6 +11,7 @@ namespace WpfSettings.ViewModels
     {
         private string _explorerWidth;
         private object _settings;
+        private int _unsavedSettings;
 
         public object Settings
         {
@@ -22,6 +23,12 @@ namespace WpfSettings.ViewModels
         {
             get { return _explorerWidth; }
             set { Set(ref _explorerWidth, value); }
+        }
+
+        public int UnsavedSettings
+        {
+            get { return _unsavedSettings; }
+            set { Set(ref _unsavedSettings, value); }
         }
 
         public ICommand ApplyCommand => new RelayCommand<SettingsWindow>(Apply);

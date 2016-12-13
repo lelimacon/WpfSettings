@@ -69,6 +69,8 @@ namespace WpfSettings.SettingElements
             set { Set(ref _filter, value); }
         }
 
+        public abstract int UnsavedSettings { get; }
+
         protected SettingElement(object parent, MemberInfo member)
         {
             Parent = parent;
@@ -150,6 +152,9 @@ namespace WpfSettings.SettingElements
             get { return _visible; }
             set { Set(ref _visible, value); }
         }
+
+        public override int UnsavedSettings
+            => SubSections.Sum(s => s.UnsavedSettings) + Elements.Sum(e => e.UnsavedSettings);
 
         public ObservableCollection<SettingSection> SubSections
         {
@@ -353,6 +358,8 @@ namespace WpfSettings.SettingElements
             }
         }
 
+        public override int UnsavedSettings => Elements.Sum(e => e.UnsavedSettings);
+
         protected SettingGroup(object parent, MemberInfo member)
             : base(parent, member)
         {
@@ -425,6 +432,8 @@ namespace WpfSettings.SettingElements
             get { return _separator; }
             set { Set(ref _separator, value); }
         }
+
+        public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
 
         public StringSetting(object parent, MemberInfo member)
             : base(parent, member)
@@ -532,6 +541,8 @@ namespace WpfSettings.SettingElements
             set { Set(ref _tickFrequency, value); }
         }
 
+        public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
+
         public NumberSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
@@ -567,6 +578,8 @@ namespace WpfSettings.SettingElements
                 SetAndSave(ref _value, value, _originalValue);
             }
         }
+
+        public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
 
         public TextSetting(object parent, MemberInfo member)
             : base(parent, member)
@@ -606,6 +619,8 @@ namespace WpfSettings.SettingElements
                 SetAndSave(ref _value, value, _originalValue);
             }
         }
+
+        public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
 
         public BoolSetting(object parent, MemberInfo member)
             : base(parent, member)
@@ -647,6 +662,8 @@ namespace WpfSettings.SettingElements
             }
         }
 
+        public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
+
         public DateSetting(object parent, MemberInfo member)
             : base(parent, member)
         {
@@ -671,6 +688,8 @@ namespace WpfSettings.SettingElements
     {
         public object Value { get; }
         public string Details { get; }
+
+        public override int UnsavedSettings => 0;
 
         public SettingField(object value, string name, string label, string details)
             : base(null, null)
@@ -726,6 +745,8 @@ namespace WpfSettings.SettingElements
                 SetAndSave(ref _selectedValue, value, _originalValue);
             }
         }
+
+        public override int UnsavedSettings => _originalValue == _selectedValue ? 0 : 1;
 
         protected ChoiceSetting(object parent, MemberInfo member)
             : base(parent, member)
@@ -826,6 +847,8 @@ namespace WpfSettings.SettingElements
         }
 
         public ICommand PressedCommand { get; set; }
+
+        public override int UnsavedSettings => 0;
 
         protected ButtonSetting(object parent, MemberInfo member)
             : base(parent, member)

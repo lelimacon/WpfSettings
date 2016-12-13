@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,6 +36,9 @@ namespace WpfSettings
 
         public static readonly DependencyProperty FilterProperty =
             MvvmUtils.RegisterDp<SettingsControl>();
+
+        public static readonly DependencyProperty UnsavedSettingsProperty =
+            MvvmUtils.RegisterDp<SettingsControl>(new FrameworkPropertyMetadata {BindsTwoWayByDefault = false});
 
         public object Settings
         {
@@ -84,6 +88,12 @@ namespace WpfSettings
             set { SetValueDp(FilterProperty, value); }
         }
 
+        public int UnsavedSettings
+        {
+            get { return (int) GetValue(UnsavedSettingsProperty); }
+            set { SetValueDp(UnsavedSettingsProperty, value); }
+        }
+
         public Action<SettingSection> ChangeSectionAction { get; }
 
         public ICommand EmptySearchBoxCommand { get; }
@@ -127,6 +137,13 @@ namespace WpfSettings
             control.SettingElements = sections;
             control.ChangeSection(control.SettingElements[0]);
             control.Save = control.SaveAll;
+            foreach (var section in control.SettingElements)
+                section.ValueChanged += control.RecalculateUnsaved;
+        }
+
+        private void RecalculateUnsaved(object sender, ValueChangedEventArgs args)
+        {
+            UnsavedSettings = SettingElements.Sum(s => s.UnsavedSettings);
         }
 
         private void SaveAll()
