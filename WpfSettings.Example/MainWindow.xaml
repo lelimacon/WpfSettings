@@ -9,7 +9,8 @@
         mc:Ignorable="d"
         Title="{Binding WindowTitle}"
         Icon="Resources/icon-note.ico"
-        Height="400" Width="600"
+        Width="600" Height="400"
+        MinWidth="540" MinHeight="300"
         ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>
