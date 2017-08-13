@@ -92,6 +92,7 @@
       <DependentUpon>SettingsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\EmptyChecker.cs" />
+    <Compile Include="Utils\Wpf\NotEmptyConverter.cs" />
     <Compile Include="Utils\Wpf\AnyToVisibilityConverter.cs" />
     <Compile Include="Utils\Wpf\ContentToVisibilityInvConverter.cs" />
     <Compile Include="Utils\Wpf\AllToVisibilityConverter.cs" />

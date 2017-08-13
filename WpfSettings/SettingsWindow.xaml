@@ -15,6 +15,7 @@
 
     <Window.Resources>
         <wpf:AnyToVisibilityConverter x:Key="AnyToVisibility" />
+        <wpf:NotEmptyConverter x:Key="NotEmpty" />
     </Window.Resources>
 
     <Grid Margin="6">
@@ -54,6 +55,7 @@
                     Width="75" Height="24" Margin="0,0,6,0"
                     Command="{Binding ApplyCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    IsEnabled="{Binding UnsavedSettings, Converter={StaticResource NotEmpty}}"
                     VerticalAlignment="Bottom" />
             <Button Name="OkButton" Content="OK" HorizontalAlignment="Right"
                     Width="75" Height="24" Margin="0,0,6,0"

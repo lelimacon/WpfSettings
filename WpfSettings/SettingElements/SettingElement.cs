@@ -454,6 +454,7 @@ namespace WpfSettings.SettingElements
                 string[] values = Value.Split(Separator);
                 Member.SetValue(SettingParent, values);
             }
+            _originalValue = Value;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -555,6 +556,7 @@ namespace WpfSettings.SettingElements
             if (IsReadOnly)
                 return;
             Member.SetValue(SettingParent, Value);
+            _originalValue = Value;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -592,6 +594,7 @@ namespace WpfSettings.SettingElements
             if (IsReadOnly)
                 return;
             Member.SetValue(SettingParent, Value);
+            _originalValue = Value;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -634,6 +637,7 @@ namespace WpfSettings.SettingElements
             if (IsReadOnly)
                 return;
             Member.SetValue(SettingParent, Value);
+            _originalValue = Value;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -676,6 +680,7 @@ namespace WpfSettings.SettingElements
             if (IsReadOnly)
                 return;
             Member.SetValue(SettingParent, Value);
+            _originalValue = Value;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -758,9 +763,9 @@ namespace WpfSettings.SettingElements
         {
             if (IsReadOnly)
                 return;
-            if (SelectedValue == null)
-                return;
-            Member.SetValue(SettingParent, SelectedValue.Value);
+            if (SelectedValue != null)
+                Member.SetValue(SettingParent, SelectedValue.Value);
+            _originalValue = SelectedValue;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)

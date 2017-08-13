@@ -143,6 +143,11 @@ namespace WpfSettings
 
         private void RecalculateUnsaved(object sender, ValueChangedEventArgs args)
         {
+            RecalculateUnsaved();
+        }
+
+        private void RecalculateUnsaved()
+        {
             UnsavedSettings = SettingElements.Sum(s => s.UnsavedSettings);
         }
 
@@ -150,6 +155,7 @@ namespace WpfSettings
         {
             foreach (SettingSection section in SettingElements)
                 section.Save();
+            RecalculateUnsaved();
         }
     }
 }
