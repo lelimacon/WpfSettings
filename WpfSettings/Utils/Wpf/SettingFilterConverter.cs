@@ -15,7 +15,8 @@ namespace WpfSettings.Utils.Wpf
             var filter = values[1] as string;
             if (sections == null || string.IsNullOrEmpty(filter))
                 return sections;
-            return sections.Where(s => s.Visible);
+            var settingSections = sections.Where(s => s.Visible);
+            return settingSections;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

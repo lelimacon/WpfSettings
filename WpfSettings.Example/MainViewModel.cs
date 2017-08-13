@@ -16,8 +16,7 @@ namespace WpfSettings.Example
             Settings = new GlobalSettings();
             QuickSettings = new QuickSettings(Settings);
             ShowSettingsCommand = new RelayCommand<MainWindow>(ShowSettings);
-            Settings.User.ReflectPropertyChanged(this,
-                n => n == "Name" ? nameof(WindowTitle) : null);
+            Settings.User.ReflectPropertyChanged(this, n => n == "Name" ? nameof(WindowTitle) : null);
         }
 
         private void ShowSettings(MainWindow mainWindow)

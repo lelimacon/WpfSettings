@@ -11,7 +11,7 @@ namespace WpfSettings.Controls
     internal interface IListElement
     {
         int Position { get; }
-        string Height { get; }
+        string RowHeight { get; }
     }
 
     internal class DynamicList : Grid
@@ -40,7 +40,7 @@ namespace WpfSettings.Controls
                 return;
             foreach (IListElement item in ItemsSource)
             {
-                GridLength height = GetHeight(item.Height);
+                GridLength height = GetHeight(item.RowHeight);
                 RowDefinition row = new RowDefinition {Height = height};
                 RowDefinitions.Add(row);
             }

@@ -115,7 +115,7 @@ namespace WpfSettings
             var button = new LinkButtonSetting(value, null)
             {
                 Label = subSection.Label,
-                Path = e.Path + "." + subSection.Name,
+                Path = e.Path + "." + subSection.SettingName,
                 SelectSection = e.SelectSection,
                 Position = pos,
                 Type = ButtonType.Link
@@ -353,7 +353,7 @@ namespace WpfSettings
             TextSetting element = new TextSetting(parent, member);
             Fill(element, e, member.Name);
             element.Value = (string) member.GetValue(parent);
-            element.Height = Height ?? "60";
+            element.RowHeight = Height ?? "60";
             return element;
         }
     }
@@ -436,7 +436,7 @@ namespace WpfSettings
             var choices = type.IsEnum ? GetEnumChoices(parent, type) : GetListChoices(parent);
             ChoiceSetting element = GetSetting(parent, member);
             Fill(element, e, member.Name);
-            element.Height = Type == SettingChoiceType.ListView ? (Height ?? "160") : "Auto";
+            element.RowHeight = Type == SettingChoiceType.ListView ? (Height ?? "160") : "Auto";
             element.Choices = choices;
             var value = member.GetValue(parent);
             element.SelectedValue = choices.FirstOrDefault(a => a.Value.Equals(value));

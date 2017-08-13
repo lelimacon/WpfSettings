@@ -256,15 +256,15 @@
                             </Grid.RowDefinitions>
                             <RadioButton Grid.Row="0" Margin="3,0,3,0"
                                          GroupName="{Binding DataContext.GroupName,
-                                                         RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                             RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
                                          Command="{Binding DataContext.OnSelectionCommand,
-                                                       RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
-                                         CommandParameter="{Binding .}">
+                                                           RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                         CommandParameter="{Binding }">
                                 <RadioButton.IsChecked>
                                     <MultiBinding Converter="{StaticResource IndexToChecked}" Mode="OneWay">
                                         <Binding Path="DataContext.SelectedValue"
                                                  RelativeSource="{RelativeSource AncestorType={x:Type ItemsControl}}" />
-                                        <Binding Path="." />
+                                        <Binding />
                                     </MultiBinding>
                                 </RadioButton.IsChecked>
                                 <ctrls:ExtendedTextBlock

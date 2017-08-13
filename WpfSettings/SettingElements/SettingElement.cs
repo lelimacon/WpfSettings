@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using WpfSettings.Annotations;
@@ -42,10 +43,10 @@ namespace WpfSettings.SettingElements
         private string _filter;
         private string _name;
 
-        public object Parent { get; }
+        public object SettingParent { get; }
         public MemberInfo Member { get; }
 
-        public string Name
+        public string SettingName
         {
             get { return _name ?? (_name = Member?.Name); }
             set { _name = value; }
@@ -71,12 +72,12 @@ namespace WpfSettings.SettingElements
 
         public abstract int UnsavedSettings { get; }
 
-        protected SettingElement(object parent, MemberInfo member)
+        protected SettingElement(object settingParent, MemberInfo member)
         {
-            Parent = parent;
+            SettingParent = settingParent;
             Member = member;
-            Label = Name;
-            var propertyChanged = parent as INotifyPropertyChanged;
+            Label = SettingName;
+            var propertyChanged = settingParent as INotifyPropertyChanged;
             if (propertyChanged != null)
                 propertyChanged.PropertyChanged += OuterPropertyChanged;
         }
@@ -208,8 +209,8 @@ namespace WpfSettings.SettingElements
             set { Set(ref _icon, value); }
         }
 
-        public SettingSection(object parent, MemberInfo member)
-            : base(parent, member)
+        public SettingSection(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
             Visible = true;
         }
@@ -250,7 +251,7 @@ namespace WpfSettings.SettingElements
         private string _suffixLabel;
         private bool _readOnly;
 
-        public string Height
+        public string RowHeight
         {
             get { return _height; }
             set { Set(ref _height, value); }
@@ -300,8 +301,8 @@ namespace WpfSettings.SettingElements
 
         public bool IsReadOnly => ReadOnly || (Member?.IsReadOnly() ?? true);
 
-        protected SettingPageElement(object parent, MemberInfo member)
-            : base(parent, member)
+        protected SettingPageElement(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
         }
 
@@ -360,8 +361,8 @@ namespace WpfSettings.SettingElements
 
         public override int UnsavedSettings => Elements.Sum(e => e.UnsavedSettings);
 
-        protected SettingGroup(object parent, MemberInfo member)
-            : base(parent, member)
+        protected SettingGroup(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
             Elements = new ObservableCollection<SettingPageElement>();
         }
@@ -389,16 +390,16 @@ namespace WpfSettings.SettingElements
 
     internal class SettingGroupBox : SettingGroup
     {
-        public SettingGroupBox(object parent, MemberInfo member)
-            : base(parent, member)
+        public SettingGroupBox(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
         }
     }
 
     internal class SettingGroupTitle : SettingGroup
     {
-        public SettingGroupTitle(object parent, MemberInfo member)
-            : base(parent, member)
+        public SettingGroupTitle(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
         }
     }
@@ -447,11 +448,11 @@ namespace WpfSettings.SettingElements
                 return;
             Type type = Member.GetValueType();
             if (type == typeof(string))
-                Member.SetValue(Parent, Value);
+                Member.SetValue(SettingParent, Value);
             else // type == typeof(string[])
             {
                 string[] values = Value.Split(Separator);
-                Member.SetValue(Parent, values);
+                Member.SetValue(SettingParent, values);
             }
         }
 
@@ -465,9 +466,9 @@ namespace WpfSettings.SettingElements
         {
             Type type = Member.GetValueType();
             if (type == typeof(string))
-                return (string) Member.GetValue(Parent);
+                return (string)Member.GetValue(SettingParent);
             // type == typeof(string[])
-            return string.Join(Separator.ToString(), (string[]) Member.GetValue(Parent));
+            return string.Join(Separator.ToString(), (string[])Member.GetValue(SettingParent));
         }
     }
 
@@ -543,8 +544,8 @@ namespace WpfSettings.SettingElements
 
         public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
 
-        public NumberSetting(object parent, MemberInfo member)
-            : base(parent, member)
+        public NumberSetting(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
             _originalValueSet = false;
         }
@@ -553,13 +554,13 @@ namespace WpfSettings.SettingElements
         {
             if (IsReadOnly)
                 return;
-            Member.SetValue(Parent, Value);
+            Member.SetValue(SettingParent, Value);
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Member.Name)
-                Value = (int) Member.GetValue(Parent);
+                Value = (int) Member.GetValue(SettingParent);
         }
     }
 
@@ -581,8 +582,8 @@ namespace WpfSettings.SettingElements
 
         public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
 
-        public TextSetting(object parent, MemberInfo member)
-            : base(parent, member)
+        public TextSetting(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
         }
 
@@ -590,13 +591,13 @@ namespace WpfSettings.SettingElements
         {
             if (IsReadOnly)
                 return;
-            Member.SetValue(Parent, Value);
+            Member.SetValue(SettingParent, Value);
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Member.Name)
-                Value = (string) Member.GetValue(Parent);
+                Value = (string) Member.GetValue(SettingParent);
         }
     }
 
@@ -622,8 +623,8 @@ namespace WpfSettings.SettingElements
 
         public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
 
-        public BoolSetting(object parent, MemberInfo member)
-            : base(parent, member)
+        public BoolSetting(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
             _originalValueSet = false;
         }
@@ -632,13 +633,13 @@ namespace WpfSettings.SettingElements
         {
             if (IsReadOnly)
                 return;
-            Member.SetValue(Parent, Value);
+            Member.SetValue(SettingParent, Value);
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Member.Name)
-                Value = (bool) Member.GetValue(Parent);
+                Value = (bool) Member.GetValue(SettingParent);
         }
     }
 
@@ -664,8 +665,8 @@ namespace WpfSettings.SettingElements
 
         public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
 
-        public DateSetting(object parent, MemberInfo member)
-            : base(parent, member)
+        public DateSetting(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
             _originalValueSet = false;
         }
@@ -674,13 +675,13 @@ namespace WpfSettings.SettingElements
         {
             if (IsReadOnly)
                 return;
-            Member.SetValue(Parent, Value);
+            Member.SetValue(SettingParent, Value);
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Member.Name)
-                Value = (DateTime) Member.GetValue(Parent);
+                Value = (DateTime) Member.GetValue(SettingParent);
         }
     }
 
@@ -691,11 +692,11 @@ namespace WpfSettings.SettingElements
 
         public override int UnsavedSettings => 0;
 
-        public SettingField(object value, string name, string label, string details)
+        public SettingField(object value, string settingName, string label, string details)
             : base(null, null)
         {
             Value = value;
-            Name = name;
+            SettingName = settingName;
             Label = label;
             Details = details;
         }
@@ -748,8 +749,8 @@ namespace WpfSettings.SettingElements
 
         public override int UnsavedSettings => _originalValue == _selectedValue ? 0 : 1;
 
-        protected ChoiceSetting(object parent, MemberInfo member)
-            : base(parent, member)
+        protected ChoiceSetting(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
         }
 
@@ -759,14 +760,14 @@ namespace WpfSettings.SettingElements
                 return;
             if (SelectedValue == null)
                 return;
-            Member.SetValue(Parent, SelectedValue.Value);
+            Member.SetValue(SettingParent, SelectedValue.Value);
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Member.Name)
             {
-                object value = Member.GetValue(Parent);
+                object value = Member.GetValue(SettingParent);
                 SettingField field = Choices.FirstOrDefault(a => a.Value.Equals(value));
                 SelectedValue = field;
             }
@@ -785,8 +786,8 @@ namespace WpfSettings.SettingElements
 
     internal class DropDownSetting : ChoiceSetting
     {
-        public DropDownSetting(object parent, MemberInfo member)
-            : base(parent, member)
+        public DropDownSetting(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
         }
     }
@@ -797,8 +798,8 @@ namespace WpfSettings.SettingElements
         public string GroupName { get; }
         public ICommand OnSelectionCommand { get; }
 
-        public RadioButtonsSetting(object parent, MemberInfo member)
-            : base(parent, member)
+        public RadioButtonsSetting(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
             OnSelectionCommand = new RelayCommand<SettingField>(ChangeSelection);
             GroupName = Member.Name + _id++;
@@ -816,8 +817,8 @@ namespace WpfSettings.SettingElements
 
         public string SearchBoxHeight => SearchBox ? "24" : "0";
 
-        public ListViewSetting(object parent, MemberInfo member)
-            : base(parent, member)
+        public ListViewSetting(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
         }
     }
@@ -850,8 +851,8 @@ namespace WpfSettings.SettingElements
 
         public override int UnsavedSettings => 0;
 
-        protected ButtonSetting(object parent, MemberInfo member)
-            : base(parent, member)
+        protected ButtonSetting(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
             Alignment = HorizontalAlignment.Left;
             PressedCommand = new RelayCommand(OnPressed);
@@ -882,8 +883,8 @@ namespace WpfSettings.SettingElements
 
         public Action<string> SelectSection { get; set; }
 
-        public LinkButtonSetting(object parent, MemberInfo member)
-            : base(parent, member)
+        public LinkButtonSetting(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
         }
 
@@ -900,7 +901,7 @@ namespace WpfSettings.SettingElements
         {
             base.OuterPropertyChanged(sender, e);
             if (e.PropertyName == Member.Name)
-                Path = (string) Member.GetValue(Parent);
+                Path = (string) Member.GetValue(SettingParent);
         }
     }
 
@@ -921,8 +922,8 @@ namespace WpfSettings.SettingElements
         }
 
 
-        public CustomButtonSetting(object parent, MemberInfo member)
-            : base(parent, member)
+        public CustomButtonSetting(object settingParent, MemberInfo member)
+            : base(settingParent, member)
         {
         }
 
@@ -939,7 +940,7 @@ namespace WpfSettings.SettingElements
         {
             base.OuterPropertyChanged(sender, e);
             if (e.PropertyName == Member.Name)
-                Action = (Action) Member.GetValue(Parent);
+                Action = (Action) Member.GetValue(SettingParent);
         }
     }
 }

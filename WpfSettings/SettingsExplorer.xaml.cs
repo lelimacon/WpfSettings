@@ -83,9 +83,9 @@ namespace WpfSettings
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentException("Path must not be empty");
             string[] names = path.Split('.');
-            SettingSection section = Items.FirstOrDefault(s => s.Name == names[0]);
+            SettingSection section = Items.FirstOrDefault(s => s.SettingName == names[0]);
             for (int i = 1; i < names.Length; i++)
-                section = section?.SubSections?.FirstOrDefault(s => s.Name == names[i]);
+                section = section?.SubSections?.FirstOrDefault(s => s.SettingName == names[i]);
             if (section == null)
                 throw new ArgumentException("Invalid path");
             section.IsSelected = true;
