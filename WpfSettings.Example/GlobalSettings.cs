@@ -1,7 +1,8 @@
-﻿using PropertyChanged;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using PropertyChanged;
+using WpfSettings.Example.CustomSettings;
 using WpfSettings.SettingElements;
 
 namespace WpfSettings.Example
@@ -12,26 +13,29 @@ namespace WpfSettings.Example
         private readonly GlobalSettings _settings;
 
         [SettingChoice(LabelWidth = "80",
-             Details = "This will change the background to match your color preferences! No questions.")]
+            Details = "This will change the background to match your color preferences! No questions.")]
         public UserSettings.EGender Gender
         {
-            get { return _settings.User.Gender; }
-            set { _settings.User.Gender = value; }
+            get => _settings.User.Gender;
+            set => _settings.User.Gender = value;
         }
 
         [SettingString(LabelWidth = "80", Prefix = "Sir", Suffix = "the Great")]
         public string Name
         {
-            get { return _settings.User.Name; }
-            set { _settings.User.Name = value; }
+            get => _settings.User.Name;
+            set => _settings.User.Name = value;
         }
 
         [SettingNumber(LabelWidth = "80", MinValue = 0, MaxValue = 160)]
         public int Age
         {
-            get { return _settings.User.Age; }
-            set { _settings.User.Age = value; }
+            get => _settings.User.Age;
+            set => _settings.User.Age = value;
         }
+
+        [RandomSetting(LabelWidth = "80")]
+        public int MyRandom { get; set; }
 
         public QuickSettings(GlobalSettings settings)
         {
@@ -43,25 +47,25 @@ namespace WpfSettings.Example
     public class GlobalSettings
     {
         [SettingSection(
-             LabelWidth = "100",
-             Icon = "Resources.icon-bulb.png")]
+            LabelWidth = "100",
+            Icon = "Resources.icon-bulb.png")]
         public GeneralSettings General { get; }
 
         [SettingSection(
-             LabelWidth = "100",
-             Icon = "Resources.icon-skull.png")]
+            LabelWidth = "100",
+            Icon = "Resources.icon-skull.png")]
         public UserSettings User { get; }
 
         [SettingSection(
-             LabelWidth = "0.3*",
-             Expansion = SectionExpansion.Expanded,
-             Icon = "Resources.icon-window-system.png")]
+            LabelWidth = "0.3*",
+            Expansion = SectionExpansion.Expanded,
+            Icon = "Resources.icon-window-system.png")]
         public InterfaceSettings Interface { get; }
 
         [SettingSection(
-             LabelWidth = "Auto",
-             Expansion = SectionExpansion.Expanded,
-             Icon = "Resources.icon-globe.png")]
+            LabelWidth = "Auto",
+            Expansion = SectionExpansion.Expanded,
+            Icon = "Resources.icon-globe.png")]
         public CulturalSettings Culture { get; }
 
         public GlobalSettings()
@@ -77,12 +81,12 @@ namespace WpfSettings.Example
     public class GeneralSettings
     {
         [SettingBool(Label = "Launch this program with Windows start-up",
-             Details = "This option doesn't actually have any effect, don't worry.")]
+            Details = "This option doesn't actually have any effect, don't worry.")]
         public bool StartReboot { get; set; }
 
         [SettingNumber(Type = NumberSettingType.SliderAndValue,
-             MinValue = 100, MaxValue = 250, TickFrequency = 50,
-             SuffixLabel = "%")]
+            MinValue = 100, MaxValue = 250, TickFrequency = 50,
+            SuffixLabel = "%")]
         public int ElementsSizes { get; set; } = 100;
 
         [SettingButton(Label = "Style settings", Type = ButtonType.Link)]
@@ -102,28 +106,28 @@ namespace WpfSettings.Example
         }
 
         [SettingChoice(
-             Details = "This will change the background to match your color preferences! No questions.",
-             InGroup = "GeneralInformation")]
+            Details = "This will change the background to match your color preferences! No questions.",
+            InGroup = "GeneralInformation")]
         public EGender Gender { get; set; } = EGender.Other;
 
         [SettingString(Prefix = "Sir", Suffix = "the Great",
-             PlaceHolderText = "You have got to put a name...",
-             InGroup = "GeneralInformation")]
+            PlaceHolderText = "You have got to put a name...",
+            InGroup = "GeneralInformation")]
         public string Name { get; set; } = "Bob";
 
         [SettingNumber(MinValue = 0, MaxValue = 160,
-             InGroup = "GeneralInformation")]
+            InGroup = "GeneralInformation")]
         public int Age { get; set; } = 42;
 
         [SettingNumber(Type = NumberSettingType.SliderAndSpinner, MinValue = 1900, MaxValue = 2020,
-             TickFrequency = 10, InGroup = "UsefulInformation", Details = "Just to make sure...")]
+            TickFrequency = 10, InGroup = "UsefulInformation", Details = "Just to make sure...")]
         public int YearOfBirth { get; set; } = 1980;
 
         [SettingDate(InGroup = "UsefulInformation", Details = "Triple check!")]
         public DateTime Birthday { get; set; }
 
         [SettingString(Prefix = "https://",
-             InGroup = "UsefulInformation")]
+            InGroup = "UsefulInformation")]
         public string Website { get; set; } = "duckduckgo.com";
     }
 
@@ -262,8 +266,8 @@ namespace WpfSettings.Example
         public bool UseSystemLanguage { get; set; } = false;
 
         [SettingChoice(ItemsSource = nameof(Languages), Height = "*",
-             Type = SettingChoiceType.ListView,
-             ItemsLabelPath = "Name")]
+            Type = SettingChoiceType.ListView,
+            ItemsLabelPath = "Name")]
         public Language DisplayLanguage { get; set; } = Languages[1];
 
         public static List<Language> Languages { get; } = new List<Language>

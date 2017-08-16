@@ -145,7 +145,7 @@ namespace WpfSettings
         /// </summary>
         public string InGroup { get; set; }
 
-        internal abstract SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e);
+        public abstract SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e);
 
         internal void Fill(SettingPageElement element, ConverterArgs e, string name)
         {
@@ -173,7 +173,7 @@ namespace WpfSettings
         /// </summary>
         public GroupType Type { get; set; }
 
-        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        public override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
             if (!type.IsClass)
@@ -248,7 +248,7 @@ namespace WpfSettings
         /// </summary>
         public char Separator { get; set; } = ';';
 
-        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        public override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
             if (type != typeof(string) && type != typeof(string[]))
@@ -312,7 +312,7 @@ namespace WpfSettings
         /// </summary>
         public string SuffixLabel { get; set; }
 
-        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        public override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
             if (type != typeof(int))
@@ -344,7 +344,7 @@ namespace WpfSettings
             set { base.Height = value; }
         }
 
-        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        public override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
             if (type != typeof(string))
@@ -360,7 +360,7 @@ namespace WpfSettings
 
     public class SettingBoolAttribute : SettingPageAttribute
     {
-        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        public override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
             if (type != typeof(bool))
@@ -375,7 +375,7 @@ namespace WpfSettings
 
     public class SettingDateAttribute : SettingPageAttribute
     {
-        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        public override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
             if (type != typeof(DateTime))
@@ -427,7 +427,7 @@ namespace WpfSettings
             set { base.Height = value; }
         }
 
-        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        public override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
             if (!type.IsEnum && ItemsSource == null)
@@ -541,7 +541,7 @@ namespace WpfSettings
         /// </summary>
         public ButtonType Type { get; set; }
 
-        internal override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
+        public override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
         {
             Type type = member.GetValueType();
             if (type != typeof(Action) && type != typeof(string))

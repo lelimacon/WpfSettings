@@ -3,9 +3,9 @@ using System.Reflection;
 
 namespace WpfSettings.Utils.Reflection
 {
-    internal static class MemberInfoUtils
+    public static class MemberInfoUtils
     {
-        internal static Type GetValueType(this MemberInfo memberInfo)
+        public static Type GetValueType(this MemberInfo memberInfo)
         {
             switch (memberInfo.MemberType)
             {
@@ -18,7 +18,7 @@ namespace WpfSettings.Utils.Reflection
             }
         }
 
-        internal static bool IsReadOnly(this MemberInfo memberInfo)
+        public static bool IsReadOnly(this MemberInfo memberInfo)
         {
             switch (memberInfo.MemberType)
             {
@@ -31,7 +31,7 @@ namespace WpfSettings.Utils.Reflection
             }
         }
 
-        internal static object GetValue(this MemberInfo memberInfo, object parent)
+        public static object GetValue(this MemberInfo memberInfo, object parent)
         {
             switch (memberInfo.MemberType)
             {
@@ -44,7 +44,7 @@ namespace WpfSettings.Utils.Reflection
             }
         }
 
-        internal static void SetValue(this MemberInfo memberInfo, object parent, object value)
+        public static void SetValue(this MemberInfo memberInfo, object parent, object value)
         {
             switch (memberInfo.MemberType)
             {

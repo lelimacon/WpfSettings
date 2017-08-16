@@ -44,7 +44,7 @@
             <StackPanel Orientation="Horizontal" Background="#FFC2DD"
                         VerticalAlignment="Center" HorizontalAlignment="Left">
                 <TextBlock Text="{Binding UnsavedSettings, Mode=OneWay}" Margin="6,3,0,3" />
-                <TextBlock Text=" modified setting(s) will be saved" Margin="0,3,6,3" />
+                <TextBlock Text=" setting(s) will be saved" Margin="0,3,6,3" />
             </StackPanel>
         </Border>
 

@@ -2,7 +2,7 @@
 
 namespace WpfSettings.SettingElements
 {
-    internal class ConverterArgs
+    public class ConverterArgs
     {
         public ReadOnly IsReadOnly { get; set; }
         public bool AutoSave { get; set; }

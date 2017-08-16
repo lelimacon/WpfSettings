@@ -1,0 +1,33 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:WpfSettings.Example.CustomSettings"
+                    xmlns:controls="clr-namespace:WpfSettings.Controls;assembly=WpfSettings">
+
+    <DataTemplate DataType="{x:Type local:RandomSetting}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding LabelWidth}" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border Grid.Row="0" Grid.Column="0" Height="24" Margin="3">
+                <controls:ExtendedTextBlock
+                    Text="{Binding Label}" VerticalAlignment="Center"
+                    HighlightText="{Binding Filter, Mode=OneWay}" />
+            </Border>
+            <TextBox Grid.Row="0" Grid.Column="1" Margin="3" Height="24"
+                     VerticalContentAlignment="Center"
+                     Text="{Binding Value}" IsEnabled="False" />
+            <Button Grid.Row="0" Grid.Column="2" Margin="3" Height="24" Width="60"
+                    Content="Gen" Command="{Binding GenRandomCommand}" />
+            <controls:ExtendedTextBlock
+                Grid.Row="1" Grid.Column="1" Margin="3,0,3,3"
+                Text="{Binding Details}" FontStyle="Italic"
+                HighlightText="{Binding Filter, Mode=OneWay}" />
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

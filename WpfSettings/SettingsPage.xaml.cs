@@ -73,7 +73,7 @@ namespace WpfSettings
             page.SettingElements = elements;
             //page.AddResources();
         }
-        
+
         private static void SettingsElementsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             SettingsPage page = (SettingsPage) d;

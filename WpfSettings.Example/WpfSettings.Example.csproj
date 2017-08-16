@@ -65,6 +65,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="CustomSettings\RandomSetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -73,6 +77,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CustomSettings\RandomSetting.cs" />
+    <Compile Include="CustomSettings\RandomSettingAttribute.cs" />
     <Compile Include="MvvmUtils.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="StyleToFontStyleConverter.cs" />
