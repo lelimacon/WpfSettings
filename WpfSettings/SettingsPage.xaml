@@ -7,9 +7,11 @@
              mc:Ignorable="d"
              x:Name="Root">
 
+    <!--
     <UserControl.Resources>
         <ResourceDictionary Source="SettingElements/SettingElementsTemplate.xaml" />
     </UserControl.Resources>
+    -->
 
     <Grid DataContext="{Binding ElementName=Root}">
         <ItemsControl ItemsSource="{Binding SettingElements}" IsTabStop="False">

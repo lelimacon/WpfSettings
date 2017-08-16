@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -14,7 +15,7 @@ namespace WpfSettings
             MvvmUtils.RegisterDp<SettingsPage>(SettingsChanged);
 
         public static readonly DependencyProperty SettingElementsProperty =
-            MvvmUtils.RegisterDp<SettingsPage>();
+            MvvmUtils.RegisterDp<SettingsPage>(SettingsElementsChanged);
 
         public static readonly DependencyProperty AutoSaveProperty =
             MvvmUtils.RegisterDp<SettingsPage>(true);
@@ -24,31 +25,31 @@ namespace WpfSettings
 
         public string Filter
         {
-            get { return (string) GetValue(FilterProperty); }
-            set { SetValueDp(FilterProperty, value); }
+            get => (string) GetValue(FilterProperty);
+            set => SetValueDp(FilterProperty, value);
         }
 
         public object Settings
         {
-            get { return GetValue(SettingsProperty); }
-            set { SetValueDp(SettingsProperty, value); }
+            get => GetValue(SettingsProperty);
+            set => SetValueDp(SettingsProperty, value);
         }
 
         public ObservableCollection<SettingPageElement> SettingElements
         {
-            get { return (ObservableCollection<SettingPageElement>) GetValue(SettingElementsProperty); }
-            set { SetValueDp(SettingElementsProperty, value); }
+            get => (ObservableCollection<SettingPageElement>) GetValue(SettingElementsProperty);
+            set => SetValueDp(SettingElementsProperty, value);
         }
 
         public bool AutoSave
         {
-            get { return (bool) GetValue(AutoSaveProperty); }
-            set { SetValueDp(AutoSaveProperty, value); }
+            get => (bool) GetValue(AutoSaveProperty);
+            set => SetValueDp(AutoSaveProperty, value);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        void SetValueDp(DependencyProperty property, object value,
+        private void SetValueDp(DependencyProperty property, object value,
             [CallerMemberName] string p = null)
         {
             SetValue(property, value);
@@ -70,6 +71,24 @@ namespace WpfSettings
             ConverterArgs args = new ConverterArgs {AutoSave = page.AutoSave};
             var elements = SettingsConverter.GetElements(page.Settings, args);
             page.SettingElements = elements;
+            //page.AddResources();
+        }
+        
+        private static void SettingsElementsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            SettingsPage page = (SettingsPage) d;
+            page.AddResources();
+        }
+
+        private void AddResources()
+        {
+            if (SettingElements == null)
+                return;
+            foreach (SettingPageElement element in SettingElements)
+            {
+                var rd = new ResourceDictionary {Source = new Uri(element.ResourceUri)};
+                Resources.MergedDictionaries.Add(rd);
+            }
         }
     }
 }

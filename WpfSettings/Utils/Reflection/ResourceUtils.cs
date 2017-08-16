@@ -13,5 +13,10 @@ namespace WpfSettings.Utils.Reflection
             Stream resourceStream = assembly.GetManifestResourceStream(resourcePath);
             return resourceStream;
         }
+
+        internal static string AppPath(string path)
+        {
+            return "pack://application:,,,/WpfSettings;component/" + path;
+        }
     }
 }

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using WpfSettings.Annotations;
@@ -15,7 +14,6 @@ using WpfSettings.Utils.Wpf;
 
 namespace WpfSettings.SettingElements
 {
-
     #region Value changed event
 
     public delegate void ValueChangedEventHandler(object sender, ValueChangedEventArgs args);
@@ -48,26 +46,26 @@ namespace WpfSettings.SettingElements
 
         public string SettingName
         {
-            get { return _name ?? (_name = Member?.Name); }
-            set { _name = value; }
+            get => _name ?? (_name = Member?.Name);
+            set => _name = value;
         }
 
         public int Position
         {
-            get { return _position; }
-            set { Set(ref _position, value); }
+            get => _position;
+            set => Set(ref _position, value);
         }
 
         public string Label
         {
-            get { return _label; }
-            set { Set(ref _label, value); }
+            get => _label;
+            set => Set(ref _label, value);
         }
 
         public string Filter
         {
-            get { return _filter; }
-            set { Set(ref _filter, value); }
+            get => _filter;
+            set => Set(ref _filter, value);
         }
 
         public abstract int UnsavedSettings { get; }
@@ -150,8 +148,8 @@ namespace WpfSettings.SettingElements
 
         public bool Visible
         {
-            get { return _visible; }
-            set { Set(ref _visible, value); }
+            get => _visible;
+            set => Set(ref _visible, value);
         }
 
         public override int UnsavedSettings
@@ -159,7 +157,7 @@ namespace WpfSettings.SettingElements
 
         public ObservableCollection<SettingSection> SubSections
         {
-            get { return _subSections; }
+            get => _subSections;
             set
             {
                 if (!Set(ref _subSections, value))
@@ -176,7 +174,7 @@ namespace WpfSettings.SettingElements
 
         public ObservableCollection<SettingPageElement> Elements
         {
-            get { return _elements; }
+            get => _elements;
             set
             {
                 if (!Set(ref _elements, value))
@@ -193,20 +191,20 @@ namespace WpfSettings.SettingElements
 
         public bool IsExpanded
         {
-            get { return _isExpanded; }
-            set { Set(ref _isExpanded, value); }
+            get => _isExpanded;
+            set => Set(ref _isExpanded, value);
         }
 
         public bool IsSelected
         {
-            get { return _isSelected; }
-            set { Set(ref _isSelected, value); }
+            get => _isSelected;
+            set => Set(ref _isSelected, value);
         }
 
         public BitmapSource Icon
         {
-            get { return _icon; }
-            set { Set(ref _icon, value); }
+            get => _icon;
+            set => Set(ref _icon, value);
         }
 
         public SettingSection(object settingParent, MemberInfo member)
@@ -242,6 +240,8 @@ namespace WpfSettings.SettingElements
 
     public abstract class SettingPageElement : SettingElement, IListElement
     {
+        public abstract string ResourceUri { get; }
+
         private string _height;
         private string _labelWidth;
         private bool _autoSave;
@@ -253,50 +253,50 @@ namespace WpfSettings.SettingElements
 
         public string RowHeight
         {
-            get { return _height; }
-            set { Set(ref _height, value); }
+            get => _height;
+            set => Set(ref _height, value);
         }
 
         public string LabelWidth
         {
-            get { return _labelWidth; }
-            set { Set(ref _labelWidth, value); }
+            get => _labelWidth;
+            set => Set(ref _labelWidth, value);
         }
 
         public bool AutoSave
         {
-            get { return _autoSave; }
-            set { Set(ref _autoSave, value); }
+            get => _autoSave;
+            set => Set(ref _autoSave, value);
         }
 
         public string Details
         {
-            get { return _details; }
-            set { Set(ref _details, value); }
+            get => _details;
+            set => Set(ref _details, value);
         }
 
         public string Prefix
         {
-            get { return _prefix; }
-            set { Set(ref _prefix, value); }
+            get => _prefix;
+            set => Set(ref _prefix, value);
         }
 
         public string Suffix
         {
-            get { return _suffix; }
-            set { Set(ref _suffix, value); }
+            get => _suffix;
+            set => Set(ref _suffix, value);
         }
 
         public string SuffixLabel
         {
-            get { return _suffixLabel; }
-            set { Set(ref _suffixLabel, value); }
+            get => _suffixLabel;
+            set => Set(ref _suffixLabel, value);
         }
 
         public bool ReadOnly
         {
-            get { return _readOnly; }
-            set { Set(ref _readOnly, value); }
+            get => _readOnly;
+            set => Set(ref _readOnly, value);
         }
 
         public bool IsReadOnly => ReadOnly || (Member?.IsReadOnly() ?? true);
@@ -344,7 +344,7 @@ namespace WpfSettings.SettingElements
 
         public ObservableCollection<SettingPageElement> Elements
         {
-            get { return _elements; }
+            get => _elements;
             set
             {
                 if (!Set(ref _elements, value))
@@ -390,6 +390,9 @@ namespace WpfSettings.SettingElements
 
     internal class SettingGroupBox : SettingGroup
     {
+        public override string ResourceUri { get; } =
+            ResourceUtils.AppPath("SettingElements/SettingElementsTemplate.xaml");
+
         public SettingGroupBox(object settingParent, MemberInfo member)
             : base(settingParent, member)
         {
@@ -398,6 +401,9 @@ namespace WpfSettings.SettingElements
 
     internal class SettingGroupTitle : SettingGroup
     {
+        public override string ResourceUri { get; } =
+            ResourceUtils.AppPath("SettingElements/SettingElementsTemplate.xaml");
+
         public SettingGroupTitle(object settingParent, MemberInfo member)
             : base(settingParent, member)
         {
@@ -406,6 +412,9 @@ namespace WpfSettings.SettingElements
 
     internal class StringSetting : SettingPageElement
     {
+        public override string ResourceUri { get; } =
+            ResourceUtils.AppPath("SettingElements/SettingElementsTemplate.xaml");
+
         private string _originalValue;
         private string _value;
         private string _placeHolderText;
@@ -413,7 +422,7 @@ namespace WpfSettings.SettingElements
 
         public string Value
         {
-            get { return _value; }
+            get => _value;
             set
             {
                 if (_originalValue == null)
@@ -424,14 +433,14 @@ namespace WpfSettings.SettingElements
 
         public string PlaceHolderText
         {
-            get { return _placeHolderText; }
-            set { Set(ref _placeHolderText, value); }
+            get => _placeHolderText;
+            set => Set(ref _placeHolderText, value);
         }
 
         public char Separator
         {
-            get { return _separator; }
-            set { Set(ref _separator, value); }
+            get => _separator;
+            set => Set(ref _separator, value);
         }
 
         public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
@@ -448,7 +457,9 @@ namespace WpfSettings.SettingElements
                 return;
             Type type = Member.GetValueType();
             if (type == typeof(string))
+            {
                 Member.SetValue(SettingParent, Value);
+            }
             else // type == typeof(string[])
             {
                 string[] values = Value.Split(Separator);
@@ -467,9 +478,9 @@ namespace WpfSettings.SettingElements
         {
             Type type = Member.GetValueType();
             if (type == typeof(string))
-                return (string)Member.GetValue(SettingParent);
+                return (string) Member.GetValue(SettingParent);
             // type == typeof(string[])
-            return string.Join(Separator.ToString(), (string[])Member.GetValue(SettingParent));
+            return string.Join(Separator.ToString(), (string[]) Member.GetValue(SettingParent));
         }
     }
 
@@ -483,6 +494,9 @@ namespace WpfSettings.SettingElements
 
     internal class NumberSetting : SettingPageElement
     {
+        public override string ResourceUri { get; } =
+            ResourceUtils.AppPath("SettingElements/SettingElementsTemplate.xaml");
+
         private NumberSettingType _type;
         private bool _originalValueSet;
         private int _originalValue;
@@ -501,13 +515,13 @@ namespace WpfSettings.SettingElements
 
         public NumberSettingType Type
         {
-            get { return _type; }
-            set { Set(ref _type, value); }
+            get => _type;
+            set => Set(ref _type, value);
         }
 
         public int Value
         {
-            get { return _value; }
+            get => _value;
             set
             {
                 if (!_originalValueSet)
@@ -521,26 +535,26 @@ namespace WpfSettings.SettingElements
 
         public int MinValue
         {
-            get { return _minValue; }
-            set { Set(ref _minValue, value); }
+            get => _minValue;
+            set => Set(ref _minValue, value);
         }
 
         public int MaxValue
         {
-            get { return _maxValue; }
-            set { Set(ref _maxValue, value); }
+            get => _maxValue;
+            set => Set(ref _maxValue, value);
         }
 
         public int Step
         {
-            get { return _step; }
-            set { Set(ref _step, value); }
+            get => _step;
+            set => Set(ref _step, value);
         }
 
         public int TickFrequency
         {
-            get { return _tickFrequency; }
-            set { Set(ref _tickFrequency, value); }
+            get => _tickFrequency;
+            set => Set(ref _tickFrequency, value);
         }
 
         public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
@@ -568,12 +582,15 @@ namespace WpfSettings.SettingElements
 
     internal class TextSetting : SettingPageElement
     {
+        public override string ResourceUri { get; } =
+            ResourceUtils.AppPath("SettingElements/SettingElementsTemplate.xaml");
+
         private string _originalValue;
         private string _value;
 
         public string Value
         {
-            get { return _value; }
+            get => _value;
             set
             {
                 if (_originalValue == null)
@@ -606,13 +623,16 @@ namespace WpfSettings.SettingElements
 
     internal class BoolSetting : SettingPageElement
     {
+        public override string ResourceUri { get; } =
+            ResourceUtils.AppPath("SettingElements/SettingElementsTemplate.xaml");
+
         private bool _originalValueSet;
         private bool _originalValue;
         private bool _value;
 
         public bool Value
         {
-            get { return _value; }
+            get => _value;
             set
             {
                 if (!_originalValueSet)
@@ -649,13 +669,16 @@ namespace WpfSettings.SettingElements
 
     internal class DateSetting : SettingPageElement
     {
+        public override string ResourceUri { get; } =
+            ResourceUtils.AppPath("SettingElements/SettingElementsTemplate.xaml");
+
         private bool _originalValueSet;
         private DateTime _originalValue;
         private DateTime _value;
 
         public DateTime Value
         {
-            get { return _value; }
+            get => _value;
             set
             {
                 if (!_originalValueSet)
@@ -731,19 +754,22 @@ namespace WpfSettings.SettingElements
 
     internal abstract class ChoiceSetting : SettingPageElement
     {
+        public override string ResourceUri { get; } =
+            ResourceUtils.AppPath("SettingElements/SettingElementsTemplate.xaml");
+
         private ObservableCollection<SettingField> _choices;
         private SettingField _originalValue;
         private SettingField _selectedValue;
 
         public ObservableCollection<SettingField> Choices
         {
-            get { return _choices; }
-            set { Set(ref _choices, value); }
+            get => _choices;
+            set => Set(ref _choices, value);
         }
 
         public SettingField SelectedValue
         {
-            get { return _selectedValue; }
+            get => _selectedValue;
             set
             {
                 if (_originalValue == null)
@@ -837,19 +863,22 @@ namespace WpfSettings.SettingElements
 
     internal abstract class ButtonSetting : SettingPageElement
     {
+        public override string ResourceUri { get; } =
+            ResourceUtils.AppPath("SettingElements/SettingElementsTemplate.xaml");
+
         private HorizontalAlignment _alignment;
         private ButtonType _type;
 
         public HorizontalAlignment Alignment
         {
-            get { return _alignment; }
-            set { Set(ref _alignment, value); }
+            get => _alignment;
+            set => Set(ref _alignment, value);
         }
 
         public ButtonType Type
         {
-            get { return _type; }
-            set { Set(ref _type, value); }
+            get => _type;
+            set => Set(ref _type, value);
         }
 
         public ICommand PressedCommand { get; set; }
@@ -877,7 +906,7 @@ namespace WpfSettings.SettingElements
 
         public string Path
         {
-            get { return _path; }
+            get => _path;
             set
             {
                 if (_originalValue == null)
@@ -917,7 +946,7 @@ namespace WpfSettings.SettingElements
 
         public Action Action
         {
-            get { return _action; }
+            get => _action;
             set
             {
                 if (_originalValue == null)
