@@ -115,7 +115,7 @@ namespace WpfSettings
             var button = new LinkButtonSetting(value, null)
             {
                 Label = subSection.Label,
-                Path = e.Path + "." + subSection.SettingName,
+                Value = e.Path + "." + subSection.SettingName,
                 SelectSection = e.SelectSection,
                 Position = pos,
                 Type = ButtonType.Link
@@ -177,7 +177,8 @@ namespace WpfSettings
         {
             Type type = member.GetValueType();
             if (!type.IsClass)
-                throw new ArgumentException("SettingGroupAttribute must target a class (not a value type or interface)");
+                throw new ArgumentException(
+                    "SettingGroupAttribute must target a class (not a value type or interface)");
             e = new ConverterArgs(e, this);
             object value = member.GetValue(parent);
             e = e.ChildrenArgs(this);
@@ -254,24 +255,15 @@ namespace WpfSettings
             if (type != typeof(string) && type != typeof(string[]))
                 throw new ArgumentException("SettingStringAttribute must target a string or string array");
             e = new ConverterArgs(e, this);
-            StringSetting element = new StringSetting(parent, member);
+            var element = new StringSetting(parent, member, Separator)
+            {
+                PlaceHolderText = PlaceHolderText,
+                Prefix = Prefix,
+                Suffix = Suffix,
+                SuffixLabel = SuffixLabel
+            };
             Fill(element, e, member.Name);
-            element.Value = GetValue(parent, member);
-            element.PlaceHolderText = PlaceHolderText;
-            element.Prefix = Prefix;
-            element.Suffix = Suffix;
-            element.SuffixLabel = SuffixLabel;
-            element.Separator = Separator;
             return element;
-        }
-
-        private string GetValue(object parent, MemberInfo member)
-        {
-            Type type = member.GetValueType();
-            if (type == typeof(string))
-                return (string) member.GetValue(parent);
-            // type == typeof(string[])
-            return string.Join(Separator.ToString(), (string[]) member.GetValue(parent));
         }
     }
 
@@ -281,13 +273,13 @@ namespace WpfSettings
         ///     Gets or sets the minimum value.
         ///     Defaults to min int.
         /// </summary>
-        public int MinValue { get; set; } = Int32.MinValue;
+        public int MinValue { get; set; } = int.MinValue;
 
         /// <summary>
         ///     Gets or sets the minimum value.
         ///     Defaults to max int.
         /// </summary>
-        public int MaxValue { get; set; } = Int32.MaxValue;
+        public int MaxValue { get; set; } = int.MaxValue;
 
         /// <summary>
         ///     Gets or sets the ticks frequency on the slider.
@@ -318,15 +310,16 @@ namespace WpfSettings
             if (type != typeof(int))
                 throw new ArgumentException("SettingNumberAttribute must target an integer");
             e = new ConverterArgs(e, this);
-            NumberSetting element = new NumberSetting(parent, member);
+            var element = new NumberSetting(parent, member)
+            {
+                SuffixLabel = SuffixLabel,
+                MinValue = MinValue,
+                MaxValue = MaxValue,
+                TickFrequency = TickFrequency,
+                Step = Step,
+                Type = Type
+            };
             Fill(element, e, member.Name);
-            element.Value = (int) member.GetValue(parent);
-            element.SuffixLabel = SuffixLabel;
-            element.MinValue = MinValue;
-            element.MaxValue = MaxValue;
-            element.TickFrequency = TickFrequency;
-            element.Step = Step;
-            element.Type = Type;
             return element;
         }
     }
@@ -340,8 +333,8 @@ namespace WpfSettings
         /// </summary>
         public new string Height
         {
-            get { return base.Height; }
-            set { base.Height = value; }
+            get => base.Height;
+            set => base.Height = value;
         }
 
         public override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
@@ -350,10 +343,11 @@ namespace WpfSettings
             if (type != typeof(string))
                 throw new ArgumentException("SettingTextAttribute must target a string");
             e = new ConverterArgs(e, this);
-            TextSetting element = new TextSetting(parent, member);
+            var element = new TextSetting(parent, member)
+            {
+                RowHeight = Height ?? "60"
+            };
             Fill(element, e, member.Name);
-            element.Value = (string) member.GetValue(parent);
-            element.RowHeight = Height ?? "60";
             return element;
         }
     }
@@ -366,9 +360,8 @@ namespace WpfSettings
             if (type != typeof(bool))
                 throw new ArgumentException("SettingBoolAttribute must target a boolean");
             e = new ConverterArgs(e, this);
-            BoolSetting element = new BoolSetting(parent, member);
+            var element = new BoolSetting(parent, member);
             Fill(element, e, member.Name);
-            element.Value = (bool) member.GetValue(parent);
             return element;
         }
     }
@@ -381,9 +374,8 @@ namespace WpfSettings
             if (type != typeof(DateTime))
                 throw new ArgumentException("SettingStringAttribute must target a DateTime");
             e = new ConverterArgs(e, this);
-            DateSetting element = new DateSetting(parent, member);
+            var element = new DateSetting(parent, member);
             Fill(element, e, member.Name);
-            element.Value = (DateTime) member.GetValue(parent);
             return element;
         }
     }
@@ -423,8 +415,8 @@ namespace WpfSettings
         /// </summary>
         public new string Height
         {
-            get { return base.Height; }
-            set { base.Height = value; }
+            get => base.Height;
+            set => base.Height = value;
         }
 
         public override SettingPageElement GetElement(object parent, MemberInfo member, ConverterArgs e)
@@ -434,25 +426,22 @@ namespace WpfSettings
                 throw new ArgumentException("SettingChoiceAttribute must target an enum or declare an item source");
             e = new ConverterArgs(e, this);
             var choices = type.IsEnum ? GetEnumChoices(parent, type) : GetListChoices(parent);
-            ChoiceSetting element = GetSetting(parent, member);
+            ChoiceSetting element = GetSetting(parent, member, choices);
             Fill(element, e, member.Name);
             element.RowHeight = Type == SettingChoiceType.ListView ? (Height ?? "160") : "Auto";
-            element.Choices = choices;
-            var value = member.GetValue(parent);
-            element.SelectedValue = choices.FirstOrDefault(a => a.Value.Equals(value));
             return element;
         }
 
-        private ChoiceSetting GetSetting(object parent, MemberInfo member)
+        private ChoiceSetting GetSetting(object parent, MemberInfo member, ObservableCollection<SettingField> choices)
         {
             switch (Type)
             {
                 case SettingChoiceType.DropDown:
-                    return new DropDownSetting(parent, member);
+                    return new DropDownSetting(parent, member, choices);
                 case SettingChoiceType.RadioButtons:
-                    return new RadioButtonsSetting(parent, member);
+                    return new RadioButtonsSetting(parent, member, choices);
                 case SettingChoiceType.ListView:
-                    return new ListViewSetting(parent, member);
+                    return new ListViewSetting(parent, member, choices);
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -484,7 +473,8 @@ namespace WpfSettings
             foreach (var e in list)
             {
                 if (!(e is string) && ItemsLabelPath == null)
-                    throw new ArgumentException("ItemsSource elements must be strings unless ItemsLabelPath is declared");
+                    throw new ArgumentException(
+                        "ItemsSource elements must be strings unless ItemsLabelPath is declared");
                 var field = e is string ? GetStringField(e) : GetField(e);
                 choices.Add(field);
             }
@@ -558,13 +548,9 @@ namespace WpfSettings
         private ButtonSetting GetSetting(object parent, MemberInfo member, Type type, ConverterArgs e)
         {
             if (type == typeof(Action))
-                return new CustomButtonSetting(parent, member) {Action = (Action) member.GetValue(parent)};
+                return new CustomButtonSetting(parent, member);
             if (type == typeof(string))
-                return new LinkButtonSetting(parent, member)
-                {
-                    Path = (string) member.GetValue(parent),
-                    SelectSection = e.SelectSection
-                };
+                return new LinkButtonSetting(parent, member) {SelectSection = e.SelectSection};
             throw new ArgumentException($"Unknown type \"{type.FullName}\"");
         }
     }

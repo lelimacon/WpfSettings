@@ -423,12 +423,7 @@ namespace WpfSettings.SettingElements
         public string Value
         {
             get => _value;
-            set
-            {
-                if (_originalValue == null)
-                    _originalValue = value;
-                SetAndSave(ref _value, value, _originalValue);
-            }
+            set => SetAndSave(ref _value, value, _originalValue);
         }
 
         public string PlaceHolderText
@@ -445,42 +440,54 @@ namespace WpfSettings.SettingElements
 
         public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
 
-        public StringSetting(object parent, MemberInfo member)
+        /// <summary>
+        ///     The value of the source setting property.
+        /// </summary>
+        private string OuterValue
+        {
+            get
+            {
+                Type type = Member.GetValueType();
+                if (type == typeof(string))
+                    return (string) Member.GetValue(SettingParent);
+                // type == typeof(string[])
+                return string.Join(Separator.ToString(), (string[]) Member.GetValue(SettingParent));
+            }
+            set
+            {
+                Type type = Member.GetValueType();
+                if (type == typeof(string))
+                {
+                    Member.SetValue(SettingParent, value);
+                }
+                else // type == typeof(string[])
+                {
+                    string[] values = value.Split(Separator);
+                    Member.SetValue(SettingParent, values);
+                }
+            }
+        }
+
+        public StringSetting(object parent, MemberInfo member, char separator)
             : base(parent, member)
         {
-            Separator = ';';
+            Separator = separator;
+            Value = OuterValue;
+            _originalValue = Value;
         }
 
         public override void Save()
         {
             if (IsReadOnly)
                 return;
-            Type type = Member.GetValueType();
-            if (type == typeof(string))
-            {
-                Member.SetValue(SettingParent, Value);
-            }
-            else // type == typeof(string[])
-            {
-                string[] values = Value.Split(Separator);
-                Member.SetValue(SettingParent, values);
-            }
+            OuterValue = Value;
             _originalValue = Value;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Member.Name)
-                Value = GetValue();
-        }
-
-        private string GetValue()
-        {
-            Type type = Member.GetValueType();
-            if (type == typeof(string))
-                return (string) Member.GetValue(SettingParent);
-            // type == typeof(string[])
-            return string.Join(Separator.ToString(), (string[]) Member.GetValue(SettingParent));
+                Value = OuterValue;
         }
     }
 
@@ -498,7 +505,6 @@ namespace WpfSettings.SettingElements
             ResourceUtils.AppPath("SettingElements/SettingElementsTemplate.xaml");
 
         private NumberSettingType _type;
-        private bool _originalValueSet;
         private int _originalValue;
         private int _value;
         private int _maxValue;
@@ -522,15 +528,7 @@ namespace WpfSettings.SettingElements
         public int Value
         {
             get => _value;
-            set
-            {
-                if (!_originalValueSet)
-                {
-                    _originalValue = value;
-                    _originalValueSet = true;
-                }
-                SetAndSave(ref _value, value, _originalValue);
-            }
+            set => SetAndSave(ref _value, value, _originalValue);
         }
 
         public int MinValue
@@ -559,24 +557,34 @@ namespace WpfSettings.SettingElements
 
         public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
 
+        /// <summary>
+        ///     The value of the source setting property.
+        /// </summary>
+        private int OuterValue
+        {
+            get => (int) Member.GetValue(SettingParent);
+            set => Member.SetValue(SettingParent, value);
+        }
+
         public NumberSetting(object settingParent, MemberInfo member)
             : base(settingParent, member)
         {
-            _originalValueSet = false;
+            Value = OuterValue;
+            _originalValue = Value;
         }
 
         public override void Save()
         {
             if (IsReadOnly)
                 return;
-            Member.SetValue(SettingParent, Value);
+            OuterValue = Value;
             _originalValue = Value;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Member.Name)
-                Value = (int) Member.GetValue(SettingParent);
+                Value = OuterValue;
         }
     }
 
@@ -601,23 +609,34 @@ namespace WpfSettings.SettingElements
 
         public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
 
+        /// <summary>
+        ///     The value of the source setting property.
+        /// </summary>
+        private string OuterValue
+        {
+            get => (string) Member.GetValue(SettingParent);
+            set => Member.SetValue(SettingParent, value);
+        }
+
         public TextSetting(object settingParent, MemberInfo member)
             : base(settingParent, member)
         {
+            Value = OuterValue;
+            _originalValue = Value;
         }
 
         public override void Save()
         {
             if (IsReadOnly)
                 return;
-            Member.SetValue(SettingParent, Value);
+            OuterValue = Value;
             _originalValue = Value;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Member.Name)
-                Value = (string) Member.GetValue(SettingParent);
+                Value = OuterValue;
         }
     }
 
@@ -626,44 +645,45 @@ namespace WpfSettings.SettingElements
         public override string ResourceUri { get; } =
             ResourceUtils.AppPath("SettingElements/SettingElementsTemplate.xaml");
 
-        private bool _originalValueSet;
         private bool _originalValue;
         private bool _value;
 
         public bool Value
         {
             get => _value;
-            set
-            {
-                if (!_originalValueSet)
-                {
-                    _originalValue = value;
-                    _originalValueSet = true;
-                }
-                SetAndSave(ref _value, value, _originalValue);
-            }
+            set => SetAndSave(ref _value, value, _originalValue);
         }
 
         public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
 
+        /// <summary>
+        ///     The value of the source setting property.
+        /// </summary>
+        private bool OuterValue
+        {
+            get => (bool) Member.GetValue(SettingParent);
+            set => Member.SetValue(SettingParent, value);
+        }
+
         public BoolSetting(object settingParent, MemberInfo member)
             : base(settingParent, member)
         {
-            _originalValueSet = false;
+            Value = OuterValue;
+            _originalValue = Value;
         }
 
         public override void Save()
         {
             if (IsReadOnly)
                 return;
-            Member.SetValue(SettingParent, Value);
+            OuterValue = Value;
             _originalValue = Value;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Member.Name)
-                Value = (bool) Member.GetValue(SettingParent);
+                Value = OuterValue;
         }
     }
 
@@ -672,44 +692,45 @@ namespace WpfSettings.SettingElements
         public override string ResourceUri { get; } =
             ResourceUtils.AppPath("SettingElements/SettingElementsTemplate.xaml");
 
-        private bool _originalValueSet;
         private DateTime _originalValue;
         private DateTime _value;
 
         public DateTime Value
         {
             get => _value;
-            set
-            {
-                if (!_originalValueSet)
-                {
-                    _originalValue = value;
-                    _originalValueSet = true;
-                }
-                SetAndSave(ref _value, value, _originalValue);
-            }
+            set => SetAndSave(ref _value, value, _originalValue);
         }
 
         public override int UnsavedSettings => _originalValue == Value ? 0 : 1;
 
+        /// <summary>
+        ///     The value of the source setting property.
+        /// </summary>
+        private DateTime OuterValue
+        {
+            get => (DateTime) Member.GetValue(SettingParent);
+            set => Member.SetValue(SettingParent, value);
+        }
+
         public DateSetting(object settingParent, MemberInfo member)
             : base(settingParent, member)
         {
-            _originalValueSet = false;
+            Value = OuterValue;
+            _originalValue = Value;
         }
 
         public override void Save()
         {
             if (IsReadOnly)
                 return;
-            Member.SetValue(SettingParent, Value);
+            OuterValue = Value;
             _originalValue = Value;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Member.Name)
-                Value = (DateTime) Member.GetValue(SettingParent);
+                Value = OuterValue;
         }
     }
 
@@ -780,28 +801,40 @@ namespace WpfSettings.SettingElements
 
         public override int UnsavedSettings => _originalValue == _selectedValue ? 0 : 1;
 
-        protected ChoiceSetting(object settingParent, MemberInfo member)
+        /// <summary>
+        ///     The value of the source setting property.
+        /// </summary>
+        private SettingField OuterValue
+        {
+            get
+            {
+                object value = Member.GetValue(SettingParent);
+                return Choices.FirstOrDefault(a => a.Value.Equals(value));
+            }
+            set => Member.SetValue(SettingParent, value?.Value);
+        }
+
+        protected ChoiceSetting(object settingParent, MemberInfo member, ObservableCollection<SettingField> choices)
             : base(settingParent, member)
         {
+            Choices = choices;
+            SelectedValue = OuterValue;
+            _originalValue = SelectedValue;
         }
 
         public override void Save()
         {
             if (IsReadOnly)
                 return;
-            if (SelectedValue != null)
-                Member.SetValue(SettingParent, SelectedValue.Value);
+            //if (SelectedValue != null)
+            OuterValue = SelectedValue;
             _originalValue = SelectedValue;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == Member.Name)
-            {
-                object value = Member.GetValue(SettingParent);
-                SettingField field = Choices.FirstOrDefault(a => a.Value.Equals(value));
-                SelectedValue = field;
-            }
+                SelectedValue = OuterValue;
         }
 
         public override bool Matches(string filter, bool parentMatch = false)
@@ -817,8 +850,8 @@ namespace WpfSettings.SettingElements
 
     internal class DropDownSetting : ChoiceSetting
     {
-        public DropDownSetting(object settingParent, MemberInfo member)
-            : base(settingParent, member)
+        public DropDownSetting(object settingParent, MemberInfo member, ObservableCollection<SettingField> choices)
+            : base(settingParent, member, choices)
         {
         }
     }
@@ -829,8 +862,8 @@ namespace WpfSettings.SettingElements
         public string GroupName { get; }
         public ICommand OnSelectionCommand { get; }
 
-        public RadioButtonsSetting(object settingParent, MemberInfo member)
-            : base(settingParent, member)
+        public RadioButtonsSetting(object settingParent, MemberInfo member, ObservableCollection<SettingField> choices)
+            : base(settingParent, member, choices)
         {
             OnSelectionCommand = new RelayCommand<SettingField>(ChangeSelection);
             GroupName = Member.Name + _id++;
@@ -848,8 +881,8 @@ namespace WpfSettings.SettingElements
 
         public string SearchBoxHeight => SearchBox ? "24" : "0";
 
-        public ListViewSetting(object settingParent, MemberInfo member)
-            : base(settingParent, member)
+        public ListViewSetting(object settingParent, MemberInfo member, ObservableCollection<SettingField> choices)
+            : base(settingParent, member, choices)
         {
         }
     }
@@ -902,79 +935,112 @@ namespace WpfSettings.SettingElements
     internal class LinkButtonSetting : ButtonSetting
     {
         private string _originalValue;
-        private string _path;
+        private string _value;
 
-        public string Path
+        /// <summary>
+        ///     The value corresponds to the hyperlink's path.
+        /// </summary>
+        public string Value
         {
-            get => _path;
-            set
-            {
-                if (_originalValue == null)
-                    _originalValue = value;
-                SetAndSave(ref _path, value, _originalValue);
-            }
+            get => _value;
+            set => SetAndSave(ref _value, value, _originalValue);
         }
 
         public Action<string> SelectSection { get; set; }
 
+        /// <summary>
+        ///     The value of the source setting property.
+        /// </summary>
+        private string OuterValue
+        {
+            get => (string) Member?.GetValue(SettingParent);
+            set => Member.SetValue(SettingParent, value);
+        }
+
+        /// <summary>
+        ///     Member is null for generated links from the setting window.
+        /// </summary>
         public LinkButtonSetting(object settingParent, MemberInfo member)
             : base(settingParent, member)
         {
+            Value = OuterValue;
+            _originalValue = Value;
         }
 
         protected override void OnPressed()
         {
-            SelectSection?.Invoke(Path);
+            SelectSection?.Invoke(Value);
         }
 
         public override void Save()
         {
+            if (IsReadOnly)
+                return;
+            OuterValue = Value;
+            _originalValue = Value;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OuterPropertyChanged(sender, e);
             if (e.PropertyName == Member.Name)
-                Path = (string) Member.GetValue(SettingParent);
+                Value = OuterValue;
         }
     }
 
     internal class CustomButtonSetting : ButtonSetting
     {
         private Action _originalValue;
-        private Action _action;
+        private Action _value;
 
-        public Action Action
+        /// <summary>
+        ///     The value corresponds to the action to execute when the button is pressed.
+        /// </summary>
+        public Action Value
         {
-            get => _action;
+            get => _value;
             set
             {
                 if (_originalValue == null)
                     _originalValue = value;
-                SetAndSave(ref _action, value, _originalValue);
+                SetAndSave(ref _value, value, _originalValue);
             }
         }
 
+        /// <summary>
+        ///     The value of the source setting property.
+        /// </summary>
+        private Action OuterValue
+        {
+            get => (Action) Member.GetValue(SettingParent);
+            set => Member.SetValue(SettingParent, value);
+        }
 
         public CustomButtonSetting(object settingParent, MemberInfo member)
             : base(settingParent, member)
         {
+            Value = OuterValue;
+            _originalValue = Value;
         }
 
         protected override void OnPressed()
         {
-            Action();
+            Value();
         }
 
         public override void Save()
         {
+            if (IsReadOnly)
+                return;
+            OuterValue = Value;
+            _originalValue = Value;
         }
 
         protected override void OuterPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OuterPropertyChanged(sender, e);
             if (e.PropertyName == Member.Name)
-                Action = (Action) Member.GetValue(SettingParent);
+                Value = OuterValue;
         }
     }
 }

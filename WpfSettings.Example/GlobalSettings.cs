@@ -111,7 +111,7 @@ namespace WpfSettings.Example
         public EGender Gender { get; set; } = EGender.Other;
 
         [SettingString(Prefix = "Sir", Suffix = "the Great",
-            PlaceHolderText = "You have got to put a name...",
+            PlaceHolderText = "You have to specify a name...",
             InGroup = "GeneralInformation")]
         public string Name { get; set; } = "Bob";
 

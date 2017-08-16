@@ -42,56 +42,56 @@ namespace WpfSettings
 
         public object Settings
         {
-            get { return GetValue(SettingsProperty); }
-            set { SetValueDp(SettingsProperty, value); }
+            get => GetValue(SettingsProperty);
+            set => SetValueDp(SettingsProperty, value);
         }
 
         public ObservableCollection<SettingSection> SettingElements
         {
-            get { return (ObservableCollection<SettingSection>) GetValue(SettingElementsProperty); }
-            set { SetValueDp(SettingElementsProperty, value); }
+            get => (ObservableCollection<SettingSection>) GetValue(SettingElementsProperty);
+            set => SetValueDp(SettingElementsProperty, value);
         }
 
         public bool AutoSave
         {
-            get { return (bool) GetValue(AutoSaveProperty); }
-            set { SetValueDp(AutoSaveProperty, value); }
+            get => (bool) GetValue(AutoSaveProperty);
+            set => SetValueDp(AutoSaveProperty, value);
         }
 
         public Action Save
         {
-            get { return (Action) GetValue(SaveProperty); }
-            set { SetValueDp(SaveProperty, value); }
+            get => (Action) GetValue(SaveProperty);
+            set => SetValueDp(SaveProperty, value);
         }
 
         public ObservableCollection<SettingPageElement> CurrentPageConfig
         {
-            get { return (ObservableCollection<SettingPageElement>) GetValue(CurrentPageConfigProperty); }
-            set { SetValueDp(CurrentPageConfigProperty, value); }
+            get => (ObservableCollection<SettingPageElement>) GetValue(CurrentPageConfigProperty);
+            set => SetValueDp(CurrentPageConfigProperty, value);
         }
 
         public string CategoryTitle
         {
-            get { return (string) GetValue(CategoryTitleProperty); }
-            set { SetValueDp(CategoryTitleProperty, value); }
+            get => (string) GetValue(CategoryTitleProperty);
+            set => SetValueDp(CategoryTitleProperty, value);
         }
 
         public string ExplorerWidth
         {
-            get { return (string) GetValue(ExplorerWidthProperty); }
-            set { SetValueDp(ExplorerWidthProperty, value); }
+            get => (string) GetValue(ExplorerWidthProperty);
+            set => SetValueDp(ExplorerWidthProperty, value);
         }
 
         public string Filter
         {
-            get { return (string) GetValue(FilterProperty); }
-            set { SetValueDp(FilterProperty, value); }
+            get => (string) GetValue(FilterProperty);
+            set => SetValueDp(FilterProperty, value);
         }
 
         public int UnsavedSettings
         {
-            get { return (int) GetValue(UnsavedSettingsProperty); }
-            set { SetValueDp(UnsavedSettingsProperty, value); }
+            get => (int) GetValue(UnsavedSettingsProperty);
+            set => SetValueDp(UnsavedSettingsProperty, value);
         }
 
         public Action<SettingSection> ChangeSectionAction { get; }
@@ -100,7 +100,7 @@ namespace WpfSettings
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        void SetValueDp(DependencyProperty property, object value,
+        private void SetValueDp(DependencyProperty property, object value,
             [CallerMemberName] string p = null)
         {
             SetValue(property, value);
